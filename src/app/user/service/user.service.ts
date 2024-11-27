@@ -14,6 +14,15 @@ export class UserService {
     return this.http.get(`${this.apiUrl}/get/all`);
   }
 
+  getAllDivision(): Observable<any> {
+    return this.http.get(`http://localhost:8081/division/get/all`);
+  }
+
+  getAllRole(): Observable<any> {
+    return this.http.get(`http://localhost:8081/appRole/get/all`);
+  }
+  
+
   saveUser(user: any): Observable<any> {
     return this.http.put(`${this.apiUrl}/save`, user);
   }
@@ -29,4 +38,6 @@ export class UserService {
   deleteUser(id: string): Observable<any> {
     return this.http.delete(`${this.apiUrl}/delete/${id}`);
   }
+
+  
 }

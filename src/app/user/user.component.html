@@ -1,55 +1,64 @@
-<p-table [value]="users" [paginator]="true" [rows]="10" [loading]="loading" class="p-datatable-striped">
-    <ng-template pTemplate="header">
-        <tr>
-            <th>Username</th>
-            <th>Full Name</th>
-            <th>Position</th>
-            <th>Email Address</th>
-            <th>Employee Status</th>
-            <th>Join Date</th>
-            <th>Enabled</th>
-            <!-- <th>Password</th> -->
-            <th>Division Id</th>
-            <th>Action</th>
-        </tr>
-    </ng-template>
+<div class="card">
+    <!-- Tombol global untuk membuat pengguna baru -->
+    <p-button label="Tambah Pengguna" icon="pi pi-plus" (click)="openCreateDialog()" class="mb-3"></p-button>
+  
+    <p-table [value]="users" [paginator]="true" [rows]="10" [loading]="loading" class="p-datatable-striped">
+      <ng-template pTemplate="header">
+          <tr>
+              <th>Username</th>
+              <th>Nama Lengkap</th>
+              <th>Jabatan</th>
+              <th>Email</th>
+              <th>Status Karyawan</th>
+              <th>Tanggal Bergabung</th>
+              <th>Status Akun</th>
+              <th>Divisi</th>
+              <th>Aksi</th>
+          </tr>
+      </ng-template>
+  
+      <ng-template pTemplate="body" let-user>
+          <tr>
+              <td>{{ user.username }}</td>
+              <td>{{ user.full_name }}</td>
+              <td>{{ user.position }}</td>
+              <td>{{ user.email_address }}</td>
+  
+              <td>
+                  <p-tag [severity]="user.employee_status === 1 ? 'warning' : 'info'"
+                         [value]="user.employee_status === 1 ? 'Kontrak' : 'Permanen'">
+                  </p-tag>
+              </td>
+  
+              <td>{{ user.join_date | date:'yyyy-MM-dd' }}</td>
+  
+              <td>
+                  <p-tag [severity]="user.enabled === 1 ? 'success' : 'danger'"
+                         [value]="user.enabled === 1 ? 'Enabled' : 'Disabled'">
+                  </p-tag>
+              </td>
+  
+              <td>{{ user.division_name }}</td>
+  
+              <td class="flex gap-2">
+                  <button pButton type="button" icon="pi pi-pencil" class="p-button-sm" (click)="openUpdateDialog(user)"></button>
+                  <button pButton type="button" icon="pi pi-trash" class="p-button-danger p-button-sm"
+                          (click)="confirmDelete(user)"></button>
+              </td>
+          </tr>
+      </ng-template>
+    </p-table>
+  </div>
+  
+  <!-- Komponen Dialog Create User -->
+  <app-create-user
+    [(visible)]="displayCreateDialog"
+    (userCreated)="onUserCreated($event)">
+  </app-create-user>
 
-    <ng-template pTemplate="body" let-user>
-        <tr>
-            <td>{{ user.username }}</td>
-            <td>{{ user.full_name }}</td>
-            <td>{{ user.position }}</td>
-            <td>{{ user.email_address }}</td>
-            <!-- <td>{{ user.employee_status }}</td> -->
-            <td>
-                @if (user.employee_status == 1) {
-                    <p-button label="kontrak" severity="warning" />
-                }@else {
-                    <p-button label="permanen" severity="info" />}
-            </td>
-            <td>{{ user.join_date | date:'yyyy-MM-dd' }}</td>
-            <!-- <td>{{ user.enabled ? 'Yes' : 'No' }}</td> -->
-            <td>
-                {{
-                user.enabled === 0 ? 'Disabled' :
-                user.enabled === 1 ? 'Enabled' :
-                'Invalid'
-                }}
-            </td>
-            <!-- <td>{{ user.password }}</td> -->
-            <td>{{ user.division_id }}</td>
-            <td>
-                <button pButton type="button" label="Create" icon="pi pi-pencil" (click)="openCreateDialog()"></button>
-                <button pButton type="button" label="Delete" icon="pi pi-trash" class="p-button-danger"
-                   ></button>
-            </td>
-
-            
-        </tr>
-    </ng-template>
-</p-table>
-
-<app-create-user
-  [(visible)]="displayCreateDialog"
-  (userCreated)="onUserCreated($event)">
-</app-create-user>
+  <app-update-user
+    [(visible)]="displayUpdateDialog"
+    [user]="selectedUser"
+    (userCreated)="onUserCreated($event)">
+  </app-update-user>
+  
