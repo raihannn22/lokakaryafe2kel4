@@ -1,0 +1,12 @@
+.p-datatable {
+    font-size: 14px;
+}
+
+.p-datatable th {
+    text-align: left;
+    background-color: #f1f1f1;
+}
+
+.p-datatable td {
+    padding: 10px;
+}

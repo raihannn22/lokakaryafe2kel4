@@ -3,7 +3,7 @@
     <!-- Tombol global untuk membuat pengguna baru -->
     
     <div class="p-5">
-    <p-table #dt [value]="users" [paginator]="true" [rows]="10" [loading]="loading" class="p-datatable-striped " [globalFilterFields]="['username', 'full_name', 'email_address', 'division_name']">
+    <p-table #dt [value]="users" [paginator]="true" [rows]="10" [loading]="loading" styleClass="p-datatable-gridlines" [globalFilterFields]="['username', 'full_name', 'email_address', 'division_name']">
           <ng-template pTemplate="caption">
               <p-iconField iconPosition="left">
                   <p-inputIcon>

@@ -1,0 +1,70 @@
+<!-- Tombol Tambah Data -->
+<div class="flex justify-content-end mb-3">
+    <button pButton type="button" label="Tambah Data" icon="pi pi-plus" (click)="showAddDialog()"></button>
+</div>
+
+<!-- Input Pencarian dengan Dropdown Kategori -->
+<div class="flex justify-content-between mb-3">
+    <!-- Dropdown untuk memilih kategori pencarian -->
+    <p-dropdown [options]="searchCategories" [(ngModel)]="selectedCategory" placeholder="Select Category"
+        [ngClass]="{'p-dropdown-sm': true}" [style]="{'width': '150px'}" />
+
+    <!-- Input untuk keyword pencarian -->
+    <input type="text" pInputText placeholder="Search" [(ngModel)]="searchKeyword" (input)="searchData()"
+        class="p-inputtext-sm" style="width: 300px;" />
+</div>
+
+<!-- Tabel Data dengan Pagination -->
+<p-table [value]="filteredAchievements" [paginator]="true" [rows]="10" [first]="first" [totalRecords]="totalRecords"
+    [loading]="loading" class="p-datatable-striped" (onPage)="loadPage($event)">
+    <ng-template pTemplate="header">
+        <tr>
+            <th>No</th>
+            <th>Group</th>
+            <th>Achievement</th>
+            <th>Action</th>
+        </tr>
+    </ng-template>
+
+    <ng-template pTemplate="body" let-achievement let-rowIndex="rowIndex">
+        <tr>
+            <td>{{ rowIndex + 1 }}</td>
+            <td>{{ achievement.group_name }}</td>
+            <td>{{ achievement.achievement }}</td>
+            <td>
+                <button pButton type="button" label="Update" icon="pi pi-pencil"
+                    class="p-button-rounded p-button-text mr-2" (click)="editAchievement(achievement)"></button>
+                <button pButton type="button" label="Delete" icon="pi pi-trash" class="p-button-rounded p-button-danger"
+                    (click)="deleteAchievement(achievement.id)"></button>
+            </td>
+        </tr>
+    </ng-template>
+</p-table>
+
+<!-- Modal Form for Add/Edit Achievement -->
+<p-dialog header="Achievement" [(visible)]="achievementDialog" [style]="{width: '50%', height: '50%'}"
+    [contentStyle]="{overflow: 'auto'}" modal="true" closable="false" [baseZIndex]="10000">
+    <div class="p-fluid">
+        <!-- Group Achievement Dropdown -->
+        <div class="field">
+            <label for="group-achievement">Group Achievement</label>
+            <p-dropdown id="group-achievement" [(ngModel)]="achievement.group_id" [options]="groupAchievements"
+                optionLabel="group_name" optionValue="id" placeholder="Select a Group"
+                class="custom-dropdown"></p-dropdown>
+        </div>
+
+        <!-- Achievement Input -->
+        <div class="field">
+            <label for="achievement">Achievement</label>
+            <input id="achievement" [(ngModel)]="achievement.achievement" pInputText class="custom-input" />
+        </div>
+    </div>
+
+    <p-footer>
+        <div class="flex justify-content-end">
+            <button pButton label="Save" icon="pi pi-check" (click)="saveAchievement()"
+                [disabled]="!achievement.achievement || !achievement.group_id" class="mr-2"></button>
+            <button pButton label="Cancel" icon="pi pi-times" (click)="achievementDialog = false"></button>
+        </div>
+    </p-footer>
+</p-dialog>

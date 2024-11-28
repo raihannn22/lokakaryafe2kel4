@@ -1,0 +1,68 @@
+/* Styling for Input and Dropdown */
+.custom-input {
+    height: 40px;
+    padding: 0.5rem;
+    font-size: 1rem;
+    border: 1px solid var(--primary-color);
+    border-radius: 4px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.custom-dropdown .p-dropdown-label {
+    font-size: 1rem;
+    padding: 0.5rem;
+}
+
+.custom-dropdown .p-dropdown {
+    height: 40px;
+}
+
+/* Modal Custom Styling */
+.p-dialog .p-dialog-header {
+    background-color: var(--primary-color);
+    color: white;
+    font-size: 1.2rem;
+    font-weight: bold;
+    padding: 1rem;
+}
+
+.p-dialog-footer {
+    display: flex;
+    justify-content: flex-end;
+    padding: 1rem;
+}
+
+.p-button-rounded {
+    border-radius: 50px !important;
+}
+
+/* Add Margin Between Input Fields */
+.field {
+    margin-bottom: 1rem;
+}
+
+/* Ensure Button Alignment and Spacing */
+.p-button {
+    margin-right: 0.5rem;
+}
+
+/* Styling for Table */
+.p-datatable-striped .p-datatable-tbody>tr:nth-child(odd) {
+    background-color: #f9f9f9;
+}
+
+.p-datatable-tbody td {
+    padding: 10px;
+}
+
+.p-datatable th {
+    padding: 10px;
+    background-color: #f4f4f4;
+}
+
+/* Styling Dropdown */
+.custom-dropdown .p-dropdown {
+    width: 100%;
+    margin-top: 1rem;
+}
