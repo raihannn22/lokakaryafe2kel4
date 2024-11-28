@@ -112,14 +112,26 @@ export class UpdateUserComponent {
   }
 
   onSubmit() {
-    this.userService.updateUser(this.user.id, this.newUser).subscribe({
+    // Buat salinan objek untuk menghindari perubahan langsung pada newUser
+    const updatedData: any = { ...this.newUser };
+
+    // Bandingkan setiap field dan set menjadi null jika nilainya sama dengan data existing
+    Object.keys(updatedData).forEach(key => {
+      if (updatedData[key] === this.user[key]) {
+        updatedData[key] = null;  // Set field menjadi null jika sama
+      }
+    });
+
+    // Kirim data yang sudah divalidasi ke server
+    this.userService.updateUser(this.user.id, updatedData).subscribe({
       next: (response) => {
-        console.log('User created successfully:', response);
-        this.userCreated.emit(response);// Emit event ke komponen induk
+        console.log('User updated successfully:', response);
+        this.userCreated.emit(response);  // Emit event ke komponen induk
         this.closeDialog();               // Tutup dialog setelah berhasil
       },
+      
       error: (error) => {
-        console.error('Error creating user:', error);
+        console.error('Error updating user:', error);
         // Tambahkan penanganan error di sini
       }
     });
