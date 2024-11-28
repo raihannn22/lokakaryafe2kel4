@@ -5,8 +5,8 @@ import { FloatLabelModule } from "primeng/floatlabel"
 import { PasswordModule } from 'primeng/password';
 // import { AuthService } from '../service/auth.service';
 import { Router } from '@angular/router';
-import { AuthService } from './service/auth.service';
 import Swal from 'sweetalert2';
+import { AuthService } from '../../service/login/auth.service';
 
 @Component({
   selector: 'app-login',

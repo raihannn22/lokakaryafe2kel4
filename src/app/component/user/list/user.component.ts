@@ -4,29 +4,37 @@ import { FormsModule } from '@angular/forms';
 import { ButtonModule } from 'primeng/button';
 import { CalendarModule } from 'primeng/calendar';
 import { TableModule } from 'primeng/table';
-import { UserService } from './service/user.service';
-import { CreateUserComponent } from './create-user/create-user.component';
+// import { UserService } from '../service/user.service';
+// import { CreateUserComponent } from '/component/create-user/create-user.component';
 import { DialogModule } from 'primeng/dialog';
 import { TagModule } from 'primeng/tag';
 import { ToastModule } from 'primeng/toast';
 import Swal from 'sweetalert2';
-import { UpdateUserComponent } from './update-user/update-user.component';
+import { UpdateUserComponent } from '../update-user/update-user.component';
+import { IconFieldModule } from 'primeng/iconfield';
+import { InputIconModule } from 'primeng/inputicon';
+import { InputTextModule } from 'primeng/inputtext';
+import { CreateUserComponent } from '../create-user/create-user.component';
+import { UserService } from '../../../service/user/user.service';
 
 @Component({
   selector: 'app-user',
   standalone: true,
-  imports: [CommonModule, ButtonModule, CalendarModule, FormsModule, TableModule, CreateUserComponent, DialogModule, TagModule, ToastModule, UpdateUserComponent],
+  imports: [CommonModule, ButtonModule, CalendarModule, FormsModule, TableModule, CreateUserComponent, DialogModule, TagModule, ToastModule, 
+      UpdateUserComponent, IconFieldModule, InputIconModule, InputTextModule],
   templateUrl: './user.component.html',
   styleUrl: './user.component.css'
 })
 
 export class UserComponent implements OnInit {
 
+  
   users: any[] = [];
   loading: boolean = true;
   displayCreateDialog = false;
   displayUpdateDialog = false;
   selectedUser: any;
+  searchValue: string | undefined;
   
 
   constructor(

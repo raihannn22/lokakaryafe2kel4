@@ -1,0 +1,16 @@
+.app-container {
+    display: flex;
+  }
+  
+  .content {
+    margin-left: 250px;  /* Menyesuaikan dengan lebar sidebar */
+    padding: 20px;
+    flex-grow: 1;
+    background-color: #f4f4f4;
+    min-height: 100vh;
+    transition: margin-left 0.3s;
+  }
+  
+  .sidebar.closed ~ .content {
+    margin-left: 60px;
+  }

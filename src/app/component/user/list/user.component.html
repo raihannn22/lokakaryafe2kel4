@@ -1,9 +1,19 @@
+<p-button label="Tambah Pengguna" icon="pi pi-plus" (click)="openCreateDialog()" class="p-5 mt-5" ></p-button>
 <div class="card">
     <!-- Tombol global untuk membuat pengguna baru -->
-    <p-button label="Tambah Pengguna" icon="pi pi-plus" (click)="openCreateDialog()" class="mb-3"></p-button>
-  
-    <p-table [value]="users" [paginator]="true" [rows]="10" [loading]="loading" class="p-datatable-striped">
-      <ng-template pTemplate="header">
+    
+    <div class="p-5">
+    <p-table #dt [value]="users" [paginator]="true" [rows]="10" [loading]="loading" class="p-datatable-striped " [globalFilterFields]="['username', 'full_name', 'email_address', 'division_name']">
+          <ng-template pTemplate="caption">
+              <p-iconField iconPosition="left">
+                  <p-inputIcon>
+                      <i class="pi pi-search"></i>
+                  </p-inputIcon>
+                  <input #searchInput pInputText type="text" (input)="dt.filterGlobal(searchInput.value, 'contains')" placeholder="Cari Pengguna..." />
+              </p-iconField>
+          </ng-template>
+          
+        <ng-template pTemplate="header">
           <tr>
               <th>Username</th>
               <th>Nama Lengkap</th>
@@ -48,7 +58,8 @@
           </tr>
       </ng-template>
     </p-table>
-  </div>
+    </div>
+</div>
   
   <!-- Komponen Dialog Create User -->
   <app-create-user

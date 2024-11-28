@@ -6,19 +6,18 @@ import { InputTextModule } from 'primeng/inputtext';
 import { FormsModule } from '@angular/forms';
 import { DropdownModule } from 'primeng/dropdown';
 import { CalendarModule } from 'primeng/calendar';
-import { UserService } from '../service/user.service';
+import { UserService } from '../../../service/user/user.service';
 import { CheckboxModule } from 'primeng/checkbox';
 
-
 @Component({
-  selector: 'app-create-user',
+  selector: 'app-update-user',
   standalone: true,
   imports: [DialogModule, InputTextModule, ButtonModule, CommonModule, CalendarModule, FormsModule, DropdownModule, CheckboxModule],
-  templateUrl: './create-user.component.html',
-  styleUrls: ['./create-user.component.css']
+  templateUrl: './update-user.component.html',
+  styleUrl: './update-user.component.css'
 })
-export class CreateUserComponent {
-  
+export class UpdateUserComponent {
+ 
   isValidForm(): boolean {
     return !!this.newUser.username && 
            !!this.newUser.full_name &&
@@ -34,7 +33,7 @@ export class CreateUserComponent {
   
   @Input() visible: boolean = false;  // Menyambungkan dengan property di komponen induk
   @Output() visibleChange = new EventEmitter<boolean>();  // Emit perubahan visibility
-
+  @Input() user: any = {};
   @Output() userCreated = new EventEmitter<any>();  
 
   divisions: any[] = [];
@@ -44,9 +43,17 @@ export class CreateUserComponent {
     private userService: UserService
   ) {}
 
+  ngOnChanges() {
+    if (this.user) {
+      this.newUser = { ...this.user };
+    }
+  }
+
   ngOnInit() {
     this.getAllDivision();
     this.getAllRole();
+    console.log(this.user , 'ini on inir');
+    this.newUser = { ...this.user };
   }
 
   getAllRole() {
@@ -105,7 +112,7 @@ export class CreateUserComponent {
   }
 
   onSubmit() {
-    this.userService.saveUser(this.newUser).subscribe({
+    this.userService.updateUser(this.user.id, this.newUser).subscribe({
       next: (response) => {
         console.log('User created successfully:', response);
         this.userCreated.emit(response);// Emit event ke komponen induk

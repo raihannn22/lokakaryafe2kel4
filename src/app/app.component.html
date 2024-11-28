@@ -1,3 +1,4 @@
 
-<app-navbar></app-navbar>
+<app-navbar  (toggleSidebar)="onToggleSidebar()"></app-navbar>
+<app-sidebar [sidebarVisible]="sidebarVisible" ></app-sidebar>
 <router-outlet></router-outlet>

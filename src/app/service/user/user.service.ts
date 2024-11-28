@@ -27,6 +27,8 @@ export class UserService {
     return this.http.put(`${this.apiUrl}/save`, user);
   }
 
+  
+
   getUserById(id: string): Observable<any> {
     return this.http.get(`${this.apiUrl}/get/${id}`);
   }
