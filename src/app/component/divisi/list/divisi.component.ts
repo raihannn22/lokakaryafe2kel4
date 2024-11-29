@@ -4,60 +4,57 @@ import { FormsModule } from '@angular/forms';
 import { ButtonModule } from 'primeng/button';
 import { CalendarModule } from 'primeng/calendar';
 import { TableModule } from 'primeng/table';
-// import { UserService } from '../service/user.service';
-// import { CreateUserComponent } from '/component/create-user/create-user.component';
 import { DialogModule } from 'primeng/dialog';
 import { TagModule } from 'primeng/tag';
 import { ToastModule } from 'primeng/toast';
 import Swal from 'sweetalert2';
-import { UpdateUserComponent } from '../update-user/update-user.component';
+
 import { IconFieldModule } from 'primeng/iconfield';
 import { InputIconModule } from 'primeng/inputicon';
 import { InputTextModule } from 'primeng/inputtext';
-import { CreateUserComponent } from '../create-user/create-user.component';
-import { UserService } from '../../../service/user/user.service';
 import { MessageService } from 'primeng/api';
+import { DivisiService } from '../../../service/divisi/divisi.service';
+
 
 @Component({
-  selector: 'app-user',
+  selector: 'app-divisi',
   standalone: true,
-  imports: [CommonModule, ButtonModule, CalendarModule, FormsModule, TableModule, CreateUserComponent, DialogModule, TagModule, ToastModule, 
-      UpdateUserComponent, IconFieldModule, InputIconModule, InputTextModule],
-  templateUrl: './user.component.html',
-  styleUrl: './user.component.css'
+  imports: [CommonModule, ButtonModule, CalendarModule, FormsModule, TableModule, DialogModule, TagModule, ToastModule, 
+    IconFieldModule, InputIconModule, InputTextModule],
+  templateUrl: './divisi.component.html',
+  styleUrl: './divisi.component.css'
 })
-
-export class UserComponent implements OnInit {
+export class DivisiComponent {
 
   
-  users: any[] = [];
+  divisions: any[] = [];
   loading: boolean = true;
   displayCreateDialog = false;
   displayUpdateDialog = false;
-  selectedUser: any;
+  selecteddivision: any;
   searchValue: string | undefined;
   
 
   constructor(
-    private userService: UserService,
+    private divisiService: DivisiService,
     private messageService: MessageService
     
   ) {}
 
 
   ngOnInit() {
-    this.getAllUsers();
+    this.getAllDivisions();
   }
 
-  getAllUsers() {
-    this.userService.getAllUsers().subscribe({
+  getAllDivisions() {
+    this.divisiService.getAllDivisions().subscribe({
       next: (response) => {
-        this.users = response.content; // Data ada di 'content'
-        console.log('Total rows:', response.totalRows);
+        this.divisions = response.content; // Data ada di 'content'
+        console.log('Total rows:',  response.content);
         this.loading = false;
       },
       error: (error) => {
-        console.error('Error fetching users:', error);
+        console.error('Error fetching divisis:', error);
         this.loading = false;
       },
     });
@@ -68,27 +65,27 @@ export class UserComponent implements OnInit {
     this.displayCreateDialog = true;
   }
 
-  openUpdateDialog(user: any) {
-    this.selectedUser = user;
-    console.log(this.selectedUser);
+  openUpdateDialog(divisi: any) {
+    this.selecteddivision = divisi;
+    console.log(this.selecteddivision);
     this.displayUpdateDialog = true;
   }
 
   
-  // Fungsi menangani event user yang dibuat
-  onUserCreated(newUser: any) {
-    console.log('User baru:', newUser);
-    // Logika untuk menyimpan user ke database (via API)
-    this.getAllUsers();
+  // Fungsi menangani event divisi yang dibuat
+  ondivisionCreated(newdivision: any) {
+    console.log('division baru:', newdivision);
+    // Logika untuk menyimpan division ke database (via API)
+    this.getAllDivisions();
     this.displayCreateDialog = false;
     this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Message Content' });
-    // Tambahkan user baru ke daftar users atau update data sesuai kebutuhan
+    // Tambahkan division baru ke daftar divisions atau update data sesuai kebutuhan
   }
 
-  confirmDelete(user: any) {
+  confirmDelete(division: any) {
     Swal.fire({
       title: 'Apakah Anda yakin?',
-      text: `Anda akan menghapus pengguna ${user.username}!`,
+      text: `Anda akan menghapus pengguna ${division.divisionname}!`,
       icon: 'warning',
       showCancelButton: true,
       confirmButtonText: 'Ya, hapus!',
@@ -97,14 +94,14 @@ export class UserComponent implements OnInit {
       cancelButtonColor: '#3085d6',
     }).then((result) => {
       if (result.isConfirmed) {
-        this.userService.deleteUser(user.id).subscribe({
+        this.divisiService.deleteDivision(division.id).subscribe({
           next: () => {
             Swal.fire('Terhapus!', 'Pengguna berhasil dihapus.', 'success');
-            this.getAllUsers(); // Panggil metode untuk memperbarui tabel
+            this.getAllDivisions(); // Panggil metode untuk memperbarui tabel
           },
           error: (error) => {
             Swal.fire('Error', 'Terjadi kesalahan saat menghapus pengguna.', 'error');
-            console.error('Error deleting user:', error);
+            console.error('Error deleting division:', error);
           }
         });
       }
@@ -112,3 +109,4 @@ export class UserComponent implements OnInit {
   }
   
 }
+
