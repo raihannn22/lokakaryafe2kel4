@@ -12,19 +12,27 @@ import { trigger, transition, style, animate } from '@angular/animations';
 import { GroupAchievementService } from '../../service/group-achievement/group-achievement.service';
 import { DropdownModule } from 'primeng/dropdown';
 import { AchievementService } from '../../service/achievement/achievement.service';
+import { TagModule } from 'primeng/tag';
+import { InputIconModule } from 'primeng/inputicon';
+import { InputTextModule } from 'primeng/inputtext';
+import { IconFieldModule } from 'primeng/iconfield';
 
 @Component({
   selector: 'app-achievement',
   standalone: true,
   imports: [
-    CommonModule, // Use CommonModule instead of BrowserModule
+    CommonModule, 
     ButtonModule,
     CalendarModule,
     FormsModule,
     TableModule,
     DialogModule,
     CheckboxModule,
-    DropdownModule
+    DropdownModule,
+    TagModule,
+    InputIconModule,
+    InputTextModule,
+    IconFieldModule
   ],
   animations: [
     trigger('dialogAnimation', [
@@ -48,11 +56,10 @@ export class AchievementComponent implements OnInit {
   achievementDialog: boolean = false;
   achievement: any = { achievement: '', group_id: null, enabled: false };
   searchKeyword: string = ''; 
-   selectedCategory: string = ''; // Kategori yang dipilih dari dropdown
+  selectedCategory: string = ''; // Kategori yang dipilih dari dropdown
   searchCategories: any[] = [
     { label: 'Group Name', value: 'group_name' },
     { label: 'Achievement', value: 'achievement' },
-    // Tambahkan kategori lain jika diperlukan
   ];
 
   first: number = 0; // Untuk pagination
@@ -74,7 +81,7 @@ export class AchievementComponent implements OnInit {
     this.achievementService.getAllAchievements(this.first, 5).subscribe({
       next: (response) => {
         this.achievements = response.content;
-        this.totalRecords = response.totalRecords; // Pastikan ada totalRecords pada response
+        this.totalRecords = response.totalRecords;
         this.filteredAchievements = this.achievements;
         this.loading = false;
       },
@@ -90,8 +97,13 @@ export class AchievementComponent implements OnInit {
     this.getAllAchievements(); // Muat ulang data berdasarkan halaman baru
   }
 
+  enabledOptions = [
+    { label: 'Enabled', value: 1 },
+    { label: 'Disabled', value: 0 }
+  ];
+
   getAllGroupAchievements() {
-    this.groupAchievementService.getAllGroupAchievements().subscribe({
+    this.achievementService.getAllGroupAchievements().subscribe({
       next: (response) => {
         // console.log('Data GroupAchievements:', response.content);  // Log data untuk memastikan isi array
         this.groupAchievements = response.content;
@@ -127,32 +139,7 @@ export class AchievementComponent implements OnInit {
     this.achievementDialog = true;
   }
 
-  // saveAchievement() {
-  //   console.log('Data yang dikirim:', this.achievement);
-  //   if (this.achievement.id) {
-  //     this.achievementService.updateAchievement(this.achievement.id, this.achievement).subscribe({
-  //       next: () => {
-  //         alert('Achievement updated successfully');
-  //         this.getAllAchievements();
-  //         this.achievementDialog = false;
-  //       },
-  //       error: (error) => {
-  //         console.error('Error updating achievement:', error);
-  //       }
-  //     });
-  //   } else {
-  //     this.achievementService.saveAchievement(this.achievement).subscribe({
-  //       next: () => {
-  //         alert('Achievement added successfully');
-  //         this.getAllAchievements();
-  //         this.achievementDialog = false;
-  //       },
-  //       error: (error) => {
-  //         console.error('Error saving achievement:', error);
-  //       }
-  //     });
-  //   }
-  // }
+
 
 saveAchievement() {
   const dataToSend = {

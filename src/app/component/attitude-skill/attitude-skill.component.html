@@ -1,0 +1,89 @@
+<p-button label="Tambah Attitude Skill" icon="pi pi-plus" (click)="showAddDialog()" class="p-5 mt-5"></p-button>
+
+<div class="card">
+    <div class="p-5">
+
+        <p-table [value]="filteredAttitudeSkills" [paginator]="true" [rows]="5" [first]="first"
+            [totalRecords]="totalRecords" [loading]="loading" styleClass="p-datatable-gridlines"
+            (onPage)="loadPage($event)">
+
+            <ng-template pTemplate="caption">
+                <!-- <p-iconField iconPosition="left"> -->
+                <p-dropdown [options]="searchCategories" [(ngModel)]="selectedCategory" placeholder="Select Category"
+                    [ngClass]="{'p-dropdown-sm': true}" [style]="{'width': '150px'}" class="mr-3" />
+
+                <input pInputText type="text" (input)="searchData()" placeholder="Cari ..."
+                    [(ngModel)]="searchKeyword" />
+
+                <!-- </p-iconField> -->
+            </ng-template>
+
+            <ng-template pTemplate="header">
+                <tr>
+                    <th>No</th>
+                    <th>Group</th>
+                    <th>Attitude Skill</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                </tr>
+            </ng-template>
+
+            <ng-template pTemplate="body" let-attitudeSkill let-rowIndex="rowIndex">
+                <tr>
+                    <td>{{ rowIndex + 1 }}</td>
+                    <td>{{ attitudeSkill.group_name }}</td>
+                    <td>{{ attitudeSkill.attitude_skill }}</td>
+                    <td>
+                        <p-tag [severity]="attitudeSkill.enabled === 1 ? 'success' : 'danger'"
+                            [value]="attitudeSkill.enabled === 1 ? 'Enabled' : 'Disabled'">
+                        </p-tag>
+                    </td>
+                    <td class="flex gap-2">
+                        <button pButton type="button" label="" icon="pi pi-pencil" class=" p-button-sm"
+                            (click)="editAttitudeSkill(attitudeSkill)"></button>
+                        <button pButton type="button" label="" icon="pi pi-trash" class="p-button-danger p-button-sm"
+                            (click)="deleteAttitudeSkill(attitudeSkill.id)"></button>
+                    </td>
+                </tr>
+            </ng-template>
+        </p-table>
+
+    </div>
+</div>
+
+
+<!-- Modal Form for Add/Edit attitudeSkill -->
+<p-dialog header="AttitudeSkill" [(visible)]="attitudeSkillDialog" [style]="{width: '50%', height: '50%'}"
+    [contentStyle]="{overflow: 'auto'}" modal="true" closable="false" [baseZIndex]="10000">
+    <div class="p-fluid">
+        <!-- Group attitudeSkill Dropdown -->
+        <div class="field">
+            <label for="group-attitude-skill">Group Attitude Skill</label>
+            <p-dropdown id="group-attitude-skill" [(ngModel)]="attitudeSkill.group_id" [options]="groupAttitudeSkills"
+                optionLabel="group_name" optionValue="id" placeholder="Pilih Group Attitude Skill" class=""></p-dropdown>
+        </div>
+
+        <!-- attitudeSkill Input -->
+        <div class="field">
+            <label for="attitudeSkill">Attitude Skill</label>
+            <input id="attitude_skill" [(ngModel)]="attitudeSkill.attitude_skill" pInputText class="custom-input" />
+        </div>
+    </div>
+
+    <div class="field">
+        <label for="enabled">Status Attitude Skill</label>
+        <p-dropdown [options]="enabledOptions" [(ngModel)]="attitudeSkill.enabled" placeholder="Pilih Status" id="enabled"
+            name="enabled" #enabled="ngModel" placeholder="Pillih Status" class="" required>
+        </p-dropdown>
+        <small class="p-error" *ngIf="enabled.invalid && enabled.touched">Status attitudeSkill wajib dipilih.</small>
+    </div>
+
+    <p-footer>
+        <div class="flex justify-content-end">
+            <p-button label="Cancel" icon="pi pi-times" severity="secondary"
+                (click)="attitudeSkillDialog = false"></p-button>
+            <button pButton label="Save" icon="pi pi-check" (click)="saveAttitudeSkill()"
+                [disabled]="!attitudeSkill.attitude_skill || !attitudeSkill.group_id" class="mr-2"></button>
+        </div>
+    </p-footer>
+</p-dialog>

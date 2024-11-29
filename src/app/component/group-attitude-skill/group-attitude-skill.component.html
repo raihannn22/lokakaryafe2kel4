@@ -1,56 +1,92 @@
 <!-- Tombol Tambah Data -->
-<button pButton type="button" label="Tambah Data" icon="pi pi-plus" (click)="showAddDialog()"></button>
+<p-button label="Tambah Group Attiude Skill" icon="pi pi-plus" (click)="showAddDialog()" class="p-5 mt-5"></p-button>
 
-<!-- Tabel Data -->
-<p-table [value]="groupAttitudeSkills" [paginator]="true" [rows]="10" [loading]="loading" class="p-datatable-striped">
-    <ng-template pTemplate="header">
-        <tr>
-            <th>ID</th>
-            <th>Group Name</th>
-            <th>Percentage</th>
-            <th>Enabled</th>
-            <th>Action</th>
-        </tr>
-    </ng-template>
+<div class="card">
+    <div class="p-5">
+        <!-- Tabel Data -->
+        <p-table [value]="filteredgroupAttitudeSkills" [paginator]="true" [rows]="5" [first]="first"
+            [totalRecords]="totalRecords" [loading]="loading" styleClass="p-datatable-gridlines"
+            (onPage)="loadPage($event)">
 
-    <ng-template pTemplate="body" let-groupAttitudeSkill>
-        <tr>
-            <td>{{ groupAttitudeSkill.id }}</td>
-            <td>{{ groupAttitudeSkill.group_name }}</td>
-            <td>{{ groupAttitudeSkill.percentage }}%</td>
-            <td>{{ groupAttitudeSkill.enabled ? 'Yes' : 'No' }}</td>
-            <td>
-                <button pButton type="button" label="Update" icon="pi pi-pencil"
-                    (click)="editGroupAttitudeSkill(groupAttitudeSkill)"></button>
-                <button pButton type="button" label="Delete" icon="pi pi-trash" class="p-button-danger"
-                    (click)="deleteGroupAttitudeSkill(groupAttitudeSkill.id)"></button>
-            </td>
-        </tr>
-    </ng-template>
-</p-table>
+            <ng-template pTemplate="caption">
+                <div class="flex">
+                    <!-- Dropdown Kategori Pencarian -->
+                    <p-dropdown [options]="searchCategories" [(ngModel)]="selectedCategory"
+                        placeholder="Select Category" [ngClass]="{'p-dropdown-sm': true}" [style]="{'width': '150px'}"
+                        class="mr-3"></p-dropdown>
 
-<!-- Modal Form for Add/Edit Group AttitudeSkill -->
-<p-dialog header="Group AttitudeSkill" [(visible)]="groupAttitudeSkillDialog" [style]="{width: '50vw'}" [@dialogAnimation]>
+                    <!-- Input Pencarian -->
+                    <input pInputText type="text" (input)="searchData()" placeholder="Cari ..."
+                        [(ngModel)]="searchKeyword" />
+                </div>
+            </ng-template>
+
+            <ng-template pTemplate="header">
+                <tr>
+                    <th>No</th>
+                    <th>Group Name</th>
+                    <th>Percentage</th>
+                    <th>Enabled</th>
+                    <th>Action</th>
+                </tr>
+            </ng-template>
+
+            <ng-template pTemplate="body" let-groupAttitudeSkill let-rowIndex="rowIndex">
+                <tr>
+                    <td>{{ rowIndex + 1 }}</td>
+                    <td>{{ groupAttitudeSkill.group_name }}</td>
+                    <td>{{ groupAttitudeSkill.percentage }}%</td>
+                    <td>
+                        <p-tag [severity]="groupAttitudeSkill.enabled ? 'success' : 'danger'"
+                            [value]="groupAttitudeSkill.enabled ? 'Enabled' : 'Disabled'">
+                        </p-tag>
+                    </td>
+                    <td class="flex gap-2">
+                        <button pButton type="button" label="" icon="pi pi-pencil" class="p-button-sm"
+                            (click)="editGroupAttitudeSkill(groupAttitudeSkill)"></button>
+                        <button pButton type="button" label="" icon="pi pi-trash" class="p-button-danger p-button-sm"
+                            (click)="deleteGroupAttitudeSkill(groupAttitudeSkill.id)"></button>
+                    </td>
+                </tr>
+            </ng-template>
+        </p-table>
+    </div>
+</div>
+
+<!-- Modal Form for Add/Edit Group Achievement -->
+<p-dialog header="Group Attitude Skill" [(visible)]="groupAttitudeSkillDialog" [style]="{width: '50%', height: '50%'}"
+    [contentStyle]="{overflow: 'auto'}" modal="true" closable="false" [baseZIndex]="10000">
+
     <div class="p-fluid">
-        <div class="p-field">
+        <!-- Input Group Name -->
+        <div class="field">
             <label for="groupName">Group Name</label>
             <input id="groupName" [(ngModel)]="groupAttitudeSkill.group_name" pInputText />
         </div>
 
-        <div class="p-field">
+        <!-- Input Percentage -->
+        <div class="field">
             <label for="percentage">Percentage</label>
             <input id="percentage" [(ngModel)]="groupAttitudeSkill.percentage" pInputText type="number" />
         </div>
 
-        <div class="p-field" hidden>
-            <label for="enabled">Enabled</label>
-            <p-checkbox id="enabled" [(ngModel)]="groupAttitudeSkill.enabled"></p-checkbox>
+        <!-- Checkbox for Enabled -->
+        <div class="field">
+            <label for="enabled">Status</label>
+            <p-dropdown [options]="enabledOptions" [(ngModel)]="groupAttitudeSkill.enabled" placeholder="Select Status"
+                id="enabled" required>
+            </p-dropdown>
+            <small class="p-error" *ngIf="!groupAttitudeSkill.enabled && groupAttitudeSkillDialog">Status wajib
+                dipilih.</small>
         </div>
     </div>
 
     <p-footer>
-        <button pButton label="Save" icon="pi pi-check" (click)="saveGroupAttitudeSkill()"
-            [disabled]="!groupAttitudeSkill.group_name || !groupAttitudeSkill.percentage"></button>
-        <button pButton label="Cancel" icon="pi pi-times" (click)="groupAttitudeSkillDialog = false"></button>
+        <div class="flex justify-content-end">
+            <p-button label="Cancel" icon="pi pi-times" severity="secondary"
+                (click)="groupAttitudeSkillDialog = false"></p-button>
+            <button pButton label="Save" icon="pi pi-check" (click)="saveGroupAttitudeSkill()"
+                [disabled]="!groupAttitudeSkill.group_name || !groupAttitudeSkill.percentage" class="mr-2"></button>
+        </div>
     </p-footer>
 </p-dialog>
