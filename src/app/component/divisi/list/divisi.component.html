@@ -1,0 +1,44 @@
+<p-button label="Tambah Pengguna" icon="pi pi-plus" (click)="openCreateDialog()" class="p-5 mt-5" ></p-button>
+<div class="card">
+    <!-- Tombol global untuk membuat pengguna baru -->
+    
+    <div class="p-5">
+    <p-table #dt [value]="divisions" [paginator]="true" [rows]="10" [loading]="loading" styleClass="p-datatable-gridlines" [globalFilterFields]="[ 'DIVISION_NAME']">
+          <ng-template pTemplate="caption">
+              <p-iconField iconPosition="left">
+                  <p-inputIcon>
+                      <i class="pi pi-search"></i>
+                  </p-inputIcon>
+                  <input #searchInput pInputText type="text" (input)="dt.filterGlobal(searchInput.value, 'contains')" placeholder="Cari Pengguna..." />
+              </p-iconField>
+          </ng-template>
+          
+        <ng-template pTemplate="header">
+          <tr>
+              <th>Nama Divisi</th>
+              <th>Aksi</th>
+          </tr>
+      </ng-template>
+  
+      <ng-template pTemplate="body" let-divisions>
+          <tr>
+              <td>{{ divisions.DIVISION_NAME }}</td>
+              <td class="flex gap-2">
+                  <button pButton type="button" icon="pi pi-pencil" class="p-button-sm" (click)="openUpdateDialog(divisions)"></button>
+                  <button pButton type="button" icon="pi pi-trash" class="p-button-danger p-button-sm"
+                          (click)="confirmDelete(divisions)"></button>
+              </td>
+          </tr>
+      </ng-template>
+    </p-table>
+    </div>
+</div>
+<div>
+<!-- 
+    <p-toast 
+    [showTransformOptions]="'translateY(100%)'" 
+    [showTransitionOptions]="'1000ms'" 
+    [hideTransitionOptions]="'1000ms'" 
+    [showTransformOptions]="'translateX(100%)'" /> -->
+
+</div>
