@@ -4,11 +4,14 @@ import { TableModule } from 'primeng/table';
 import { FormsModule } from '@angular/forms';
 import { ButtonModule } from 'primeng/button';
 import { MenuManagementService } from '../service/menu-management/menu-management.service';
+import { ToastModule } from 'primeng/toast';
+import { MessageService } from 'primeng/api';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-menu-management',
   standalone: true,
-  imports: [CheckboxModule, TableModule, FormsModule, ButtonModule],
+  imports: [CheckboxModule, TableModule, FormsModule, ButtonModule, ToastModule],
   templateUrl: './menu-management.component.html',
   styleUrl: './menu-management.component.css'
 })
@@ -17,7 +20,7 @@ export class MenuManagementComponent implements OnInit {
   menus: any[] = [];
   roleMenuMap: { [key: string]: { [key: string]: boolean } } = {}; // Map untuk role dan menu
 
-  constructor(private menuManagementService: MenuManagementService) {}
+  constructor(private menuManagementService: MenuManagementService, private messageService: MessageService) {}
 
   ngOnInit(): void {
     this.getAllMenu();
@@ -65,9 +68,12 @@ export class MenuManagementComponent implements OnInit {
         .filter((menuId) => this.roleMenuMap[roleId][menuId]); // Ambil menu yang dicentang
     }
 
+    
     this.menuManagementService.updateRoleMenu(result).subscribe({
+
       next: (response) => {
         console.log('Role-menu updated successfully:', response);
+        this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Message Content' });
       },
       error: (error) => console.error('Error updating role-menu:', error),
     })
