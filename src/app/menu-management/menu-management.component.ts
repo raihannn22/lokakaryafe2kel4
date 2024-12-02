@@ -13,51 +13,66 @@ import { MenuManagementService } from '../service/menu-management/menu-managemen
   styleUrl: './menu-management.component.css'
 })
 export class MenuManagementComponent implements OnInit {
-item: any;
+  roles: any[] = [];
+  menus: any[] = [];
+  roleMenuMap: { [key: string]: { [key: string]: boolean } } = {}; // Map untuk role dan menu
 
-  constructor (private menuManagementService: MenuManagementService) {}
+  constructor(private menuManagementService: MenuManagementService) {}
+
   ngOnInit(): void {
     this.getAllMenu();
-      this.getAllRole();
+    this.getAllRole();
   }
-    
-    roles:any = [];
-    menus:any = [];
-    nganu: {[key: string] : string[]} = {};
 
-    
+  getAllRole() {
+    this.menuManagementService.gettAllRole().subscribe({
+      next: (response) => {
+        this.roles = response.content;
+        this.initializeRoleMenuMap();
+      },
+      error: (error) => console.error('Error fetching roles:', error),
+    });
+  }
 
-    getAllRole() {
-      this.menuManagementService.gettAllRole().subscribe({
-        next: (response) => {
-          this.roles = response.content; 
-          this.roles.array.forEach((role:any) => {
-            this.nganu[role.ID] = role.menus!;
-          });
-        },
-        error: (error) => {
-          console.error('Error fetching users:', error);
-        },
-      });
-    };
-    
-    getAllMenu() {
-      this.menuManagementService.gettAllMenu().subscribe({
-        next: (response) => {
-          this.menus = response.content; 
-          console.log('Total menus:', this.menus);
-        },
-        error: (error) => {
-          console.error('Error fetching users:', error);
-        },
-      });
-    };
+  getAllMenu() {
+    this.menuManagementService.gettAllMenu().subscribe({
+      next: (response) => {
+        this.menus = response.content;
+        this.initializeRoleMenuMap();
+      },
+      error: (error) => console.error('Error fetching menus:', error),
+    });
+  }
 
+  initializeRoleMenuMap() {
+    for (const role of this.roles) {
+      this.roleMenuMap[role.ID] = {};
+      for (const menu of this.menus) {
+        this.roleMenuMap[role.ID][menu.ID] = false; // Inisialisasi semua checkbox
+      }
+    }
+  }
 
-    
+  updateRoleMenu(roleId: string, menuId: string, isChecked: boolean) {
+    this.roleMenuMap[roleId][menuId] = isChecked;
+  }
 
-    savePermissions() {
-      console.log(this.nganu)
-   
+  savePermissions() {
+    const result: { [key: string]: string[] } = {};
+
+    for (const roleId in this.roleMenuMap) {
+      result[roleId] = Object.keys(this.roleMenuMap[roleId])
+        .filter((menuId) => this.roleMenuMap[roleId][menuId]); // Ambil menu yang dicentang
+    }
+
+    this.menuManagementService.updateRoleMenu(result).subscribe({
+      next: (response) => {
+        console.log('Role-menu updated successfully:', response);
+      },
+      error: (error) => console.error('Error updating role-menu:', error),
+    })
+
+    console.log('Resulting JSON:', result);
+    // Lakukan aksi lanjutan, seperti kirim ke backend
   }
 }

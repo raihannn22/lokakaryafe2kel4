@@ -17,4 +17,8 @@ export class MenuManagementService {
   gettAllRole(): Observable<any> {
     return this.http.get(`${this.apiUrl}/appRole/get/all`);
   }
+
+  updateRoleMenu(roleMenuData: any): Observable<any> {
+    return this.http.put(`${this.apiUrl}/appRoleMenu/create`, roleMenuData); // Endpoint update role-menu
+  }
 }

@@ -1,11 +1,11 @@
 <h2>Role Access Management</h2>
-<p-checkbox 
-    [binary]="true" 
+<p-checkbox
+    [binary]="true"
     inputId="binary"></p-checkbox>
 
     <p-table [value]="menus" [tableStyle]="{ 'min-width': '50rem' }">
       <ng-template pTemplate="header">
-        
+
           <tr>
             <th>Permissions</th>
             @for (roles of roles; track $index) {
@@ -18,39 +18,15 @@
             <td>{{menu.MENU_NAME}}</td>
             @for (item of roles; track $index) {
               <td>
-              <p-checkbox 
-              [(ngModel)]="nganu[item.ID]"
-              value="menu.MENU_NAME"
-              name="group"
+              <p-checkbox
+              [binary]="true"
+              [(ngModel)]="roleMenuMap[item.ID][menu.ID]"
+              (ngModelChange)="updateRoleMenu(item.ID, menu.ID, $event)">
               ></p-checkbox>
             </td>
             }
           </tr>
       </ng-template>
   </p-table>
-  
-  <button (click)="savePermissions()">CLICK</button> 
-<!-- 
-  <ng-template pTemplate="header">
-    <th>Permissions</th>
-    @for (roles of roles; track $index) {
-        <th>{{ roles.ROLENAME }}</th>
-    }
-  </ng-template>
 
-  <ng-template pTemplate="body">
-    <tr>
-          <td>RAIHAN</td>
-          <td>RAIHAN</td>
-          <td>RAIHAN</td>
-          <td>RAIHAN</td>
-          <td>RAIHAN</td>
-          <td>RAIHAN</td>
-       
-    </tr>
-  </ng-template>
-</table> -->
-
-<!-- <div class="mt-4">
-  <button pButton type="button" label="Save" (click)="savePermissions()"></button>
-</div> -->
+  <p-button (click)="savePermissions()" label="simpan"></p-button>
