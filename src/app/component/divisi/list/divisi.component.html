@@ -33,12 +33,24 @@
     </p-table>
     </div>
 </div>
+
 <div>
-<!-- 
+
     <p-toast 
     [showTransformOptions]="'translateY(100%)'" 
     [showTransitionOptions]="'1000ms'" 
     [hideTransitionOptions]="'1000ms'" 
-    [showTransformOptions]="'translateX(100%)'" /> -->
+    [showTransformOptions]="'translateX(100%)'" />
 
 </div>
+
+<app-create-division
+[(visible)]="displayCreateDialog"
+(divisionCreated)="ondivisionCreated($event)">
+</app-create-division>
+
+<app-update-division
+[(visible)]="displayUpdateDialog"
+[division]="selecteddivision"
+(divisionCreated)="ondivisionCreated($event)">
+</app-update-division>

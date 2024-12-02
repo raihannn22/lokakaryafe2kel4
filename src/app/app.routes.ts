@@ -7,6 +7,7 @@ import { GroupAttitudeSkillComponent } from './component/group-attitude-skill/gr
 import { AttitudeSkillComponent } from './component/attitude-skill/attitude-skill.component';
 import { EmpSuggestionComponent } from './component/emp-suggestion/emp-suggestion.component';
 import { DivisiComponent } from './component/divisi/list/divisi.component';
+import { MenuManagementComponent } from './menu-management/menu-management.component';
 
 
 export const routes: Routes =  [
@@ -46,6 +47,10 @@ export const routes: Routes =  [
     {
         path: 'divisi',
         component: DivisiComponent
+    },
+    {
+        path: 'menu-management',
+        component: MenuManagementComponent
     }
     
 ];
