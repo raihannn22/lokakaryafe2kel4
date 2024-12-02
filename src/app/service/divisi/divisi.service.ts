@@ -26,6 +26,6 @@ export class DivisiService {
   }
 
   deleteDivision(id: string): Observable<any> {
-    return this.http.delete(`${this.apiUrl}/division`);
+    return this.http.delete(`${this.apiUrl}/division/delete/${id}`);
   }
 }

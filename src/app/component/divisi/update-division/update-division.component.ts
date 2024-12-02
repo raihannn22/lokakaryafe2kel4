@@ -5,16 +5,15 @@ import { DialogModule } from 'primeng/dialog';
 import { InputTextModule } from 'primeng/inputtext';
 import { FormsModule } from '@angular/forms';
 import { DivisiService } from '../../../service/divisi/divisi.service';
-
 @Component({
-  selector: 'app-create-division',
+  selector: 'app-update-division',
   standalone: true,
   imports: [DialogModule, InputTextModule, ButtonModule, CommonModule, FormsModule],
-  templateUrl: './create-division.component.html',
-  styleUrl: './create-division.component.css'
+  templateUrl: './update-division.component.html',
+  styleUrl: './update-division.component.css'
 })
-export class CreateDivisionComponent {
- 
+export class UpdateDivisionComponent {
+
   isValidForm(): boolean {
     return !!this.newDivision.DIVISION_NAME 
   }
@@ -22,7 +21,7 @@ export class CreateDivisionComponent {
   
   @Input() visible: boolean = false;  // Menyambungkan dengan property di komponen induk
   @Output() visibleChange = new EventEmitter<boolean>();  // Emit perubahan visibility
-
+  @Input() division: any;
   @Output() divisionCreated = new EventEmitter<any>();  
 
   divisions: any[] = [];
@@ -35,7 +34,11 @@ export class CreateDivisionComponent {
   ngOnInit() {
   }
 
-
+  ngOnChanges() {
+    if (this.division) {
+      this.newDivision = { ...this.division };
+    }
+  }
 
 
 
@@ -52,9 +55,10 @@ export class CreateDivisionComponent {
   }
 
   onSubmit() {
-    this.divisionService.saveDivision(this.newDivision).subscribe({
+    const updatedData: any = { ...this.newDivision };
+    this.divisionService.updateDivision( this.division.ID, updatedData).subscribe({
       next: (response) => {
-        console.log('User created successfully:', response);
+        console.log('Division updated successfully:', response);
         this.divisionCreated.emit(response);// Emit event ke komponen induk
         this.closeDialog();               // Tutup dialog setelah berhasil
       },

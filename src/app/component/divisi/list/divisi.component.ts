@@ -14,13 +14,15 @@ import { InputIconModule } from 'primeng/inputicon';
 import { InputTextModule } from 'primeng/inputtext';
 import { MessageService } from 'primeng/api';
 import { DivisiService } from '../../../service/divisi/divisi.service';
+import { CreateDivisionComponent } from '../create-division/create-division.component';
+import { UpdateDivisionComponent } from '../update-division/update-division.component';
 
 
 @Component({
   selector: 'app-divisi',
   standalone: true,
   imports: [CommonModule, ButtonModule, CalendarModule, FormsModule, TableModule, DialogModule, TagModule, ToastModule, 
-    IconFieldModule, InputIconModule, InputTextModule],
+    IconFieldModule, InputIconModule, InputTextModule, CreateDivisionComponent, UpdateDivisionComponent],
   templateUrl: './divisi.component.html',
   styleUrl: './divisi.component.css'
 })
@@ -65,8 +67,8 @@ export class DivisiComponent {
     this.displayCreateDialog = true;
   }
 
-  openUpdateDialog(divisi: any) {
-    this.selecteddivision = divisi;
+  openUpdateDialog(divisions: any) {
+    this.selecteddivision = divisions;
     console.log(this.selecteddivision);
     this.displayUpdateDialog = true;
   }
@@ -82,10 +84,10 @@ export class DivisiComponent {
     // Tambahkan division baru ke daftar divisions atau update data sesuai kebutuhan
   }
 
-  confirmDelete(division: any) {
+  confirmDelete(divisions: any) {
     Swal.fire({
       title: 'Apakah Anda yakin?',
-      text: `Anda akan menghapus pengguna ${division.divisionname}!`,
+      text: `Anda akan menghapus divisi ${divisions.DIVISION_NAME}!`,
       icon: 'warning',
       showCancelButton: true,
       confirmButtonText: 'Ya, hapus!',
@@ -94,13 +96,13 @@ export class DivisiComponent {
       cancelButtonColor: '#3085d6',
     }).then((result) => {
       if (result.isConfirmed) {
-        this.divisiService.deleteDivision(division.id).subscribe({
+        this.divisiService.deleteDivision(divisions.ID).subscribe({
           next: () => {
-            Swal.fire('Terhapus!', 'Pengguna berhasil dihapus.', 'success');
+            Swal.fire('Terhapus!', 'Divisi berhasil dihapus.', 'success');
             this.getAllDivisions(); // Panggil metode untuk memperbarui tabel
           },
           error: (error) => {
-            Swal.fire('Error', 'Terjadi kesalahan saat menghapus pengguna.', 'error');
+            Swal.fire('Error', 'Terjadi kesalahan saat menghapus Divisi.', 'error');
             console.error('Error deleting division:', error);
           }
         });
