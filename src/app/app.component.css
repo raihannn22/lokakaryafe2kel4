@@ -14,3 +14,11 @@
   .sidebar.closed ~ .content {
     margin-left: 60px;
   }
+   
+  .card {
+    padding: 20px;
+    border: 1px solid #dcdcdc;
+    border-radius: 8px;
+    width: 100%;
+    box-shadow: 2px 2px 12px #ccc;
+  }
