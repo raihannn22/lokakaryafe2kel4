@@ -7,8 +7,10 @@ import { GroupAttitudeSkillComponent } from './component/group-attitude-skill/gr
 import { AttitudeSkillComponent } from './component/attitude-skill/attitude-skill.component';
 import { EmpSuggestionComponent } from './component/emp-suggestion/emp-suggestion.component';
 import { DivisiComponent } from './component/divisi/list/divisi.component';
+import { EmpAchievementSkillComponent } from './component/emp-achievement-skill/emp-achievement-skill.component';
 import { MenuManagementComponent } from './component/menu-management/menu-management.component';
 import { ProfilComponent } from './profil/profil.component';
+
 
 
 export const routes: Routes =  [
@@ -32,6 +34,10 @@ export const routes: Routes =  [
     {
         path: 'group-achievement',
         component: GroupAchievementComponent
+    },
+    {
+        path: 'emp-achievement-skill',
+        component: EmpAchievementSkillComponent
     },
     {
         path: 'attitude-skill',
