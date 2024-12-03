@@ -23,7 +23,7 @@
                                 leaveActiveClass="slideup"
                                 class="p-3 flex align-items-center justify-content-between text-600 cursor-pointer p-ripple"
                             >
-                                <span class="font-medium">FAVORITES</span>
+                                <span class="font-medium">MENU</span>
                                 <i class="pi pi-chevron-down"></i>
                             </div>
                             <ul class="list-none p-0 m-0 overflow-hidden">
@@ -42,6 +42,11 @@
                                     <a [routerLink]="['/divisi']" pRipple class="flex align-items-center cursor-pointer p-3 border-round text-700 hover:surface-100 transition-duration-150 transition-colors p-ripple ">
                                         <i class="pi pi-ethereum mr-2"></i>
                                         <span class="font-medium">Divisi</span>                                    </a>
+                                </li>
+                                <li>
+                                    <a [routerLink]="['/menu-management']" pRipple class="flex align-items-center cursor-pointer p-3 border-round text-700 hover:surface-100 transition-duration-150 transition-colors p-ripple ">
+                                        <i class="pi pi-objects-column mr-2"></i>
+                                        <span class="font-medium">Menu Management</span>                                    </a>
                                 </li>
                                 <li>
                                     <a 
@@ -123,13 +128,6 @@
                                 </li>
                                 <li>
                                     <a pRipple class="flex align-items-center cursor-pointer p-3 border-round text-700 hover:surface-100 transition-duration-150 transition-colors p-ripple">
-                                        <i class="pi pi-comments mr-2"></i>
-                                        <span class="font-medium">Messages</span>
-                                        <span class="inline-flex align-items-center justify-content-center ml-auto bg-primary border-circle" style="min-width: 1.5rem; height: 1.5rem">3</span>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a pRipple class="flex align-items-center cursor-pointer p-3 border-round text-700 hover:surface-100 transition-duration-150 transition-colors p-ripple">
                                         <i class="pi pi-calendar mr-2"></i>
                                         <span class="font-medium">Calendar</span>
                                     </a>
@@ -183,12 +181,11 @@
                 <div class="mt-auto">
                     <hr class="mb-3 mx-3 border-top-1 border-none surface-border" />
                     <a pRipple class="m-3 flex align-items-center cursor-pointer p-3 gap-2 border-round text-700 hover:surface-100 transition-duration-150 transition-colors p-ripple">
-                        <p-avatar image="https://primefaces.org/cdn/primeng/images/demo/avatar/amyelsner.png" shape="circle" />
-                        <span class="font-bold">Amy Elsner</span>
+                        <p-avatar image="https://www.iconbolt.com/iconsets/elastic-ui-icons/users-roles.svg" shape="circle" />
+                        <span class="font-bold">{{role}}</span>
                     </a>
                 </div>
             </div>
         </ng-template>
     </p-sidebar>
-    <!-- <p-button (onClick)="sidebarVisible = true" icon="pi pi-arrow-right"></p-button> -->
     </div>
