@@ -18,7 +18,9 @@ export class AuthService {
       tap(response => {
         // Simpan token di localStorage
         localStorage.setItem('token', response.token);
-        localStorage.setItem('full_namw', response.user.full_name);
+        localStorage.setItem('full_name', response.user.full_name);
+        localStorage.setItem('role', response.user.app_role.map((role: any) => role.roleName));
+        localStorage.setItem('id', response.user.id);
       })
     );
   }
@@ -26,6 +28,9 @@ export class AuthService {
   // Fungsi untuk logout
   logout(): void {
     localStorage.removeItem('token');
+    localStorage.removeItem('full_name');
+    localStorage.removeItem('role');
+    localStorage.removeItem('id');
   }
 
   // Cek status login

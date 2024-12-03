@@ -6,7 +6,7 @@ import { PasswordModule } from 'primeng/password';
 // import { AuthService } from '../service/auth.service';
 import { Router } from '@angular/router';
 import Swal from 'sweetalert2';
-import { AuthService } from '../../service/login/auth.service';
+import { AuthService } from '../../service/auth/auth.service';
 
 @Component({
   selector: 'app-login',
@@ -22,7 +22,7 @@ export class LoginComponent {
   password: string = '';
   errorMessage: string = '';
 
-  constructor(private authService: AuthService, private router: Router) {}
+  constructor(private authService:AuthService , private router: Router) {}
 
   // Fungsi login
   onLogin() {
