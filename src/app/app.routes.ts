@@ -9,7 +9,7 @@ import { EmpSuggestionComponent } from './component/emp-suggestion/emp-suggestio
 import { DivisiComponent } from './component/divisi/list/divisi.component';
 import { EmpAchievementSkillComponent } from './component/emp-achievement-skill/emp-achievement-skill.component';
 import { MenuManagementComponent } from './component/menu-management/menu-management.component';
-import { ProfilComponent } from './profil/profil.component';
+import { ProfilComponent } from './component/profil/profil.component';
 
 
 
@@ -63,5 +63,5 @@ export const routes: Routes =  [
         path: 'profile',
         component: ProfilComponent
     }
-    
+
 ];

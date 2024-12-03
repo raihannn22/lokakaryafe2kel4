@@ -6,12 +6,11 @@ import { PasswordModule } from 'primeng/password';
 // import { AuthService } from '../service/auth.service';
 import { Router } from '@angular/router';
 import Swal from 'sweetalert2';
-import { AuthService } from '../../service/auth/auth.service';
-
+import { AuthService } from '../../service/login/auth.service';
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [FloatLabelModule, CommonModule, FormsModule, PasswordModule], 
+  imports: [FloatLabelModule, CommonModule, FormsModule, PasswordModule],
   templateUrl: './login.component.html',
   styleUrl: './login.component.css'
 })
@@ -40,26 +39,4 @@ export class LoginComponent {
     });
   }
 
-  
-  // onLogin() {
-  //   if (this.email && this.password) {
-  //     this.authService.login(this.email, this.password).subscribe(
-  //       (response) => {
-  //         localStorage.setItem('token', response.content.token);
-  //         console.log('Login successful:', response);
-  //         this.router.navigate(['/user']);
-  //         // Handle successful login, e.g., navigate to another page
-  //       },
-  //       (error) => {
-  //         this.onLoginError();
-  //         console.error('Login failed:', error);
-  //         // Handle login failure
-  //       }
-  //     );
-  //   }
-
-  // }
-  // onLoginError() {
-  //   this.errorMessage = 'Login gagal. Periksa username dan password.';
-  // }
 }
