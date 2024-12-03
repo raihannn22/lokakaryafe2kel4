@@ -38,8 +38,10 @@ export class NavbarComponent {
     });
   }
 
+  
   ngOnInit() {
-      this.items = [
+    const nama:string| null = localStorage.getItem('full_name');
+    this.items = [
             {
                 label: 'Menu',
                 styleClass: 'p-mr-2',
@@ -55,12 +57,13 @@ export class NavbarComponent {
             //     }
             // }, 
              {
-              label: 'USER',
+              label: `${nama}`,
               icon: 'pi pi-user',
               items: [
                   {
                   label: 'Profil',
-                  icon: 'pi pi-id-card'
+                  icon: 'pi pi-id-card',
+                  command: () => this.router.navigate(['/profile'])
                   },
                   {
                     label: 'Logout',
