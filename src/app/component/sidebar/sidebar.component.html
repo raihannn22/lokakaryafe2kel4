@@ -12,7 +12,14 @@
                     </span>
                 </div>
                 <div class="overflow-y-auto">
+                    @if (role?.includes('HR')) {
                     <ul class="list-none p-3 m-0">
+                        <li>
+                            <a pRipple class="flex align-items-center cursor-pointer p-3 border-round text-700 hover:surface-100 transition-duration-150 transition-colors p-ripple">
+                                <i class="pi pi-home mr-2"></i>
+                                <span class="font-medium">Dashboard</span>
+                            </a>
+                        </li>
                         <li>
                             <div
                                 pRipple
@@ -23,124 +30,59 @@
                                 leaveActiveClass="slideup"
                                 class="p-3 flex align-items-center justify-content-between text-600 cursor-pointer p-ripple"
                             >
-                                <span class="font-medium">MENU</span>
+                                <span class="font-medium">MENU HR</span>
                                 <i class="pi pi-chevron-down"></i>
                             </div>
                             <ul class="list-none p-0 m-0 overflow-hidden">
-                                <li>
-                                    <a pRipple class="flex align-items-center cursor-pointer p-3 border-round text-700 hover:surface-100 transition-duration-150 transition-colors p-ripple">
-                                        <i class="pi pi-home mr-2"></i>
-                                        <span class="font-medium">Dashboard</span>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a [routerLink]="['/user']" pRipple class="flex align-items-center cursor-pointer p-3 border-round text-700 hover:surface-100 transition-duration-150 transition-colors p-ripple ">
-                                        <i class="pi pi-user mr-2"></i>
-                                        <span class="font-medium">User</span>                                    </a>
-                                </li>
-                                <li>
-                                    <a [routerLink]="['/divisi']" pRipple class="flex align-items-center cursor-pointer p-3 border-round text-700 hover:surface-100 transition-duration-150 transition-colors p-ripple ">
-                                        <i class="pi pi-ethereum mr-2"></i>
-                                        <span class="font-medium">Divisi</span>                                    </a>
-                                </li>
                                 <li>
                                     <a [routerLink]="['/menu-management']" pRipple class="flex align-items-center cursor-pointer p-3 border-round text-700 hover:surface-100 transition-duration-150 transition-colors p-ripple ">
                                         <i class="pi pi-objects-column mr-2"></i>
                                         <span class="font-medium">Menu Management</span>                                    </a>
                                 </li>
-                                <li>
-                                    <a 
-                                        pRipple
-                                        pStyleClass="@next"
-                                        enterClass="hidden"
-                                        enterActiveClass="slidedown"
-                                        leaveToClass="hidden"
-                                        leaveActiveClass="slideup"
-                                        class="flex align-items-center cursor-pointer p-3 border-round text-700 hover:surface-100 transition-duration-150 transition-colors p-ripple"
-                                    >
-                                        <i class="pi pi-chart-line mr-2"></i>
-                                        <span class="font-medium">Achievement</span>
-                                        <i class="pi pi-chevron-down ml-auto"></i>
-                                    </a>
-                                    <ul class="list-none py-0 pl-3 pr-0 m-0 hidden overflow-y-hidden transition-all transition-duration-400 transition-ease-in-out">
-                                        
-                                        <li>
-                                            <a [routerLink]="['/emp-achievement-skill']" pRipple class="flex align-items-center cursor-pointer p-3 border-round text-700 hover:surface-100 transition-duration-150 transition-colors p-ripple">
-                                                <i class="pi pi-chart-line mr-2"></i>
-                                                <span class="font-medium">Emp Acheivement</span>
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a [routerLink]="['/achievement']" pRipple class="flex align-items-center cursor-pointer p-3 border-round text-700 hover:surface-100 transition-duration-150 transition-colors p-ripple">
-                                                <i class="pi pi-chart-line mr-2"></i>
-                                                <span class="font-medium">Achievement</span>
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a [routerLink]="['/group-achievement']" pRipple class="flex align-items-center cursor-pointer p-3 border-round text-700 hover:surface-100 transition-duration-150 transition-colors p-ripple">
-                                                <i class="pi pi-chart-line mr-2"></i>
-                                                <span class="font-medium">Group Achievement</span>
-                                            </a>
-                                        </li>
-
-                                    </ul>
-                                </li>
-                                <li>
-                                    <a pRipple pStyleClass="@next" enterClass="hidden" enterActiveClass="slidedown" leaveToClass="hidden"
-                                        leaveActiveClass="slideup"
-                                        class="flex align-items-center cursor-pointer p-3 border-round text-700 hover:surface-100 transition-duration-150 transition-colors p-ripple">
-                                        <i class="pi pi-chart-line mr-2"></i>
-                                        <span class="font-medium">Attitude Skill</span>
-                                        <i class="pi pi-chevron-down ml-auto"></i>
-                                    </a>
-                                    <ul
-                                        class="list-none py-0 pl-3 pr-0 m-0 hidden overflow-y-hidden transition-all transition-duration-400 transition-ease-in-out">
-                                
-                                        <li>
-                                            <a [routerLink]="['/']" pRipple
-                                                class="flex align-items-center cursor-pointer p-3 border-round text-700 hover:surface-100 transition-duration-150 transition-colors p-ripple">
-                                                <i class="pi pi-chart-line mr-2"></i>
-                                                <span class="font-medium">Emp Attitude Skill</span>
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a [routerLink]="['/attitude-skill']" pRipple
-                                                class="flex align-items-center cursor-pointer p-3 border-round text-700 hover:surface-100 transition-duration-150 transition-colors p-ripple">
-                                                <i class="pi pi-chart-line mr-2"></i>
-                                                <span class="font-medium">Attitude Skill</span>
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a [routerLink]="['/group-attitude-skill']" pRipple
-                                                class="flex align-items-center cursor-pointer p-3 border-round text-700 hover:surface-100 transition-duration-150 transition-colors p-ripple">
-                                                <i class="pi pi-chart-line mr-2"></i>
-                                                <span class="font-medium">Group Attitude Skill</span>
-                                            </a>
-                                        </li>
-                                
-                                    </ul>
-                                </li>
-                                <li>
-                                    <a pRipple class="flex align-items-center cursor-pointer p-3 border-round text-700 hover:surface-100 transition-duration-150 transition-colors p-ripple">
-                                        <i class="pi pi-users mr-2"></i>
-                                        <span class="font-medium">Team</span>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a pRipple class="flex align-items-center cursor-pointer p-3 border-round text-700 hover:surface-100 transition-duration-150 transition-colors p-ripple">
-                                        <i class="pi pi-calendar mr-2"></i>
-                                        <span class="font-medium">Calendar</span>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a pRipple class="flex align-items-center cursor-pointer p-3 border-round text-700 hover:surface-100 transition-duration-150 transition-colors p-ripple">
-                                        <i class="pi pi-cog mr-2"></i>
-                                        <span class="font-medium">Settings</span>
+                               
+                               
+                                <li *ngFor="let menu of getMenuByRole('hr')">
+                                    <a [routerLink]="[menu.path]" pRipple 
+                                       class="flex align-items-center cursor-pointer p-3 border-round text-700 hover:surface-100 transition-duration-150 transition-colors p-ripple">
+                                      <i [class]="menu.icon + ' mr-2'"></i>
+                                      <span class="font-medium">{{ menu.MAPPED_NAME }}</span>
                                     </a>
                                 </li>
                             </ul>
                         </li>
                     </ul>
+                }
+
+
+                    @if (role?.includes('USER')) {
+                        <ul class="list-none p-3 m-0">
+                            <li>
+                                <div
+                                    pRipple
+                                    pStyleClass="@next"
+                                    enterClass="hidden"
+                                    enterActiveClass="slidedown"
+                                    leaveToClass="hidden"
+                                    leaveActiveClass="slideup"
+                                    class="p-3 flex align-items-center justify-content-between text-600 cursor-pointer p-ripple"
+                                >
+                                    <span class="font-medium">Menu User</span>
+                                    <i class="pi pi-chevron-down"></i>
+                                </div>
+                                <ul class="list-none p-0 m-0 overflow-hidden">
+                                    <li *ngFor="let menu of getMenuByRole('user')">
+                                        <a [routerLink]="[menu.path]" pRipple 
+                                           class="flex align-items-center cursor-pointer p-3 border-round text-700 hover:surface-100 transition-duration-150 transition-colors p-ripple">
+                                          <i [class]="menu.icon + ' mr-2'"></i>
+                                          <span class="font-medium">{{ menu.MAPPED_NAME }}</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+                        </ul>
+                    }
+
+                    @if (role?.includes('SVP')) {
                     <ul class="list-none p-3 m-0">
                         <li>
                             <div
@@ -152,31 +94,50 @@
                                 leaveActiveClass="slideup"
                                 class="p-3 flex align-items-center justify-content-between text-600 cursor-pointer p-ripple"
                             >
-                                <span class="font-medium">APPLICATION</span>
+                                <span class="font-medium">Menu SVP</span>
                                 <i class="pi pi-chevron-down"></i>
                             </div>
                             <ul class="list-none p-0 m-0 overflow-hidden">
-                                <li>
-                                    <a pRipple class="flex align-items-center cursor-pointer p-3 border-round text-700 hover:surface-100 transition-duration-150 transition-colors p-ripple">
-                                        <i class="pi pi-folder mr-2"></i>
-                                        <span class="font-medium">Projects</span>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a pRipple class="flex align-items-center cursor-pointer p-3 border-round text-700 hover:surface-100 transition-duration-150 transition-colors p-ripple">
-                                        <i class="pi pi-chart-bar mr-2"></i>
-                                        <span class="font-medium">Performance</span>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a pRipple class="flex align-items-center cursor-pointer p-3 border-round text-700 hover:surface-100 transition-duration-150 transition-colors p-ripple">
-                                        <i class="pi pi-cog mr-2"></i>
-                                        <span class="font-medium">Settings</span>
+                                <li *ngFor="let menu of getMenuByRole('svp')">
+                                    <a [routerLink]="[menu.path]" pRipple 
+                                       class="flex align-items-center cursor-pointer p-3 border-round text-700 hover:surface-100 transition-duration-150 transition-colors p-ripple">
+                                      <i [class]="menu.icon + ' mr-2'"></i>
+                                      <span class="font-medium">{{ menu.MAPPED_NAME }}</span>
                                     </a>
                                 </li>
                             </ul>
                         </li>
                     </ul>
+                }
+
+                @if (role?.includes('MGR')) {
+                    <ul class="list-none p-3 m-0">
+                        <li>
+                            <div
+                                pRipple
+                                pStyleClass="@next"
+                                enterClass="hidden"
+                                enterActiveClass="slidedown"
+                                leaveToClass="hidden"
+                                leaveActiveClass="slideup"
+                                class="p-3 flex align-items-center justify-content-between text-600 cursor-pointer p-ripple"
+                            >
+                                <span class="font-medium">Menu MGR</span>
+                                <i class="pi pi-chevron-down"></i>
+                            </div>
+                            <ul class="list-none p-0 m-0 overflow-hidden">
+                                <li *ngFor="let menu of getMenuByRole('mgr')">
+                                    <a [routerLink]="[menu.path]" pRipple 
+                                       class="flex align-items-center cursor-pointer p-3 border-round text-700 hover:surface-100 transition-duration-150 transition-colors p-ripple">
+                                      <i [class]="menu.icon + ' mr-2'"></i>
+                                      <span class="font-medium">{{ menu.MAPPED_NAME }}</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+
+                }
                 </div>
                 <div class="mt-auto">
                     <hr class="mb-3 mx-3 border-top-1 border-none surface-border" />

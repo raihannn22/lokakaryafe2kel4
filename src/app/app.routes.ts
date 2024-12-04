@@ -10,6 +10,7 @@ import { DivisiComponent } from './component/divisi/list/divisi.component';
 import { EmpAchievementSkillComponent } from './component/emp-achievement-skill/emp-achievement-skill.component';
 import { MenuManagementComponent } from './component/menu-management/menu-management.component';
 import { ProfilComponent } from './component/profil/profil.component';
+import { DevplanComponent } from './component/devplan/list/devplan.component';
 
 
 
@@ -24,7 +25,7 @@ export const routes: Routes =  [
         component: LoginComponent
     },
     {
-        path: 'user',
+        path: 'user-management',
         component: UserComponent
     },
     {
@@ -52,7 +53,7 @@ export const routes: Routes =  [
         component: EmpSuggestionComponent
     },
     {
-        path: 'divisi',
+        path: 'division-management',
         component: DivisiComponent
     },
     {
@@ -62,6 +63,10 @@ export const routes: Routes =  [
     {
         path: 'profile',
         component: ProfilComponent
+    },
+    {
+        path: 'development-plan',
+        component: DevplanComponent
     }
 
 ];

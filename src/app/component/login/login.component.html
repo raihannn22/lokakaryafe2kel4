@@ -15,7 +15,7 @@
             <!-- </div> -->
             <div class="input-group">
                 <label for="password">Password</label>
-                <p-password [(ngModel)]="password" id="password"  name="password" [feedback]="false" />
+                <p-password [(ngModel)]="password" id="password"  name="password" [feedback]="false" [toggleMask]="true" />
             </div>
             <button type="submit" >Masuk</button>
             <div *ngIf="errorMessage" class="error">{{ errorMessage }}</div>

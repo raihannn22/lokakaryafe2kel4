@@ -1,0 +1,32 @@
+<div class="card flex justify-content-center">
+
+    <p-dialog header="Tambah DevPlan" [modal]="true" (onHide)="closeDialog()" [(visible)]="visible" [style]="{ width: '40rem', height: '25rem' }">
+        <div class="p-fluid">
+            <div class="field">
+                <label for="division">Nama Divisi</label>
+                <input pInputText id="division" [(ngModel)]="newDevplan.PLAN" name="division" #division="ngModel" required />
+                <small class="p-error" *ngIf="division.invalid && division.touched">nama Devplan wajib diisi.</small>
+            </div>
+
+            <div class="field">
+                <label for="enabled">Status Devplan</label>
+                <p-dropdown 
+                  [options]="enabledOptions" 
+                  [(ngModel)]="newDevplan.ENABLED" 
+                  placeholder="Pilih Status" 
+                  id="enabled"
+                  name="enabled"
+                  #enabled="ngModel"
+                  required>
+                </p-dropdown>
+                <small class="p-error" *ngIf="enabled.invalid && enabled.touched">Status Devplan wajib dipilih.</small>
+              </div>
+        
+            <div class="flex justify-content-end gap-2 mt-3">
+                <p-button label="Batal" icon="pi pi-times" severity="secondary" (click)="closeDialog()"></p-button>
+                <p-button label="Simpan" icon="pi pi-check" (click)="onSubmit()" [disabled]="!isValidForm()"></p-button>
+            </div>
+        </div>
+    </p-dialog>
+  </div>
+  
