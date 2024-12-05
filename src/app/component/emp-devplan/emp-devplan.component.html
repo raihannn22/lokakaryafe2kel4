@@ -6,26 +6,26 @@
     </div>
     <button (click)="addKeterangan(empdevplan)" class="btn btn-primary mt-2">Tambah Keterangan</button>
   </div>
-  
+
   <button (click)="saveToDatabase()" class="btn btn-success mt-3">Simpan</button>
    -->
    <p-tag severity="secondary" value="Tahun{{ Year }}"/>
    <div *ngFor="let empdevplan of empdevplans; let j = index" class="card mb-3">
     <h3>{{ empdevplan.title }}</h3>
-  
-    <!-- Daftar keterangan untuk setiap perihal -->
+
     <div *ngFor="let keterangan of empdevplan.keterangans; let i = index" class="keterangan-row">
-      <!-- Input untuk keterangan -->
       <input type="text" pInputText [(ngModel)]="keterangan.value" placeholder="Masukkan keterangan" />
-      
-      <!-- Tombol hapus keterangan -->
       <button (click)="removeKeterangan(empdevplan, i)" class="btn btn-danger">Hapus</button>
     </div>
-  
+
     <!-- Tombol untuk menambah keterangan baru -->
-    <button (click)="addKeterangan(empdevplan)" class="btn btn-primary mt-2">Tambah Keterangan</button>
+    <button (click)="addKeterangan(empdevplan)"
+            class="btn btn-primary mt-2"
+            [disabled]="empdevplan.keterangans[empdevplan.keterangans.length - 1].value.trim() === ''">
+      Tambah Keterangan
+    </button>
   </div>
-  
+
+
   <!-- Tombol untuk menyimpan perubahan ke database -->
   <button (click)="saveToDatabase()" class="btn btn-success mt-3">Simpan</button>
-  
