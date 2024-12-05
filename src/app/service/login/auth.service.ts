@@ -29,6 +29,9 @@ export class AuthService {
   // Fungsi untuk logout
   logout(): void {
     localStorage.removeItem('token');
+    localStorage.removeItem('id');
+    localStorage.removeItem('full_name');
+    localStorage.removeItem('role');
   }
 
   // Cek status login

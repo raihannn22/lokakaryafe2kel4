@@ -54,7 +54,7 @@
           <ng-template pTemplate="content">
             <form >
                 <div class="input-group">
-                  <label for="newPassword">Current Password:</label>
+                  <label for="newPassword">Current Password<span class="text-red-600">*</span></label>
                   <p-password 
                     [(ngModel)]="currentPassword" 
                     name="password" 
@@ -72,7 +72,7 @@
                 </div>
 
                 <div class="input-group">
-                  <label for="newPassword">New Password:</label>
+                  <label for="newPassword">New Password<span class="text-red-600">*</span></label>
                   <p-password 
                     [(ngModel)]="newPassword" 
                     name="newPassword" 
@@ -90,7 +90,7 @@
                 </div>
   
                 <div class="input-group">
-                  <label for="confirmPassword">Confirm Password:</label>
+                  <label for="confirmPassword">Confirm Password<span class="text-red-600">*</span></label>
                   <p-password 
                     [(ngModel)]="confirmPassword" 
                     name="confirmPassword" 

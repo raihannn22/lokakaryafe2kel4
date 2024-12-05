@@ -25,7 +25,6 @@ export class UpdateUserComponent {
            !!this.newUser.email_address &&
            !!this.newUser.employee_status &&
            !!this.newUser.join_date &&
-           !!this.newUser.password &&
            !!this.newUser.division_id;
   }
 
@@ -97,7 +96,6 @@ export class UpdateUserComponent {
     app_role : [],
     join_date: null,
     enabled: 1,
-    password: '',
     division_id: ''
   };
 

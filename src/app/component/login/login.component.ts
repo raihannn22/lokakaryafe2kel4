@@ -27,7 +27,7 @@ export class LoginComponent {
   onLogin() {
     this.authService.login(this.email, this.password).subscribe({
       next: () => {
-        this.router.navigate(['/user-management']);
+        this.router.navigate(['/dashboard']);
       },
       error: () => {
         Swal.fire({

@@ -3,13 +3,13 @@
     <p-dialog header="Tambah DevPlan" [modal]="true" (onHide)="closeDialog()" [(visible)]="visible" [style]="{ width: '40rem', height: '25rem' }">
         <div class="p-fluid">
             <div class="field">
-                <label for="division">Nama Divisi</label>
+                <label for="division">Nama Divisi<span class="text-red-600">*</span></label>
                 <input pInputText id="division" [(ngModel)]="newDevplan.PLAN" name="division" #division="ngModel" required />
                 <small class="p-error" *ngIf="division.invalid && division.touched">nama Devplan wajib diisi.</small>
             </div>
 
             <div class="field">
-                <label for="enabled">Status Devplan</label>
+                <label for="enabled">Status Devplan<span class="text-red-600">*</span></label>
                 <p-dropdown 
                   [options]="enabledOptions" 
                   [(ngModel)]="newDevplan.ENABLED" 
