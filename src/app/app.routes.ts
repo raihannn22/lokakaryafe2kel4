@@ -9,11 +9,16 @@ import { EmpSuggestionComponent } from './component/emp-suggestion/emp-suggestio
 import { DivisiComponent } from './component/divisi/list/divisi.component';
 import { EmpAchievementSkillComponent } from './component/emp-achievement-skill/emp-achievement-skill.component';
 import { MenuManagementComponent } from './component/menu-management/menu-management.component';
+import { ProfilComponent } from './profil/profil.component';
+import { EmpAttitudeSkillComponent } from './component/emp-attitude-skill/emp-attitude-skill.component';
+import { TechnicalSkillComponent } from './component/technical-skill/technical-skill.component';
+import { EmpTechnicalSkillComponent } from './component/emp-technical-skill/emp-technical-skill.component';
 import { ProfilComponent } from './component/profil/profil.component';
 import { DevplanComponent } from './component/devplan/list/devplan.component';
 import { authGuard } from './guard/auth.guard';
 import { DashboardComponent } from './component/dashboard/dashboard.component';
 import { EmpDevplanComponent } from './component/emp-devplan/emp-devplan.component';
+
 
 
 
@@ -63,6 +68,10 @@ export const routes: Routes =  [
         component: GroupAttitudeSkillComponent
     },
     {
+        path: 'emp-attitude-skill',
+        component: EmpAttitudeSkillComponent
+    },
+    {
         path: 'emp-suggestion',
         canActivate: [authGuard],
         component: EmpSuggestionComponent
@@ -83,6 +92,13 @@ export const routes: Routes =  [
         component: ProfilComponent
     },
     {
+        path: 'technical-skill',
+        component: TechnicalSkillComponent
+    },
+    {
+        path: 'emp-technical-skill',
+        component: EmpTechnicalSkillComponent
+    }    
         path: 'development-plan',
         canActivate: [authGuard],
         component: DevplanComponent
@@ -92,5 +108,4 @@ export const routes: Routes =  [
         canActivate: [authGuard],
         component: EmpDevplanComponent
     }
-
 ];

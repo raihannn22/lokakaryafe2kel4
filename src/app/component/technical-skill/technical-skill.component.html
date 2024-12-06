@@ -1,49 +1,81 @@
 <!-- Tombol Tambah Data -->
-<button pButton type="button" label="Tambah Data" icon="pi pi-plus" (click)="showAddDialog()"></button>
+<p-button label="Tambah Data" icon="pi pi-plus" (click)="showAddDialog()" class="p-5 mt-5"></p-button>
 
 <!-- Tabel Data -->
-<p-table [value]="technicalSkills" [paginator]="true" [rows]="10" [loading]="loading" class="p-datatable-striped">
-    <ng-template pTemplate="header">
-        <tr>
-            <th>ID</th>
-            <th>Technical Skill</th>
-            <th>Enabled</th>
-            <th>Action</th>
-        </tr>
-    </ng-template>
+<div class="card">
+    <div class="p-5">
+        <!-- Tabel Data dengan Filter Pencarian -->
+        <p-table [value]="technicalSkills" [paginator]="true" [rows]="10" [first]="first" [totalRecords]="totalRecords"
+            [loading]="loading" styleClass="p-datatable-gridlines" (onPage)="loadPage($event)">
 
-    <ng-template pTemplate="body" let-technicalSkill>
-        <tr>
-            <td>{{ technicalSkill.id }}</td>
-            <td>{{ technicalSkill.technical_skill }}</td>
-            <td>{{ technicalSkill.enabled ? 'Yes' : 'No' }}</td>
-            <td>
-                <button pButton type="button" label="Update" icon="pi pi-pencil"
-                    (click)="editTechnicalSkill(technicalSkill)"></button>
-                <button pButton type="button" label="Delete" icon="pi pi-trash" class="p-button-danger"
-                    (click)="deleteTechnicalSkill(technicalSkill.id)"></button>
-            </td>
-        </tr>
-    </ng-template>
-</p-table>
+            <!-- <ng-template pTemplate="caption">
+                <div class="flex">
+                    <p-dropdown [options]="searchCategories" [(ngModel)]="selectedCategory"
+                        placeholder="Select Category" [ngClass]="{'p-dropdown-sm': true}" [style]="{'width': '150px'}"
+                        class="mr-3"></p-dropdown>
 
-<!-- Modal Form for Add/Edit Group Achievement -->
-<p-dialog header="Group Achievement" [(visible)]="technicalSkillDialog" [style]="{width: '50vw'}" [@dialogAnimation]>
+                    <input pInputText type="text" (input)="searchData()" placeholder="Cari ..."
+                        [(ngModel)]="searchKeyword" />
+                </div>
+            </ng-template> -->
+
+            <ng-template pTemplate="header">
+                <tr>
+                    <th>ID</th>
+                    <th>Technical Skill</th>
+                    <th>Enabled</th>
+                    <th>Action</th>
+                </tr>
+            </ng-template>
+
+            <ng-template pTemplate="body" let-technicalSkill let-rowIndex="rowIndex">
+                <tr>
+                    <td>{{ rowIndex + 1 }}</td>
+                    <td>{{ technicalSkill.technical_skill }}</td>
+                    <td>
+                        <p-tag [severity]="technicalSkill.enabled ? 'success' : 'danger'"
+                            [value]="technicalSkill.enabled ? 'Enabled' : 'Disabled'">
+                        </p-tag>
+                    </td>
+                    <td class="flex gap-2">
+                        <button pButton type="button" label="" icon="pi pi-pencil" class="p-button-sm"
+                            (click)="editTechnicalSkill(technicalSkill)"></button>
+                        <button pButton type="button" label="" icon="pi pi-trash" class="p-button-danger p-button-sm"
+                            (click)="deleteTechnicalSkill(technicalSkill.id)"></button>
+                    </td>
+                </tr>
+            </ng-template>
+        </p-table>
+    </div>
+</div>
+
+<!-- Modal Form for Add/Edit Technical Skill -->
+<p-dialog header="Technical Skill" [(visible)]="technicalSkillDialog" [style]="{width: '50%', height: '50%'}"
+    [contentStyle]="{overflow: 'auto'}" modal="true" closable="false" [baseZIndex]="10000">
+
     <div class="p-fluid">
-        <div class="p-field">
-            <label for="groupName">Technical Skill</label>
-            <input id="groupName" [(ngModel)]="technicalSkill.technical_skill" pInputText />
+        <!-- Input Technical Skill -->
+        <div class="field">
+            <label for="technicalSkill">Technical Skill</label>
+            <input id="technicalSkill" [(ngModel)]="technicalSkill.technical_skill" pInputText />
         </div>
 
-        <div class="p-field" hidden>
-            <label for="enabled">Enabled</label>
-            <p-checkbox id="enabled" [(ngModel)]="technicalSkill.enabled"></p-checkbox>
+        <!-- Checkbox for Enabled -->
+        <div class="field">
+            <label for="enabled">Status</label>
+            <p-dropdown [options]="enabledOptions" [(ngModel)]="technicalSkill.enabled" placeholder="Select Status"
+                id="enabled" required>
+            </p-dropdown>
+            <small class="p-error" *ngIf="!technicalSkill.enabled && technicalSkillDialog">Status wajib dipilih.</small>
         </div>
     </div>
 
     <p-footer>
-        <button pButton label="Save" icon="pi pi-check" (click)="saveTechnicalSkill()"
-            [disabled]="!technicalSkill.technical_skill"></button>
-        <button pButton label="Cancel" icon="pi pi-times" (click)="technicalSkillDialog = false"></button>
+        <div class="flex justify-content-end">
+            <p-button label="Cancel" icon="pi pi-times" severity="secondary"
+                (click)="technicalSkillDialog = false"></p-button>
+            <button pButton label="Save" icon="pi pi-check" (click)="saveTechnicalSkill()"
+                [disabled]="!technicalSkill.technical_skill" class="mr-2"></button>
+        </div>
     </p-footer>
 </p-dialog>

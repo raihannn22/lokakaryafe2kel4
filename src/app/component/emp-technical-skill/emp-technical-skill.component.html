@@ -1,0 +1,31 @@
+<div *ngFor="let techSkillData of technicalSkillData">
+    <h3>{{ techSkillData.skill.technical_skill }}</h3>
+
+    <p-table [value]="techSkillData.empSkills">
+        <ng-template pTemplate="header">
+            <tr>
+                <th>Criteria</th>
+                <th>Score</th>
+                <th>Actions</th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-empSkill let-i="rowIndex">
+            <tr>
+                <td><input p pInputText [(ngModel)]="empSkill.criteria" /></td>
+                <td>
+                    <p-dropdown [options]="scoreOptions" [(ngModel)]="empSkill.score"
+                        placeholder="Select score" appendTo="body"></p-dropdown>
+                </td>
+                <td>
+                    <button pButton label="" icon="pi pi-trash" severity="danger" (click)="removeRow(techSkillData.skill.id, i)"></button>
+                </td>
+            </tr>
+        </ng-template>
+    </p-table>
+
+    <button pButton label="" icon="pi pi-plus" severity="primary" (click)="addRow(techSkillData.skill.id)"></button>
+</div>
+
+<button pButton label="Simpan" icon="pi pi-save" (click)="saveAllEmpTechnicalSkills()" [disabled]="isSaving|| isExistingData">
+    Save All
+</button>

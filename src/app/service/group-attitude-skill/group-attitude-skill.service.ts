@@ -31,4 +31,8 @@ export class GroupAttitudeSkillService {
   deleteGroupAttitudeSkill(id: string): Observable<any> {
     return this.http.delete(`${this.apiUrl}/delete/${id}`);
   }
+
+  getGroupAttitudeSkillsWithDetails(): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/with-details`);
+  }
 }
