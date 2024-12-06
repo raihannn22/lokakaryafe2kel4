@@ -27,7 +27,6 @@ export class CreateUserComponent {
            !!this.newUser.employee_status &&
            !!this.newUser.join_date &&
            !!this.newUser.enabled &&
-           !!this.newUser.password &&
            !!this.newUser.division_id;
   }
 
@@ -82,7 +81,6 @@ export class CreateUserComponent {
     app_role : [],
     join_date: null,
     enabled: 1,
-    password: '',
     division_id: ''
   };
 

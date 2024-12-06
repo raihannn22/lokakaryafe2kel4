@@ -8,31 +8,23 @@ import { DropdownModule } from 'primeng/dropdown';
 import { CalendarModule } from 'primeng/calendar';
 import { UserService } from '../../../service/user/user.service';
 import { CheckboxModule } from 'primeng/checkbox';
+import { TagModule } from 'primeng/tag';
+import { ChipsModule } from 'primeng/chips';
 
 @Component({
-  selector: 'app-update-user',
+  selector: 'app-detail-user',
   standalone: true,
-  imports: [DialogModule, InputTextModule, ButtonModule, CommonModule, CalendarModule, FormsModule, DropdownModule, CheckboxModule],
-  templateUrl: './update-user.component.html',
-  styleUrl: './update-user.component.css'
+  imports: [DialogModule, InputTextModule, ButtonModule, CommonModule, CalendarModule, FormsModule, DropdownModule, CheckboxModule, TagModule, ChipsModule ],
+  templateUrl: './detail-user.component.html',
+  styleUrl: './detail-user.component.css'
 })
-export class UpdateUserComponent {
- 
-  isValidForm(): boolean {
-    return !!this.newUser.username && 
-           !!this.newUser.full_name &&
-           !!this.newUser.position &&
-           !!this.newUser.email_address &&
-           !!this.newUser.employee_status &&
-           !!this.newUser.join_date &&
-           !!this.newUser.division_id;
-  }
+export class DetailUserComponent {
+
 
   
   @Input() visible: boolean = false;  // Menyambungkan dengan property di komponen induk
   @Output() visibleChange = new EventEmitter<boolean>();  // Emit perubahan visibility
   @Input() user: any = {};
-  @Output() userCreated = new EventEmitter<any>();  
 
   divisions: any[] = [];
   roles: any[] = [];
@@ -47,8 +39,8 @@ export class UpdateUserComponent {
     }
     if (this.user && this.user.app_role) {
       // Ambil hanya ID dari setiap role di array app_role
-      this.newUser.app_role = this.user.app_role.map((role: any) => role.id);
-      console.log('Updated newUser app_role:', this.newUser.app_role); // Debug log
+      this.newUser.app_role = this.user.app_role.map((role: any) => role.roleName);
+      console.log('Updated newUser app_role:', this.newUser); // Debug log
     }
   }
 
@@ -59,6 +51,7 @@ export class UpdateUserComponent {
     // this.newUser = { ...this.user };
     this.newUser = { ...this.user 
     };
+
   }
 
   
@@ -96,7 +89,8 @@ export class UpdateUserComponent {
     app_role : [],
     join_date: null,
     enabled: 1,
-    division_id: ''
+    division_id: '',
+    division_name: ''
   };
 
   
@@ -117,29 +111,5 @@ export class UpdateUserComponent {
     this.visibleChange.emit(false)
   }
 
-  onSubmit() {
-    // Buat salinan objek untuk menghindari perubahan langsung pada newUser
-    const updatedData: any = { ...this.newUser };
-
-    // Bandingkan setiap field dan set menjadi null jika nilainya sama dengan data existing
-    Object.keys(updatedData).forEach(key => {
-      if (updatedData[key] === this.user[key]) {
-        updatedData[key] = null;  // Set field menjadi null jika sama
-      }
-    });
-
-    // Kirim data yang sudah divalidasi ke server
-    this.userService.updateUser(this.user.id, updatedData).subscribe({
-      next: (response) => {
-        console.log('User updated successfully:', response);
-        this.userCreated.emit(response);  // Emit event ke komponen induk
-        this.closeDialog();               // Tutup dialog setelah berhasil
-      },
-      
-      error: (error) => {
-        console.error('Error updating user:', error);
-        // Tambahkan penanganan error di sini
-      }
-    });
-  }
+ 
 }

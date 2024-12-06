@@ -1,6 +1,13 @@
-
-<app-navbar  (toggleSidebar)="onToggleSidebar()"></app-navbar>
-<app-sidebar [sidebarVisible]="sidebarVisible" ></app-sidebar>
-<div class="card">
+@if (!isLoginRoute()) {
+    <app-navbar  (toggleSidebar)="onToggleSidebar()"></app-navbar>
+    <app-sidebar [sidebarVisible]="sidebarVisible" ></app-sidebar>
+    @if (!isProfileRoute()) {
+        <div class="card">
+            <router-outlet></router-outlet>
+        </div>
+    }@else {
+        <router-outlet></router-outlet>
+    }
+}@else {
     <router-outlet></router-outlet>
-</div>
+}
