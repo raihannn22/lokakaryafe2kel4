@@ -17,12 +17,13 @@ import { InputTextModule } from 'primeng/inputtext';
 import { CreateUserComponent } from '../create-user/create-user.component';
 import { UserService } from '../../../service/user/user.service';
 import { MessageService } from 'primeng/api';
+import { DetailUserComponent } from '../detail-user/detail-user.component';
 
 @Component({
   selector: 'app-user',
   standalone: true,
   imports: [CommonModule, ButtonModule, CalendarModule, FormsModule, TableModule, CreateUserComponent, DialogModule, TagModule, ToastModule, 
-      UpdateUserComponent, IconFieldModule, InputIconModule, InputTextModule],
+      UpdateUserComponent, IconFieldModule, InputIconModule, InputTextModule, DetailUserComponent],
   templateUrl: './user.component.html',
   styleUrl: './user.component.css'
 })
@@ -34,6 +35,7 @@ export class UserComponent implements OnInit {
   loading: boolean = true;
   displayCreateDialog = false;
   displayUpdateDialog = false;
+  displayDetailDialog = false;
   selectedUser: any;
   searchValue: string | undefined;
   
@@ -53,7 +55,7 @@ export class UserComponent implements OnInit {
     this.userService.getAllUsers().subscribe({
       next: (response) => {
         this.users = response.content; // Data ada di 'content'
-        console.log('Total rows:', response.totalRows);
+        console.log('ini isi usernyaa:', response.content);
         this.loading = false;
       },
       error: (error) => {
@@ -70,8 +72,13 @@ export class UserComponent implements OnInit {
 
   openUpdateDialog(user: any) {
     this.selectedUser = user;
-    console.log(this.selectedUser);
     this.displayUpdateDialog = true;
+  }
+
+  openDetailDialog(user: any) {
+    this.selectedUser = user;
+    console.log(this.selectedUser, 'ini detail user!!!');
+    this.displayDetailDialog = true;
   }
 
   
