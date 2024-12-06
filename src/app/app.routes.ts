@@ -10,6 +10,9 @@ import { DivisiComponent } from './component/divisi/list/divisi.component';
 import { EmpAchievementSkillComponent } from './component/emp-achievement-skill/emp-achievement-skill.component';
 import { MenuManagementComponent } from './component/menu-management/menu-management.component';
 import { ProfilComponent } from './profil/profil.component';
+import { EmpAttitudeSkillComponent } from './component/emp-attitude-skill/emp-attitude-skill.component';
+import { TechnicalSkillComponent } from './component/technical-skill/technical-skill.component';
+import { EmpTechnicalSkillComponent } from './component/emp-technical-skill/emp-technical-skill.component';
 
 
 
@@ -48,6 +51,10 @@ export const routes: Routes =  [
         component: GroupAttitudeSkillComponent
     },
     {
+        path: 'emp-attitude-skill',
+        component: EmpAttitudeSkillComponent
+    },
+    {
         path: 'emp-suggestion',
         component: EmpSuggestionComponent
     },
@@ -62,6 +69,13 @@ export const routes: Routes =  [
     {
         path: 'profile',
         component: ProfilComponent
-    }
-    
+    },
+    {
+        path: 'technical-skill',
+        component: TechnicalSkillComponent
+    },
+    {
+        path: 'emp-technical-skill',
+        component: EmpTechnicalSkillComponent
+    }    
 ];

@@ -1,1 +1,26 @@
-<p>emp-attitude-skill works!</p>
+<div *ngFor="let attitudeSkills of attitudeSkills">
+    <h3>{{ attitudeSkills.group_name }} ({{ attitudeSkills.percentage }}%)</h3>
+    <p-table [value]="attitudeSkills.attitude_skills" responsiveLayout="scroll">
+        <ng-template pTemplate="header">
+            <tr>
+                <th>Poin Skill</th>
+                <th>Nilai</th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-skill>
+            <tr>
+                <td>{{ skill.attitude_skill }}</td>
+                <td>
+                    <p-dropdown [options]="scoreOptions" [(ngModel)]="skill.score" [disabled]="isExistingData"
+                        placeholder="Pilih Nilai" appendTo="body">
+                    </p-dropdown>
+                </td>
+            </tr>
+        </ng-template>
+    </p-table>
+</div>
+
+<div class="p-d-flex p-jc-end">
+    <button pButton label="Simpan" icon="pi pi-save" (click)="saveAllEmpAttitudeSkills()"
+        [disabled]="isSaving || isExistingData"></button>
+</div>

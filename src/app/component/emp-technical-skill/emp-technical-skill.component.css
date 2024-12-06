@@ -1,0 +1,37 @@
+.technical-skills-container {
+    margin: 20px;
+}
+
+.skills-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+.skill-item {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    width: 200px;
+    background-color: #f9f9f9;
+}
+
+.skill-name {
+    font-weight: bold;
+}
+
+.criteria-input {
+    width: 100%;
+}
+
+.p-d-flex {
+    justify-content: flex-end;
+}
+
+.disabled-row {
+    background-color: #f0f0f0;
+    color: #a0a0a0;
+}

@@ -9,6 +9,9 @@ import { DialogModule } from 'primeng/dialog';
 import { CheckboxModule } from 'primeng/checkbox';
 import { trigger, transition, style, animate } from '@angular/animations';
 import { TechnicalSkillService } from '../../service/technical-skill/technical-skill.service';
+import { DropdownModule } from 'primeng/dropdown';
+import { TagModule } from 'primeng/tag';
+import { InputTextModule } from 'primeng/inputtext';
 
 @Component({
   selector: 'app-technical-skill',
@@ -20,7 +23,10 @@ import { TechnicalSkillService } from '../../service/technical-skill/technical-s
     FormsModule,
     TableModule,
     DialogModule,
-    CheckboxModule
+    CheckboxModule,
+    DropdownModule,
+    TagModule,
+    InputTextModule
   ],
   animations: [
     trigger('dialogAnimation', [
@@ -42,6 +48,8 @@ export class TechnicalSkillComponent implements OnInit {
   technicalSkillDialog: boolean = false;
   technicalSkill: any = { group_name: '', percentage: null, enabled: false };
 
+  first: number = 0;
+  totalRecords: number = 0;
   constructor(
     private technicalSkillService: TechnicalSkillService,
     private router: Router
@@ -63,6 +71,16 @@ export class TechnicalSkillComponent implements OnInit {
       }
     });
   }
+
+  loadPage(event: any) {
+    this.first = event.first; // Dapatkan halaman yang dipilih
+    this.getAllTechnicalSkills(); // Muat ulang data berdasarkan halaman baru
+  }
+
+  enabledOptions = [
+    { label: 'Enabled', value: 1 },
+    { label: 'Disabled', value: 0 }
+  ];
 
   showAddDialog() {
     console.log('Menampilkan dialog tambah');
