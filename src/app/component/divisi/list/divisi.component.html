@@ -1,5 +1,5 @@
-<p-button label="Tambah Pengguna" icon="pi pi-plus" (click)="openCreateDialog()" class="p-5 mt-5" ></p-button>
-<div class="card">
+<p-button label="Tambah Divisi" icon="pi pi-plus" (click)="openCreateDialog()" class="p-5 mt-5" ></p-button>
+
     <!-- Tombol global untuk membuat pengguna baru -->
     
     <div class="p-5">
@@ -9,7 +9,7 @@
                   <p-inputIcon>
                       <i class="pi pi-search"></i>
                   </p-inputIcon>
-                  <input #searchInput pInputText type="text" (input)="dt.filterGlobal(searchInput.value, 'contains')" placeholder="Cari Pengguna..." />
+                  <input #searchInput pInputText type="text" (input)="dt.filterGlobal(searchInput.value, 'contains')" placeholder="Cari Divisi..." />
               </p-iconField>
           </ng-template>
           
@@ -32,7 +32,7 @@
       </ng-template>
     </p-table>
     </div>
-</div>
+
 
 <div>
 

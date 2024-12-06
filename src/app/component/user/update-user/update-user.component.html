@@ -7,31 +7,31 @@
     <p-dialog header="Edir Pengguna" [modal]="true" (onHide)="closeDialog()" [(visible)]="visible" [style]="{ width: '40rem' }">
         <div class="p-fluid">
         <div class="field">
-          <label for="username">Username</label>
+          <label for="username">Username<span class="text-red-600">*</span></label>
           <input pInputText id="username" [(ngModel)]="newUser.username" name="username" #username="ngModel" required />
           <small class="p-error" *ngIf="username.invalid && username.touched">Username wajib diisi.</small>
         </div>
   
         <div class="field">
-          <label for="full_name">Nama Lengkap</label>
+          <label for="full_name">Nama Lengkap<span class="text-red-600">*</span></label>
           <input pInputText id="full_name" [(ngModel)]="newUser.full_name" name="full_name" #fullName="ngModel" required />
           <small class="p-error" *ngIf="fullName.invalid && fullName.touched">Nama Lengkap wajib diisi.</small>
         </div>
   
         <div class="field">
-          <label for="position">Jabatan</label>
+          <label for="position">Jabatan<span class="text-red-600">*</span></label>
           <input pInputText id="position" [(ngModel)]="newUser.position" name="position" #position="ngModel" required />
           <small class="p-error" *ngIf="position.invalid && position.touched">Jabatan wajib diisi.</small>
         </div>
   
         <div class="field">
-          <label for="email">Alamat Email</label>
+          <label for="email">Alamat Email<span class="text-red-600">*</span></label>
           <input pInputText id="email" [(ngModel)]="newUser.email_address" name="email" type="email" #email="ngModel" required />
           <small class="p-error" *ngIf="email.invalid && email.touched">Alamat Email wajib diisi.</small>
         </div>
   
         <div class="field">
-          <label for="employee_status">Status Karyawan</label>
+          <label for="employee_status">Status Karyawan<span class="text-red-600">*</span></label>
           <p-dropdown 
             [options]="employeeStatusOptions" 
             [(ngModel)]="newUser.employee_status" 
@@ -45,7 +45,7 @@
         </div>
   
         <div class="field">
-          <label for="join_date">Tanggal Bergabung</label>
+          <label for="join_date">Tanggal Bergabung<span class="text-red-600">*</span></label>
           <p-calendar 
             [(ngModel)]="newUser.join_date" 
             dateFormat="yy-mm-dd" 
@@ -59,7 +59,7 @@
         </div>
   
         <div class="field">
-          <label for="enabled">Status Akun</label>
+          <label for="enabled">Status Akun<span class="text-red-600">*</span></label>
           <p-dropdown 
             [options]="enabledOptions" 
             [(ngModel)]="newUser.enabled" 
@@ -73,13 +73,7 @@
         </div>
   
         <div class="field">
-          <label for="password">Kata Sandi</label>
-          <input pInputText type="password" id="password" [(ngModel)]="newUser.password" name="password" #password="ngModel" required />
-          <small class="p-error" *ngIf="password.invalid && password.touched">Kata Sandi wajib diisi.</small>
-        </div>
-  
-        <div class="field">
-          <label for="division_id">ID Divisi</label>
+          <label for="division_id">ID Divisi<span class="text-red-600">*</span></label>
           <p-dropdown 
             [options]="divisions" 
             [(ngModel)]="newUser.division_id" 
@@ -94,7 +88,7 @@
         </div>
   
         <div class="field">
-          <label for="roles">Roles</label>
+          <label for="roles">Roles<span class="text-red-600">*</span></label>
           <div class="flex flex-column gap-2">
             <div *ngFor="let role of roles">
               <p-checkbox
@@ -110,6 +104,7 @@
       </div>
   
       <div class="flex justify-content-end gap-2 mt-3">
+        <p-button icon="pi pi-refresh" severity="help"></p-button>
         <p-button label="Batal" icon="pi pi-times" severity="secondary" (click)="closeDialog()"></p-button>
         <p-button label="Simpan" icon="pi pi-check" (click)="onSubmit()" [disabled]="!isValidForm()"></p-button>
       </div>

@@ -25,4 +25,8 @@ export class MenuManagementService {
   getAllRoleMenu(): Observable<any> {
     return this.http.get(`${this.apiUrl}/appRoleMenu/get/all`); // Endpoint get all role-menu
   }
+
+  getMenuByUserId(userId: any): Observable<any> {
+    return this.http.get(`${this.apiUrl}/appMenu/get/byUserId/${userId}`); // Endpoint get menu by user id
+  }
 }

@@ -6,17 +6,21 @@ import { AvatarModule } from 'primeng/avatar';
 import { StyleClassModule } from 'primeng/styleclass';
 import { Sidebar } from 'primeng/sidebar';
 import { RouterLink } from '@angular/router';
+import { MenuManagementService } from '../../service/menu-management/menu-management.service';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-sidebar',
   standalone: true,
-  imports: [SidebarModule, ButtonModule, RippleModule, AvatarModule, StyleClassModule, RouterLink],
+  imports: [SidebarModule, ButtonModule, RippleModule, AvatarModule, StyleClassModule, RouterLink, CommonModule],
   templateUrl: './sidebar.component.html',
   styleUrl: './sidebar.component.css'
 })
 export class SidebarComponent implements OnInit{
+  constructor(private menuManagementService: MenuManagementService) {}
   @ViewChild('sidebarRef') sidebarRef!: Sidebar;
   @Input() sidebarVisible: boolean = false; 
+  menus: any[] = [];
   closeCallback(e: Event): void {
       this.sidebarRef.close(e);
   }
@@ -25,9 +29,46 @@ export class SidebarComponent implements OnInit{
   ngOnInit(){
     const storedRole = localStorage.getItem('role');
     this.role = storedRole ? storedRole : 'Guest';
+    const idUser = localStorage.getItem('id');
+    this.menuManagementService.getMenuByUserId(idUser).subscribe((response: any) => {
+      this.menus = this.mapMenuData(response.content);
+    });
   }
 
-  
+  mapMenuData(menuData: any[]): any[] {
+    const menuMapping: { [key: string]: { name: string; path: string, icon: string } } = {
+      'user#all': { name: 'User Management', path: '/user-management', icon: 'pi pi-user-edit' },
+      'division#all': { name: 'Division Management', path: '/division-management', icon: 'pi pi-ethereum' },
+      'summary#read': { name: 'All Summary View', path: '/summary/read', icon: 'pi pi-file-o' },
+      'dev-plan#all': { name: 'Development Plan', path: '/development-plan', icon: 'pi pi-sparkles' },
+      'technical-skill#all': { name: 'Technical Skill', path: '/technical-skill', icon: 'pi pi-list-check' },
+      'group-achievement#all': { name: 'Group Achievement', path: '/group-achievement', icon: 'pi pi-sitemap' },
+      'achievement#all': { name: 'Achievement', path: '/achievement', icon: 'pi pi-star' },
+      'attitude-skill#all': { name: 'Attitude Skill', path: '/attitude-skill', icon: 'pi pi-bolt' },
+      'group-attitude-skill#all': { name: 'Group Attitude', path: '/group-attitude-skill', icon: 'pi pi-sitemap' },
+      
+      
+      'summary#read.self': { name: 'Summary View', path: '/summary/read', icon: 'pi pi-file-o' },
+      'emp-suggestion#all': { name: 'Employee Suggestion', path: '/employee/suggestion', icon: 'pi pi-list-check' },
+      'emp-technical-skill#all': { name: 'Employee Technical Skill', path: '/employee/technical-skill', icon: 'pi pi-list-check' },
+      'emp-dev-plan#all': { name: 'Employee Development Plan', path: '/employee-development-plan', icon: 'pi pi-bullseye' },
+      'emp-achievement#all': { name: 'Employee Achievement', path: '/emp-achievement-skill', icon: 'pi pi-list-check' },
+      'emp-attitude-skill#all': { name: 'Employee Attitude Skills', path: '/employee/attitude-skills', icon: 'pi pi-users' },
 
-  // sidebarVisible: boolean = false;
+      'user#read': { name: 'View User', path: '/user/read', icon: 'pi pi-users' },
+      // Tambahkan mapping lainnya di sini
+    };
+  
+    return menuData.map(menu => ({
+      ...menu,
+      MAPPED_NAME: menuMapping[menu.MENU_NAME]?.name || menu.MENU_NAME,
+      path: menuMapping[menu.MENU_NAME]?.path || '/',
+      icon: menuMapping[menu.MENU_NAME]?.icon || 'pi pi-file' 
+    }));
+  }
+
+  getMenuByRole(role: string): any[] {
+    return this.menus.filter(menu => menu.ROLE_NAME.toLowerCase() === role);
+  }
+
 }

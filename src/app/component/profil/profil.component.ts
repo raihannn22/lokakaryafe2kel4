@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { SplitterModule } from 'primeng/splitter';   
+import { SplitterModule } from 'primeng/splitter';
 import { CardModule } from 'primeng/card';
 import { ButtonModule } from 'primeng/button';
 import { PanelMenuModule } from 'primeng/panelmenu';
@@ -7,9 +7,10 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { PasswordModule } from 'primeng/password';
 import { TableModule } from 'primeng/table';
-import { UserService } from '../service/user/user.service';
-import { AuthService } from '../service/login/auth.service';
+
 import Swal from 'sweetalert2';
+import { UserService } from '../../service/user/user.service';
+import { AuthService } from '../../service/login/auth.service';
 
 @Component({
   selector: 'app-profil',
@@ -26,8 +27,8 @@ export class ProfilComponent {
   userId: any = '';
   status: string = '';
 
-  
-  
+
+
 
   ngOnInit() {
     this.userId = localStorage.getItem('id');
@@ -47,7 +48,7 @@ export class ProfilComponent {
     }else{
       this.status = 'Permanen';
     }
-  
+
   }
   // Data untuk menu panel
   menuItems = [

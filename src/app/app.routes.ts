@@ -13,41 +13,58 @@ import { ProfilComponent } from './profil/profil.component';
 import { EmpAttitudeSkillComponent } from './component/emp-attitude-skill/emp-attitude-skill.component';
 import { TechnicalSkillComponent } from './component/technical-skill/technical-skill.component';
 import { EmpTechnicalSkillComponent } from './component/emp-technical-skill/emp-technical-skill.component';
+import { ProfilComponent } from './component/profil/profil.component';
+import { DevplanComponent } from './component/devplan/list/devplan.component';
+import { authGuard } from './guard/auth.guard';
+import { DashboardComponent } from './component/dashboard/dashboard.component';
+import { EmpDevplanComponent } from './component/emp-devplan/emp-devplan.component';
+
 
 
 
 export const routes: Routes =  [
     {
         path : '',
-        redirectTo: 'login',
+        redirectTo: 'dashboard',
         pathMatch: 'full'
     },
     {
-        path: 'login',
-        component: LoginComponent
+        path: 'dashboard',
+        canActivate: [authGuard],
+        component: DashboardComponent
     },
     {
-        path: 'user',
+        path: 'login',
+        component: LoginComponent,
+    },
+    {
+        path: 'user-management',
+        canActivate: [authGuard],
         component: UserComponent
     },
     {
         path: 'achievement',
+        canActivate: [authGuard],
         component: AchievementComponent
     },
     {
         path: 'group-achievement',
+        canActivate: [authGuard],
         component: GroupAchievementComponent
     },
     {
         path: 'emp-achievement-skill',
+        canActivate: [authGuard],
         component: EmpAchievementSkillComponent
     },
     {
         path: 'attitude-skill',
+        canActivate: [authGuard],
         component: AttitudeSkillComponent
     },
     {
         path: 'group-attitude-skill',
+        canActivate: [authGuard],
         component: GroupAttitudeSkillComponent
     },
     {
@@ -56,18 +73,22 @@ export const routes: Routes =  [
     },
     {
         path: 'emp-suggestion',
+        canActivate: [authGuard],
         component: EmpSuggestionComponent
     },
     {
-        path: 'divisi',
+        path: 'division-management',
+        canActivate: [authGuard],
         component: DivisiComponent
     },
     {
         path: 'menu-management',
+        canActivate: [authGuard],
         component: MenuManagementComponent
     },
     {
         path: 'profile',
+        canActivate: [authGuard],
         component: ProfilComponent
     },
     {
@@ -78,4 +99,13 @@ export const routes: Routes =  [
         path: 'emp-technical-skill',
         component: EmpTechnicalSkillComponent
     }    
+        path: 'development-plan',
+        canActivate: [authGuard],
+        component: DevplanComponent
+    },
+    {
+        path: 'employee-development-plan',
+        canActivate: [authGuard],
+        component: EmpDevplanComponent
+    }
 ];

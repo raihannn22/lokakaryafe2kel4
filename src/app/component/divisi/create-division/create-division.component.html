@@ -3,7 +3,7 @@
     <p-dialog header="Tambah Divisi" [modal]="true" (onHide)="closeDialog()" [(visible)]="visible" [style]="{ width: '40rem' }">
         <div class="p-fluid">
             <div class="field">
-                <label for="division">Nama Divisi</label>
+                <label for="division">Nama Divisi<span class="text-red-600">*</span></label>
                 <input pInputText id="division" [(ngModel)]="newDivision.DIVISION_NAME" name="division" #division="ngModel" required />
                 <small class="p-error" *ngIf="division.invalid && division.touched">nama Divisi wajib diisi.</small>
             </div>
