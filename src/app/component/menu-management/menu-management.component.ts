@@ -37,7 +37,7 @@ export class MenuManagementComponent implements OnInit {
       error: (error) => console.error('Error fetching roles:', error),
     });
   }
-  
+
   mapMenuName(name: string): string {
     const menuNameMapping: { [key: string]: string } = {
       'user#read': 'User Management - Read',
@@ -57,8 +57,9 @@ export class MenuManagementComponent implements OnInit {
       'emp-technical-skill#all': 'Emp Technical Skill - All',
       'emp-dev-plan#all': 'Emp Development Plan - All',
       'emp-suggestion#all': 'Emp Suggestion - All',
+      'emp-dev-plan#read': 'Emp Development Plan - Read',
     };
-    return menuNameMapping[name] || name; 
+    return menuNameMapping[name] || name;
   }
 
   getAllMenu() {
@@ -87,7 +88,7 @@ export class MenuManagementComponent implements OnInit {
     this.menuManagementService.getAllRoleMenu().subscribe({
       next: (mappings) => {
         this.approlemenu = mappings.content;
-        this.approlemenu.forEach((mapping: any) => {     
+        this.approlemenu.forEach((mapping: any) => {
           const roleId = mapping.ROLE_ID.id;
           const menuId = mapping.MENU_ID.id;
           this.roleMenuMap[roleId][menuId] = true; // Set checkbox sesuai data backend
@@ -109,17 +110,57 @@ export class MenuManagementComponent implements OnInit {
         .filter((menuId) => this.roleMenuMap[roleId][menuId]); // Ambil menu yang dicentang
     }
 
-    
-    this.menuManagementService.updateRoleMenu(result).subscribe({
 
-      next: (response) => {
-        console.log('Role-menu updated successfully:', response);
-        this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Message Content' });
-      },
-      error: (error) => console.error('Error updating role-menu:', error),
-    })
+      Swal.fire({
+        title: 'Are you sure?',
+        text: 'Apakah Anda yakin ingin menyimpan data ini?',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, change it!'
+      }).then((response) => {
+        if (response.isConfirmed) {
+          // Panggil service untuk ubah password jika user konfirmasi
+          this.menuManagementService.updateRoleMenu(result).subscribe(
+            () => {
+              Swal.fire({
+                icon: 'success',
+                title: 'Success',
+                text: 'data berhasil disimpan!',
+              }).then((result) => {
+                // Cek jika tombol OK ditekan
+                if (result.isConfirmed) {
+                  // Reload halaman setelah menekan OK
+                  window.location.reload();
+                }
+              });
+            }
+            ,
+            (error: any) => {
+              // Tampilkan Swal error jika ada kesalahan
+              Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: 'gagal untuk menyimpan data!',
+              });
+              console.error('Error changing password:', error);
+            }
+          );
+        }
+      });
 
-    console.log('Resulting JSON:', result);
+
+    // this.menuManagementService.updateRoleMenu(result).subscribe({
+
+    //   next: (response) => {
+    //     console.log('Role-menu updated successfully:', response);
+    //     this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Message Content' });
+    //   },
+    //   error: (error) => console.error('Error updating role-menu:', error),
+    // })
+
+    // console.log('Resulting JSON:', result);
     // Lakukan aksi lanjutan, seperti kirim ke backend
   }
 }

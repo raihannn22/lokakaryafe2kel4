@@ -1,92 +1,218 @@
-<p-button label="Tambah Pengguna" icon="pi pi-plus" (click)="openCreateDialog()" class="p-5 mt-5" ></p-button>
+<p-button
+  label="Tambah Pengguna"
+  icon="pi pi-plus"
+  (click)="openCreateDialog()"
+  class="p-5 mt-5"
+></p-button>
 <div class="card">
-    <!-- Tombol global untuk membuat pengguna baru -->
-    
-    <div class="p-5">
-    <p-table #dt [value]="users" [paginator]="true" [rows]="10" [loading]="loading" styleClass="p-datatable-gridlines" [globalFilterFields]="['username', 'full_name', 'email_address', 'division_name']">
-          <ng-template pTemplate="caption">
-              <p-iconField iconPosition="left">
-                  <p-inputIcon>
-                      <i class="pi pi-search"></i>
-                  </p-inputIcon>
-                  <input #searchInput pInputText type="text" (input)="dt.filterGlobal(searchInput.value, 'contains')" placeholder="Cari Pengguna..." />
-              </p-iconField>
-          </ng-template>
-          
-        <ng-template pTemplate="header">
-          <tr>
-              <th>Username</th>
-              <th>Nama Lengkap</th>
-              <th>Jabatan</th>
-              <th>Email</th>
-              <th>Status Karyawan</th>
-              <th>Tanggal Bergabung</th>
-              <th>Status Akun</th>
-              <th>Divisi</th>
-              <th>Aksi</th>
-          </tr>
+  <!-- Tombol global untuk membuat pengguna baru -->
+
+  <div class="p-5">
+    <p-table
+      #dt
+      [value]="users"
+      [paginator]="true"
+      [rows]="10"
+      [loading]="loading"
+      [rowsPerPageOptions]="[10, 25, 50]"
+      styleClass="p-datatable-gridlines"
+      [globalFilterFields]="[
+        'username',
+        'full_name',
+        'email_address',
+        'division_name'
+      ]"
+    >
+      <ng-template pTemplate="caption">
+        <p-iconField iconPosition="left">
+          <p-inputIcon>
+            <i class="pi pi-search"></i>
+          </p-inputIcon>
+          <input
+            #searchInput
+            pInputText
+            type="text"
+            (input)="dt.filterGlobal(searchInput.value, 'contains')"
+            placeholder="Cari Pengguna..."
+          />
+        </p-iconField>
       </ng-template>
-  
+
+      <ng-template pTemplate="header">
+        <tr>
+          <th>Username</th>
+          <th>Nama Lengkap</th>
+          <th>Jabatan</th>
+          <th>Email</th>
+          <th>Status Karyawan</th>
+          <th>Tanggal Bergabung</th>
+          <th>Status Akun</th>
+          <th>Divisi</th>
+          <th class="aksi">Aksi</th>
+        </tr>
+
+        <tr>
+          <th>
+              <p-columnFilter
+                  type="text"
+                  field="username"
+                  placeholder="Search by username"
+                  ariaLabel="Filter Name" />
+          </th>
+
+          <th>
+            <p-columnFilter
+                  type="text"
+                  field="full_name"
+                  placeholder="Search by nama lengkap"
+                  ariaLabel="Filter Name" />
+          </th>
+
+          <th>
+            <p-columnFilter
+            type="text"
+            field="position"
+            placeholder="Search by jabatan"
+            ariaLabel="Filter Name" />
+          </th>
+
+          <th>
+            <p-columnFilter
+            type="text"
+            field="email_address"
+            placeholder="Search by email"
+            ariaLabel="Filter Name" />
+          </th>
+
+          <th>
+            <p-columnFilter field="employee_status" matchMode="equals" [showMenu]="false">
+              <ng-template pTemplate="filter" let-value let-filter="filterCallback">
+                  <p-dropdown
+                      [ngModel]="value"
+                      [options]="statuses"
+                      (onChange)="filter($event.value)"
+                      placeholder="Select One"
+                      [showClear]="true">
+                          <ng-template let-option pTemplate="item">
+                              <p-tag
+                                  [value]="option.label"
+                                  [severity]="getSeverity(option.label)" />
+                          </ng-template>
+                  </p-dropdown>
+              </ng-template>
+          </p-columnFilter>
+          </th>
+
+          <th></th>
+
+          <th></th>
+
+          <th>
+            <p-columnFilter field="division_name" matchMode="in" [showMenu]="false">
+              <ng-template pTemplate="filter" let-value let-filter="filterCallback">
+                  <p-multiSelect
+                      [ngModel]="value"
+                      [options]="divisi"
+                      placeholder="Any"
+                      (onChange)="filter($event.value)"
+                      optionLabel="DIVISION_NAME">
+                          <ng-template let-option pTemplate="item">
+                                  <span>
+                                      {{ option.DIVISION_NAME }}
+                                  </span>
+
+                          </ng-template>
+                  </p-multiSelect>
+              </ng-template>
+            </p-columnFilter>
+          </th>
+
+          <th></th>
+        
+      </tr>
+      </ng-template>
+
       <ng-template pTemplate="body" let-user>
-          <tr>
-              <td>{{ user.username }}</td>
-              <td>{{ user.full_name }}</td>
-              <td>{{ user.position }}</td>
-              <td>{{ user.email_address }}</td>
-  
-              <td>
-                  <p-tag [severity]="user.employee_status === 1 ? 'warning' : 'info'"
-                         [value]="user.employee_status === 1 ? 'Kontrak' : 'Permanen'">
-                  </p-tag>
-              </td>
-  
-              <td>{{ user.join_date | date:'yyyy-MM-dd' }}</td>
-  
-              <td>
-                  <p-tag [severity]="user.enabled === 1 ? 'success' : 'danger'"
-                         [value]="user.enabled === 1 ? 'Enabled' : 'Disabled'">
-                  </p-tag>
-              </td>
-  
-              <td>{{ user.division_name }}</td>
-  
-              <td class="flex gap-2">
-                  <button pButton type="button" icon="pi pi-pencil" class="p-button-sm" (click)="openUpdateDialog(user)"></button>
-                  <button pButton type="button" icon="pi pi-trash" class="p-button-danger p-button-sm"
-                          (click)="confirmDelete(user)"></button>
-                          <button pButton type="button" icon="pi pi-info" class="p-button-secondary p-button-sm" (click)="openDetailDialog(user)"></button>
-                
-              </td>
-          </tr>
+        <tr>
+          <td>{{ user.username }}</td>
+          <td>{{ user.full_name }}</td>
+          <td>{{ user.position }}</td>
+          <td>{{ user.email_address }}</td>
+
+          <td>
+            <p-tag
+              [severity]="user.employee_status === 1 ? 'warning' : 'info'"
+              [value]="user.employee_status === 1 ? 'Kontrak' : 'Permanen'"
+            >
+            </p-tag>
+          </td>
+
+          <td>{{ user.join_date | date : "yyyy-MM-dd" }}</td>
+
+          <td>
+            <p-tag
+              [severity]="user.enabled === 1 ? 'success' : 'danger'"
+              [value]="user.enabled === 1 ? 'Enabled' : 'Disabled'"
+            >
+            </p-tag>
+          </td>
+
+          <td>{{ user.division_name }}</td>
+
+          <td class="flex gap-2">
+            @if (userRoles?.includes('HR') && !isViewUserRoute()) {
+            <button
+              pButton
+              type="button"
+              icon="pi pi-pencil"
+              class="p-button-sm"
+              (click)="openUpdateDialog(user)"
+            ></button>
+            <button
+              pButton
+              type="button"
+              icon="pi pi-trash"
+              class="p-button-danger p-button-sm"
+              (click)="confirmDelete(user)"
+            ></button>
+          }
+          @if (userRoles?.includes('HR') || userRoles?.includes('SVP')|| userRoles?.includes('MGR')) {
+              <button
+                pButton
+                type="button"
+                icon="pi pi-info"
+                class="p-button-secondary p-button-sm"
+                (click)="openDetailDialog(user)"
+              ></button>
+            }
+          </td>
+        </tr>
       </ng-template>
     </p-table>
-    </div>
+  </div>
 </div>
 <div>
-
-    <p-toast 
-    [showTransformOptions]="'translateY(100%)'" 
-    [showTransitionOptions]="'1000ms'" 
-    [hideTransitionOptions]="'1000ms'" 
-    [showTransformOptions]="'translateX(100%)'" />
-
+  <p-toast
+    [showTransformOptions]="'translateY(100%)'"
+    [showTransitionOptions]="'1000ms'"
+    [hideTransitionOptions]="'1000ms'"
+    [showTransformOptions]="'translateX(100%)'"
+  />
 </div>
-  
-  <!-- Komponen Dialog Create User -->
-  <app-create-user
-    [(visible)]="displayCreateDialog"
-    (userCreated)="onUserCreated($event)">
-  </app-create-user>
 
-  <app-update-user
-    [(visible)]="displayUpdateDialog"
-    [user]="selectedUser"
-    (userCreated)="onUserCreated($event)">
-  </app-update-user>
+<!-- Komponen Dialog Create User -->
+<app-create-user
+  [(visible)]="displayCreateDialog"
+  (userCreated)="onUserCreated($event)"
+>
+</app-create-user>
 
-  <app-detail-user
-    [(visible)]="displayDetailDialog"
-    [user]="selectedUser">
-  </app-detail-user>
-  
-  
+<app-update-user
+  [(visible)]="displayUpdateDialog"
+  [user]="selectedUser"
+  (userCreated)="onUserCreated($event)"
+>
+</app-update-user>
+
+<app-detail-user [(visible)]="displayDetailDialog" [user]="selectedUser">
+</app-detail-user>

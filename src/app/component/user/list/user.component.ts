@@ -18,19 +18,23 @@ import { CreateUserComponent } from '../create-user/create-user.component';
 import { UserService } from '../../../service/user/user.service';
 import { MessageService } from 'primeng/api';
 import { DetailUserComponent } from '../detail-user/detail-user.component';
+import { jwtDecode } from 'jwt-decode';
+import { Router } from '@angular/router';
+import { DropdownModule } from 'primeng/dropdown';
+import { MultiSelectModule } from 'primeng/multiselect';
 
 @Component({
   selector: 'app-user',
   standalone: true,
-  imports: [CommonModule, ButtonModule, CalendarModule, FormsModule, TableModule, CreateUserComponent, DialogModule, TagModule, ToastModule, 
-      UpdateUserComponent, IconFieldModule, InputIconModule, InputTextModule, DetailUserComponent],
+  imports: [CommonModule, ButtonModule, CalendarModule, FormsModule, TableModule, CreateUserComponent, DialogModule, TagModule, ToastModule,
+      UpdateUserComponent, IconFieldModule, InputIconModule, InputTextModule, DetailUserComponent, DropdownModule, MultiSelectModule],
   templateUrl: './user.component.html',
   styleUrl: './user.component.css'
 })
 
 export class UserComponent implements OnInit {
 
-  
+
   users: any[] = [];
   loading: boolean = true;
   displayCreateDialog = false;
@@ -38,17 +42,64 @@ export class UserComponent implements OnInit {
   displayDetailDialog = false;
   selectedUser: any;
   searchValue: string | undefined;
-  
+  token: string | null = '';
+  userRoles: string = '';
+  statuses!: any[];
+  divisi!: any[];
+
 
   constructor(
     private userService: UserService,
-    private messageService: MessageService
-    
+    private messageService: MessageService,
+    private router: Router
   ) {}
 
+  isViewUserRoute(): boolean {
+    return this.router.url === '/view-user'; // Memeriksa jika URL adalah /login
+  }
 
   ngOnInit() {
     this.getAllUsers();
+    this.token = localStorage.getItem('token');
+    this.getRolesFromToken();
+    this.getAllDivision();
+
+    this.statuses = [
+      { label: 'Permanen', value: '2' },
+      { label: 'Kontrak', value: '1' },
+    ];
+  }
+
+  getSeverity(status: string) {
+    switch (status) {
+        case 'Kontrak':
+            return 'warning';
+
+        case 'Permanen':
+            return 'info';
+
+        default:
+            return 'danger';
+    }
+  }
+
+  getRolesFromToken(): void {
+    if (this.token) {
+      try {
+        const decoded: any = jwtDecode(this.token);
+        let roles = decoded.role;
+        roles = roles
+          .slice(1, -1) // Hilangkan karakter "[" dan "]"
+          .split(',') // Pecah berdasarkan koma
+          .map((role: string) => role.trim()); // Hapus spasi di sekitar elemen
+
+        this.userRoles = roles.join(', ');
+      } catch (error) {
+        console.error('Error decoding roles from token:', error);
+      }
+    } else {
+      console.warn('Token not found');
+    }
   }
 
   getAllUsers() {
@@ -65,6 +116,17 @@ export class UserComponent implements OnInit {
     });
   }
 
+  getAllDivision() {
+    this.userService.getAllDivision().subscribe({
+      next: (response) => {
+        this.divisi = response.content; // Data ada di 'content'
+        console.log('Total divisi:', this.divisi);
+      },
+      error: (error) => {
+        console.error('Error fetching users:', error);
+      },
+    });
+  }
 
   openCreateDialog() {
     this.displayCreateDialog = true;
@@ -81,7 +143,7 @@ export class UserComponent implements OnInit {
     this.displayDetailDialog = true;
   }
 
-  
+
   // Fungsi menangani event user yang dibuat
   onUserCreated(newUser: any) {
     console.log('User baru:', newUser);
@@ -117,5 +179,5 @@ export class UserComponent implements OnInit {
       }
     });
   }
-  
+
 }

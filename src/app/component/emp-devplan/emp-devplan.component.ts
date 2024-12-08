@@ -94,8 +94,8 @@ export class EmpDevplanComponent implements OnInit {
           perihal.keterangans.splice(index, 1);
         }
       });
-          
-        
+
+
     } else {
       // Hapus keterangan jika tidak disabled
       if (perihal.keterangans.length > 1) {
@@ -145,7 +145,7 @@ export class EmpDevplanComponent implements OnInit {
                 Swal.fire({
                   icon: 'success',
                   title: 'Success',
-                  text: 'Password changed successfully!',
+                  text: 'data berhasil disimpan!',
                 }).then((result) => {
                   // Cek jika tombol OK ditekan
                   if (result.isConfirmed) {
@@ -160,14 +160,14 @@ export class EmpDevplanComponent implements OnInit {
                 Swal.fire({
                   icon: 'error',
                   title: 'Error',
-                  text: 'Failed to change password. Please try again.',
+                  text: 'gagal untuk menyimpan data!',
                 });
                 console.error('Error changing password:', error);
               }
             );
           }
         });
-        
+
       }
     // Lakukan penyimpanan ke database di sini
     }

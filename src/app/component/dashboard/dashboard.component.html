@@ -1,1 +1,153 @@
-<h1>Haloo, Selamat Datang {{nama}}</h1>
+<div class="container p-4">
+  <!-- Welcome Section -->
+  <div class="welcome-section mb-4">
+      <div class="card welcome-card p-4 text-white border-round">
+          <h2>Selamat Datang, {{ nama || 'User' }}! 👋</h2>
+          <p class="mb-0 mt-2">{{ getGreeting() }} - {{ getCurrentDate() }}</p>
+      </div>
+  </div>
+
+  <!-- Stats Cards -->
+  <div class="grid">
+      <!-- Total Users Card -->
+      <div class="col-12 md:col-6 lg:col-3">
+          <div class="card stats-card users-card p-4 border-round cursor-pointer transition-colors transition-duration-300">
+              <div class="flex justify-content-between mb-3">
+                  <div>
+                      <span class="block mb-2">Total Users</span>
+                      <h2 class="m-0 text-4xl">{{ totalUsers }}</h2>
+                  </div>
+                  <div class="flex align-items-center justify-content-center icon-circle">
+                      <i class="pi pi-users text-2xl"></i>
+                  </div>
+              </div>
+
+          </div>
+      </div>
+
+      <!-- Total Roles Card -->
+      <div class="col-12 md:col-6 lg:col-3">
+          <div class="card stats-card roles-card p-4 border-round cursor-pointer transition-colors transition-duration-300">
+              <div class="flex justify-content-between mb-3">
+                  <div>
+                      <span class="block mb-2">Total Roles</span>
+                      <h2 class="m-0 text-4xl">{{ totalRoles }}</h2>
+                  </div>
+                  <div class="flex align-items-center justify-content-center icon-circle">
+                      <i class="pi pi-shield text-2xl"></i>
+                  </div>
+              </div>
+
+          </div>
+      </div>
+
+      <!-- Active Projects Card -->
+      <div class="col-12 md:col-6 lg:col-3">
+          <div class="card stats-card projects-card p-4 border-round cursor-pointer transition-colors transition-duration-300">
+              <div class="flex justify-content-between mb-3">
+                  <div>
+                      <span class="block mb-2">Active Projects</span>
+                      <h2 class="m-0 text-4xl">{{ activeProjects }}</h2>
+                  </div>
+                  <div class="flex align-items-center justify-content-center icon-circle">
+                      <i class="pi pi-briefcase text-2xl"></i>
+                  </div>
+              </div>
+
+          </div>
+      </div>
+
+      <!-- Completed Tasks Card -->
+      <div class="col-12 md:col-6 lg:col-3">
+          <div class="card stats-card tasks-card p-4 border-round cursor-pointer transition-colors transition-duration-300">
+              <div class="flex justify-content-between mb-3">
+                  <div>
+                      <span class="block mb-2">Completed Tasks</span>
+                      <h2 class="m-0 text-4xl">{{ completedTasks }}</h2>
+                  </div>
+                  <div class="flex align-items-center justify-content-center icon-circle">
+                      <i class="pi pi-check-circle text-2xl"></i>
+                  </div>
+              </div>
+
+          </div>
+      </div>
+  </div>
+</div>
+
+<style>
+.container {
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.card {
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.welcome-card {
+  background: linear-gradient(135deg, #334155 0%, #475569 100%);
+}
+
+.stats-card {
+  color: #1e293b;
+  background-color: #ffffff;
+  border: 1px solid #e2e8f0;
+}
+
+.stats-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.07);
+}
+
+.icon-circle {
+  width: 3.5rem;
+  height: 3.5rem;
+  border-radius: 50%;
+}
+
+/* Users Card */
+.users-card .icon-circle {
+  background-color: #e5eeff;
+  color: #3b82f6;
+}
+
+.users-card:hover {
+  background-color: #f8fafc;
+}
+
+/* Roles Card */
+.roles-card .icon-circle {
+  background-color: #f3e8ff;
+  color: #9333ea;
+}
+
+.roles-card:hover {
+  background-color: #f8fafc;
+}
+
+/* Projects Card */
+.projects-card .icon-circle {
+  background-color: #e0f2f1;
+  color: #0d9488;
+}
+
+.projects-card:hover {
+  background-color: #f8fafc;
+}
+
+/* Tasks Card */
+.tasks-card .icon-circle {
+  background-color: #fef3c7;
+  color: #d97706;
+}
+
+.tasks-card:hover {
+  background-color: #f8fafc;
+}
+
+:host ::ng-deep .p-card {
+  border-radius: 1rem;
+}
+</style>
