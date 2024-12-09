@@ -4,7 +4,7 @@
 <div class="card flex justify-content-center">
     <!-- Tombol untuk membuka dialog -->
     <!-- <p-button label="Tambah Pengguna" icon="pi pi-plus" (click)="visible = true" class="mb-3"></p-button> -->
-    <p-dialog header="Edir Pengguna" [modal]="true" (onHide)="closeDialog()" [(visible)]="visible" [style]="{ width: '40rem' }">
+    <p-dialog header="Detail Pengguna" [modal]="true" (onHide)="closeDialog()" [(visible)]="visible" [style]="{ width: '40rem' }">
         <div class="grid">
             <div class="col-6">
               <div class="p-2">
@@ -92,8 +92,11 @@
   
       <div class="flex justify-content-end gap-2 mt-3">
         <p-button label="Batal" icon="pi pi-times" severity="secondary" (click)="closeDialog()"></p-button>
-        <p-button label="Summary" icon="pi pi-check"></p-button>
+        <p-button label="Summary" icon="pi pi-file-arrow-up" severity="info" (click)="openSummaryDialog(user)"></p-button>
       </div>
     </p-dialog>
   </div>
   
+
+  <app-summary [(visible)]="displaySummaryDialog" [user]="user">
+  </app-summary>

@@ -1,9 +1,14 @@
+@if (userRoles?.includes('HR') && !isViewUserRoute()) {
 <p-button
   label="Tambah Pengguna"
   icon="pi pi-plus"
   (click)="openCreateDialog()"
   class="p-5 mt-5"
 ></p-button>
+}
+@if (userRoles?.includes('HR') || userRoles?.includes('SVP')|| userRoles?.includes('MGR')) {
+
+}
 <div class="card">
   <!-- Tombol global untuk membuat pengguna baru -->
 
@@ -216,3 +221,5 @@
 
 <app-detail-user [(visible)]="displayDetailDialog" [user]="selectedUser">
 </app-detail-user>
+
+

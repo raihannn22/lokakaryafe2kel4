@@ -51,6 +51,7 @@
           name="join_date"
           #joinDate="ngModel"
           [showIcon]="true"
+          appendTo="body"
           required>
         </p-calendar>
         <small class="p-error" *ngIf="joinDate.invalid && joinDate.touched">Tanggal Bergabung wajib diisi.</small>

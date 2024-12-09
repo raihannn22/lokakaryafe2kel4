@@ -11,6 +11,7 @@ import { CheckboxModule } from 'primeng/checkbox';
 import { TagModule } from 'primeng/tag';
 import { ChipsModule } from 'primeng/chips';
 import { jwtDecode } from 'jwt-decode';
+import { SummaryComponent } from '../../summary/summary.component';
 
 @Component({
   selector: 'app-detail-user',
@@ -26,6 +27,7 @@ import { jwtDecode } from 'jwt-decode';
     CheckboxModule,
     TagModule,
     ChipsModule,
+    SummaryComponent
   ],
   templateUrl: './detail-user.component.html',
   styleUrl: './detail-user.component.css',
@@ -39,6 +41,8 @@ export class DetailUserComponent {
   roles: any[] = [];
   token: string | null = '';
   userRoles: string = '';
+
+  displaySummaryDialog = false;
 
   constructor(private userService: UserService) {}
 
@@ -135,4 +139,12 @@ export class DetailUserComponent {
   closeDialog() {
     this.visibleChange.emit(false);
   }
+
+  openSummaryDialog(user: any) {
+    this.user = user;
+    this.visibleChange.emit(false);
+    this.displaySummaryDialog = true;
+  }
+
+  
 }
