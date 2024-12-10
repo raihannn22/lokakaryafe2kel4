@@ -1,0 +1,43 @@
+
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+:host ::ng-deep .p-datatable {
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+:host ::ng-deep .p-datatable .p-datatable-header {
+  background: var(--surface-0);
+  border: none;
+}
+
+:host ::ng-deep .p-datatable .p-datatable-thead > tr > th {
+  background: var(--surface-0);
+  padding: 1rem;
+  border-bottom: 2px solid var(--surface-200);
+}
+
+:host ::ng-deep .p-datatable .p-datatable-tbody > tr {
+  transition: background-color 0.2s;
+}
+
+:host ::ng-deep .p-datatable .p-datatable-tbody > tr:hover {
+  background: var(--surface-100);
+}
+
+:host ::ng-deep .p-dropdown {
+  width: 100%;
+}
+
+.card {
+  background: white;
+  transition: all 0.2s ease;
+}
+
+.card:hover {
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1) !important;
+}

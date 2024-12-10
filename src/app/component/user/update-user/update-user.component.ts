@@ -17,9 +17,9 @@ import { CheckboxModule } from 'primeng/checkbox';
   styleUrl: './update-user.component.css'
 })
 export class UpdateUserComponent {
- 
+
   isValidForm(): boolean {
-    return !!this.newUser.username && 
+    return !!this.newUser.username &&
            !!this.newUser.full_name &&
            !!this.newUser.position &&
            !!this.newUser.email_address &&
@@ -28,11 +28,11 @@ export class UpdateUserComponent {
            !!this.newUser.division_id;
   }
 
-  
+
   @Input() visible: boolean = false;  // Menyambungkan dengan property di komponen induk
   @Output() visibleChange = new EventEmitter<boolean>();  // Emit perubahan visibility
   @Input() user: any = {};
-  @Output() userCreated = new EventEmitter<any>();  
+  @Output() userCreated = new EventEmitter<any>();
 
   divisions: any[] = [];
   roles: any[] = [];
@@ -50,18 +50,16 @@ export class UpdateUserComponent {
       this.newUser.app_role = this.user.app_role.map((role: any) => role.id);
       console.log('Updated newUser app_role:', this.newUser.app_role); // Debug log
     }
+    this.getAllDivision();
   }
 
   ngOnInit() {
-    this.getAllDivision();
     this.getAllRole();
-    console.log(this.user , 'ini on inir');
-    // this.newUser = { ...this.user };
-    this.newUser = { ...this.user 
+    this.newUser = { ...this.user
     };
   }
 
-  
+
 
   getAllRole() {
     this.userService.getAllRole().subscribe({
@@ -99,7 +97,7 @@ export class UpdateUserComponent {
     division_id: ''
   };
 
-  
+
 
   employeeStatusOptions = [
     { label: 'Kontrak', value: 1 },
@@ -111,7 +109,7 @@ export class UpdateUserComponent {
     { label: 'Disabled', value: 0 }
   ];
 
- 
+
 
   closeDialog() {
     this.visibleChange.emit(false)
@@ -135,7 +133,7 @@ export class UpdateUserComponent {
         this.userCreated.emit(response);  // Emit event ke komponen induk
         this.closeDialog();               // Tutup dialog setelah berhasil
       },
-      
+
       error: (error) => {
         console.error('Error updating user:', error);
         // Tambahkan penanganan error di sini

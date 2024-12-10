@@ -10,28 +10,41 @@ import { UserService } from '../../../service/user/user.service';
 import { CheckboxModule } from 'primeng/checkbox';
 import { TagModule } from 'primeng/tag';
 import { ChipsModule } from 'primeng/chips';
+import { jwtDecode } from 'jwt-decode';
+import { SummaryComponent } from '../../summary/summary.component';
 
 @Component({
   selector: 'app-detail-user',
   standalone: true,
-  imports: [DialogModule, InputTextModule, ButtonModule, CommonModule, CalendarModule, FormsModule, DropdownModule, CheckboxModule, TagModule, ChipsModule ],
+  imports: [
+    DialogModule,
+    InputTextModule,
+    ButtonModule,
+    CommonModule,
+    CalendarModule,
+    FormsModule,
+    DropdownModule,
+    CheckboxModule,
+    TagModule,
+    ChipsModule,
+    SummaryComponent
+  ],
   templateUrl: './detail-user.component.html',
-  styleUrl: './detail-user.component.css'
+  styleUrl: './detail-user.component.css',
 })
 export class DetailUserComponent {
-
-
-  
-  @Input() visible: boolean = false;  // Menyambungkan dengan property di komponen induk
-  @Output() visibleChange = new EventEmitter<boolean>();  // Emit perubahan visibility
+  @Input() visible: boolean = false; // Menyambungkan dengan property di komponen induk
+  @Output() visibleChange = new EventEmitter<boolean>(); // Emit perubahan visibility
   @Input() user: any = {};
 
   divisions: any[] = [];
   roles: any[] = [];
+  token: string | null = '';
+  userRoles: string = '';
 
-  constructor(
-    private userService: UserService
-  ) {}
+  displaySummaryDialog = false;
+
+  constructor(private userService: UserService) {}
 
   ngOnChanges() {
     if (this.user) {
@@ -39,22 +52,42 @@ export class DetailUserComponent {
     }
     if (this.user && this.user.app_role) {
       // Ambil hanya ID dari setiap role di array app_role
-      this.newUser.app_role = this.user.app_role.map((role: any) => role.roleName);
+      this.newUser.app_role = this.user.app_role.map(
+        (role: any) => role.roleName
+      );
       console.log('Updated newUser app_role:', this.newUser); // Debug log
     }
+
+    this.token = localStorage.getItem('token');
+    this.getRolesFromToken();
   }
 
   ngOnInit() {
     this.getAllDivision();
     this.getAllRole();
-    console.log(this.user , 'ini on inir');
+    console.log(this.user, 'ini on inir');
     // this.newUser = { ...this.user };
-    this.newUser = { ...this.user 
-    };
-
+    this.newUser = { ...this.user };
   }
 
-  
+  getRolesFromToken(): void {
+    if (this.token) {
+      try {
+        const decoded: any = jwtDecode(this.token);
+        let roles = decoded.role;
+        roles = roles
+          .slice(1, -1) // Hilangkan karakter "[" dan "]"
+          .split(',') // Pecah berdasarkan koma
+          .map((role: string) => role.trim()); // Hapus spasi di sekitar elemen
+
+        this.userRoles = roles.join(', ');
+      } catch (error) {
+        console.error('Error decoding roles from token:', error);
+      }
+    } else {
+      console.warn('Token not found');
+    }
+  }
 
   getAllRole() {
     this.userService.getAllRole().subscribe({
@@ -86,30 +119,32 @@ export class DetailUserComponent {
     position: '',
     email_address: '',
     employee_status: null,
-    app_role : [],
+    app_role: [],
     join_date: null,
     enabled: 1,
     division_id: '',
-    division_name: ''
+    division_name: '',
   };
-
-  
 
   employeeStatusOptions = [
     { label: 'Kontrak', value: 1 },
-    { label: 'Permanen', value: 2 }
+    { label: 'Permanen', value: 2 },
   ];
 
   enabledOptions = [
     { label: 'Enabled', value: 1 },
-    { label: 'Disabled', value: 0 }
+    { label: 'Disabled', value: 0 },
   ];
 
- 
-
   closeDialog() {
-    this.visibleChange.emit(false)
+    this.visibleChange.emit(false);
   }
 
- 
+  openSummaryDialog(user: any) {
+    this.user = user;
+    this.visibleChange.emit(false);
+    this.displaySummaryDialog = true;
+  }
+
+  
 }

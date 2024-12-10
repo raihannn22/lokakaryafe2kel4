@@ -10,3 +10,11 @@
 .p-datatable td {
     padding: 10px;
 }
+
+td.flex.gap-2 {
+    justify-content: center;
+}
+
+th.aksi {
+    text-align: center;
+}

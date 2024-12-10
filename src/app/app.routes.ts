@@ -17,9 +17,7 @@ import { DevplanComponent } from './component/devplan/list/devplan.component';
 import { authGuard } from './guard/auth.guard';
 import { DashboardComponent } from './component/dashboard/dashboard.component';
 import { EmpDevplanComponent } from './component/emp-devplan/emp-devplan.component';
-
-
-
+import { ViewEmpdevplanComponent } from './component/view-empdevplan/view-empdevplan.component';
 
 export const routes: Routes =  [
     {

@@ -1,0 +1,66 @@
+<div class="card flex justify-content-center">
+    <!-- Tombol untuk membuka dialog -->
+    <!-- <p-button label="Tambah Pengguna" icon="pi pi-plus" (click)="visible = true" class="mb-3"></p-button> -->
+    <p-dialog header="Assessment Summary" [modal]="true" (onHide)="closeDialog()" [(visible)]="visible" [style]="{ width: '40rem' }">
+
+        <p-table >
+            <ng-template pTemplate="header" let-columns>
+                <tr>
+                    <th>
+                        no
+                    </th>
+                    <th>
+                        Aspek
+                    </th>
+                    <th>
+                        Nilai
+                    </th>
+                    <th>
+                        Bobot
+                    </th>
+                    <th>
+                        Nilai Akhir
+                    </th>
+                </tr>
+            </ng-template>
+
+            <ng-template pTemplate="groupheader">
+                <tr>
+                    <th colspan="5">Achievement</th>
+                
+                </tr>
+            </ng-template>
+
+            <ng-template pTemplate="body" let-rowData let-columns="columns">
+                <tr>
+                    <td>
+                        Achievement
+                    </td>
+                    <td>
+                        Achievement
+                    </td>
+                    <td>
+                        Achievement
+                    </td>
+                    <td>
+                        Achievement
+                    </td>
+                    <td>
+                        Achievement
+                    </td>
+                </tr>
+            </ng-template>
+
+
+            <ng-template pTemplate="groupheader">
+                <tr>
+                    <th colspan="5">Sikap</th>
+                
+                </tr>
+            </ng-template>
+           
+        </p-table>
+
+    </p-dialog>
+  </div>
+  

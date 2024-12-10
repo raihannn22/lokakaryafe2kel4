@@ -19,7 +19,7 @@ import { CommonModule } from '@angular/common';
 export class SidebarComponent implements OnInit{
   constructor(private menuManagementService: MenuManagementService) {}
   @ViewChild('sidebarRef') sidebarRef!: Sidebar;
-  @Input() sidebarVisible: boolean = false; 
+  @Input() sidebarVisible: boolean = false;
   menus: any[] = [];
   closeCallback(e: Event): void {
       this.sidebarRef.close(e);
@@ -46,8 +46,9 @@ export class SidebarComponent implements OnInit{
       'achievement#all': { name: 'Achievement', path: '/achievement', icon: 'pi pi-star' },
       'attitude-skill#all': { name: 'Attitude Skill', path: '/attitude-skill', icon: 'pi pi-bolt' },
       'group-attitude-skill#all': { name: 'Group Attitude', path: '/group-attitude-skill', icon: 'pi pi-sitemap' },
-      
-      
+      'emp-dev-plan#read': { name: 'VIew Employee Development Plan', path: '/view-empdevplan', icon: 'pi pi-bullseye' },
+
+
       'summary#read.self': { name: 'Summary View', path: '/summary/read', icon: 'pi pi-file-o' },
       'emp-suggestion#all': { name: 'Employee Suggestion', path: '/emp-suggestion', icon: 'pi pi-list-check' },
       'emp-technical-skill#all': { name: 'Employee Technical Skill', path: '/emp-technical-skill', icon: 'pi pi-list-check' },
@@ -55,15 +56,15 @@ export class SidebarComponent implements OnInit{
       'emp-achievement#all': { name: 'Employee Achievement', path: '/emp-achievement-skill', icon: 'pi pi-list-check' },
       'emp-attitude-skill#all': { name: 'Employee Attitude Skills', path: '/emp-attitude-skill', icon: 'pi pi-users' },
 
-      'user#read': { name: 'View User', path: '/user/read', icon: 'pi pi-users' },
+      'user#read': { name: 'View User', path: '/view-user', icon: 'pi pi-users' },
       // Tambahkan mapping lainnya di sini
     };
-  
+
     return menuData.map(menu => ({
       ...menu,
       MAPPED_NAME: menuMapping[menu.MENU_NAME]?.name || menu.MENU_NAME,
       path: menuMapping[menu.MENU_NAME]?.path || '/',
-      icon: menuMapping[menu.MENU_NAME]?.icon || 'pi pi-file' 
+      icon: menuMapping[menu.MENU_NAME]?.icon || 'pi pi-file'
     }));
   }
 
