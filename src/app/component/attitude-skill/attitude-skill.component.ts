@@ -8,13 +8,18 @@ import { TableModule } from 'primeng/table';
 import { DialogModule } from 'primeng/dialog';
 import { CheckboxModule } from 'primeng/checkbox';
 import { trigger, transition, style, animate } from '@angular/animations';
+// import { AchievementService } from '../../service/achievement/achievement.service';
+import { GroupAchievementService } from '../../service/group-achievement/group-achievement.service';
 import { DropdownModule } from 'primeng/dropdown';
+import { AchievementService } from '../../service/achievement/achievement.service';
 import { TagModule } from 'primeng/tag';
 import { InputIconModule } from 'primeng/inputicon';
 import { InputTextModule } from 'primeng/inputtext';
 import { IconFieldModule } from 'primeng/iconfield';
+import { FilterMetadata } from 'primeng/api';
+import Swal from 'sweetalert2';
+import { group } from 'console';
 import { AttitudeSkillService } from '../../service/attitude-skill/attitude-skill.service';
-import { GroupAttitudeSkillService } from '../../service/group-attitude-skill/group-attitude-skill.service';
 
 @Component({
   selector: 'app-attitude-skill',
@@ -50,23 +55,27 @@ import { GroupAttitudeSkillService } from '../../service/group-attitude-skill/gr
 export class AttitudeSkillComponent implements OnInit {
   attitudeSkills: any[] = [];
   groupAttitudeSkills: any[] = [];
-  filteredAttitudeSkills: any[] = []; 
+  filteredAttitudeSkill: any[] = []; 
   loading: boolean = true;
   attitudeSkillDialog: boolean = false;
-  attitudeSkill: any = { attitudeSkill: '', group_id: null, enabled: false };
+  attitudeSkill: any = { attitude_skill: '', group_id: null, enabled: false };
+
   searchKeyword: string = ''; 
-  selectedCategory: string = ''; // Kategori yang dipilih dari dropdown
-  searchCategories: any[] = [
-    { label: 'Group Name', value: 'group_name' },
-    { label: 'Attitude Skill', value: 'attitude_skill' },
+  filters: { [s: string]: FilterMetadata } = {};
+
+  enabledOptions = [
+    { label: 'Enabled', value: 1 },
+    { label: 'Disabled', value: 0 }
   ];
+
+  isAttitudeSKillDuplicate: boolean = false;
 
   first: number = 0; // Untuk pagination
   totalRecords: number = 0; // Total jumlah data yang ada
 
   constructor(
     private attitudeSkillService: AttitudeSkillService ,
-    private groupAttitudeSkillService: GroupAttitudeSkillService,
+    private groupAchievementService: GroupAchievementService,
     private router: Router
   ) {}
 
@@ -81,7 +90,7 @@ export class AttitudeSkillComponent implements OnInit {
       next: (response) => {
         this.attitudeSkills = response.content;
         this.totalRecords = response.totalRecords;
-        this.filteredAttitudeSkills = this.attitudeSkills;
+        this.filteredAttitudeSkill = this.attitudeSkills;
         this.loading = false;
       },
       error: (error) => {
@@ -96,14 +105,12 @@ export class AttitudeSkillComponent implements OnInit {
     this.getAllAttitudeSkills(); // Muat ulang data berdasarkan halaman baru
   }
 
-  enabledOptions = [
-    { label: 'Enabled', value: 1 },
-    { label: 'Disabled', value: 0 }
-  ];
+
 
   getAllGroupAttitudeSkills() {
     this.attitudeSkillService.getAllGroupAttitudeSkills().subscribe({
       next: (response) => {
+        // console.log('Data GroupAchievements:', response.content);  // Log data untuk memastikan isi array
         this.groupAttitudeSkills = response.content;
         this.loading = false;
       },
@@ -115,77 +122,154 @@ export class AttitudeSkillComponent implements OnInit {
   }
 
   searchData() {
-    if (!this.selectedCategory || this.searchKeyword.trim() === '') {
-      this.filteredAttitudeSkills = this.attitudeSkills; // Jika kategori kosong atau keyword kosong, tampilkan semua data
+    if (this.searchKeyword.trim() === '') {
+        // Jika kata kunci kosong, tampilkan semua data
+        this.filteredAttitudeSkill = this.attitudeSkills;
     } else {
-      this.filteredAttitudeSkills = this.attitudeSkills.filter(attitudeSkill => {
-        return attitudeSkill[this.selectedCategory]?.toLowerCase().includes(this.searchKeyword.toLowerCase());
-      });
+        this.filteredAttitudeSkill = this.attitudeSkills.filter(attitudeSkill => {
+            // Cek setiap kolom dan sesuaikan pencarian berdasarkan kolom
+            return Object.keys(attitudeSkill).some(key => {
+                const value = attitudeSkill[key];
+                if (typeof value === 'number') {
+                    // Jika nilai kolom adalah angka (percentage), bandingkan sebagai numerik
+                    return value.toString().includes(this.searchKeyword);
+                } else if (typeof value === 'string') {
+                    // Jika nilai kolom adalah string, bandingkan sebagai string
+                    return value.toLowerCase().includes(this.searchKeyword.toLowerCase());
+                }
+                return false;
+            });
+        });
     }
-  }
+}
   
 
   showAddDialog() {
     console.log('Menampilkan dialog tambah');
-    this.attitudeSkill = { attitudeSkill: '', group_id: '', enabled: 1 };
+    this.attitudeSkill = { attitude_skill: '', group_id: '', enabled: 1 };
     this.attitudeSkillDialog = true;
   }
 
   editAttitudeSkill(attitudeSkill: any) {
-    console.log('Mengedit Attitude Skill', attitudeSkill);
+    console.log('Mengedit attitudeSkill', attitudeSkill);
     this.attitudeSkill = { ...attitudeSkill };
     this.attitudeSkillDialog = true;
   }
 
+validateAttitudeSkill() {
+    // Validasi group_name untuk data baru (add)
+    if (!this.attitudeSkill.id) {
+      const existingAttitudeSkill = this.attitudeSkills.find(attskl => 
+        attskl.attitude_skill.toLowerCase() === this.attitudeSkill.attitude_skill.toLowerCase()
+      );
+      if (existingAttitudeSkill) {
+        this.isAttitudeSKillDuplicate = true;
+        return false; // Invalid, group name is duplicated
+      }
+    } else {
+      // Validasi group_name untuk edit data (tidak boleh sama dengan grup lain, kecuali yang sedang diedit)
+      const existingAttitudeSkill = this.attitudeSkills.find(attskl => 
+        attskl.attitude_skill.toLowerCase() === this.attitudeSkill.attitude_skill.toLowerCase() && attskl.id !== this.attitudeSkill.id
+      );
+      if (existingAttitudeSkill) {
+        this.isAttitudeSKillDuplicate = true;
+        return false; // Invalid, group name is duplicated
+      }
+    }
 
+    this.isAttitudeSKillDuplicate = false; // Reset flag
+
+
+    return true; // All validations passed
+  }
 
 saveAttitudeSkill() {
-  const dataToSend = {
-    attitude_skill: this.attitudeSkill.attitude_skill, // Nama attitudeSkill
-    group_id: this.attitudeSkill.group_id,       // ID dari dropdown (langsung)
-    enabled: this.attitudeSkill.enabled
-  };
+    // Panggil fungsi validasi
+    if (!this.validateAttitudeSkill()) {
+      return; // Jika validasi gagal, hentikan proses penyimpanan
+    }
 
-  console.log('Data yang dikirim:', dataToSend);
-
-  if (this.attitudeSkill.id) {
-    this.attitudeSkillService.updateAttitudeSkill(this.attitudeSkill.id, dataToSend).subscribe({
-      next: () => {
-        alert('AttitudeSkill updated successfully');
-        this.getAllAttitudeSkills();
-        this.attitudeSkillDialog = false;
-      },
-      error: (error) => {
-        console.error('Error updating attitudeSkill:', error);
-      }
-    });
-  } else {
-    this.attitudeSkillService.saveAttitudeSkill(dataToSend).subscribe({
-      next: () => {
-        alert('attitudeSkill added successfully');
-        this.getAllAttitudeSkills();
-        this.attitudeSkillDialog = false;
-      },
-      error: (error) => {
-        console.error('Error saving attitudeSkill:', error);
-      }
-    });
-  }
-}
-
-
-
-  deleteAttitudeSkill(id: string) {
-    if (confirm('Are you sure you want to delete this attitudeSkill?')) {
-      this.attitudeSkillService.deleteAttitudeSkill(id).subscribe({
+    // Jika validasi berhasil, lanjutkan dengan save/update
+    if (this.attitudeSkill.id) {
+      this.attitudeSkillService.updateAttitudeSkill(this.attitudeSkill.id, this.attitudeSkill).subscribe({
         next: () => {
-          alert('Attitude Skill deleted successfully');
           this.getAllAttitudeSkills();
+          this.attitudeSkillDialog = false;
+          this.resetAttitudeSkill();
+          Swal.fire({
+            icon: 'success',
+            title: 'Sukses!',
+            text: 'Berhasil memperbarui Sikap dan Keahlian!'
+          });
         },
         error: (error) => {
-          console.error('Error deleting Attitude Skill:', error);
+          Swal.fire({
+            icon: 'error',
+            title: 'Gagal!',
+            text: 'Gagal memperbarui Sikap dan Keahlian!'
+          });
+        }
+      });
+    } else {
+      this.attitudeSkillService.saveAttitudeSkill(this.attitudeSkill).subscribe({
+        next: () => {
+          this.getAllAttitudeSkills();
+          this.attitudeSkillDialog = false;
+          this.resetAttitudeSkill();
+          Swal.fire({
+            icon: 'success',
+            title: 'Sukses!',
+            text: 'Berhasil menambahkan Sikap dan Keahlian!'
+          });
+        },
+        error: (error) => {
+          Swal.fire({
+            icon: 'error',
+            title: 'Gagal!',
+            text: 'Gagal menambahkan Sikap dan Keahlian!.'
+          });
         }
       });
     }
   }
+
+  resetAttitudeSkill() {
+    this.attitudeSkill = { attitude_skill: '', group_id: null, enabled: 1 }; 
+    this.isAttitudeSKillDuplicate = false; // Clear duplicate group name warning
+  }
+
+
+
+  deleteAttitudeSkill(id: string) {
+  Swal.fire({
+    title: 'Apakah anda yakin?',
+    text: "Data tidak dapat kembali jika dihapus!",
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonText: 'Hapus!',
+    cancelButtonText: 'Batal'
+  }).then((result) => {
+    if (result.isConfirmed) {
+      this.attitudeSkillService.deleteAttitudeSkill(id).subscribe({
+        next: () => {
+          Swal.fire({
+            icon: 'success',
+            title: 'Berhasil Menghapus Sikap dan Keahlian!',
+            showConfirmButton: false,
+            timer: 1500
+          });
+          this.getAllAttitudeSkills();
+        },
+        error: (error) => {
+          Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: 'Gagal Menghapus Sikap dan Keahlian!.',
+            confirmButtonText: 'Coba Lagi'
+          });
+        }
+      });
+    }
+  });
+}
 }

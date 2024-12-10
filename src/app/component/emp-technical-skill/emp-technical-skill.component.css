@@ -35,3 +35,27 @@
     background-color: #f0f0f0;
     color: #a0a0a0;
 }
+
+.column1 {
+    width: 70%;
+}
+
+.column2 {
+    width: 20%;
+    text-align: center;
+}
+
+.column3 {
+    width: 10%;
+    text-align: center;
+}
+
+.row-for-add {
+    width: 100%;
+    text-align: center;
+    
+}
+
+.pInputText {
+    width: 100%;
+}

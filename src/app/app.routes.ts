@@ -9,7 +9,6 @@ import { EmpSuggestionComponent } from './component/emp-suggestion/emp-suggestio
 import { DivisiComponent } from './component/divisi/list/divisi.component';
 import { EmpAchievementSkillComponent } from './component/emp-achievement-skill/emp-achievement-skill.component';
 import { MenuManagementComponent } from './component/menu-management/menu-management.component';
-import { ProfilComponent } from './profil/profil.component';
 import { EmpAttitudeSkillComponent } from './component/emp-attitude-skill/emp-attitude-skill.component';
 import { TechnicalSkillComponent } from './component/technical-skill/technical-skill.component';
 import { EmpTechnicalSkillComponent } from './component/emp-technical-skill/emp-technical-skill.component';
@@ -98,7 +97,8 @@ export const routes: Routes =  [
     {
         path: 'emp-technical-skill',
         component: EmpTechnicalSkillComponent
-    }    
+    }    ,
+{
         path: 'development-plan',
         canActivate: [authGuard],
         component: DevplanComponent
