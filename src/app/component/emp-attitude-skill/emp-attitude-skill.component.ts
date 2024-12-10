@@ -7,6 +7,7 @@ import { ButtonModule } from 'primeng/button';
 import { TableModule } from 'primeng/table';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { DropdownModule } from 'primeng/dropdown';
+import Swal from 'sweetalert2';
 
 interface AttitudeSkill {
   id: string;
@@ -60,6 +61,18 @@ export class EmpAttitudeSkillComponent implements OnInit {
 
   isSaving: boolean = false;
   isExistingData: boolean = false;
+  
+
+  assessmentYear: number = new Date().getFullYear(); // Default ke tahun sekarang
+
+
+  isFormComplete(): boolean {
+  // Periksa apakah setiap skill dalam attitudeSkills memiliki skor yang valid
+  return this.attitudeSkills.every(group => 
+    group.attitude_skills.every(skill => skill.score !== null && skill.score !== undefined)
+  );
+}
+
 
   // Tambahkan kriteria dropdown
   scoreOptions = [
@@ -70,54 +83,122 @@ export class EmpAttitudeSkillComponent implements OnInit {
     { label: 'Sangat Kurang', value: 20 }
   ];
 
+  yearOptions = [
+  { label: '2023', value: 2023 },
+  { label: '2024', value: 2024 },
+  { label: '2025', value: 2025 }
+];
+
+
   constructor(
     private groupAttitudeSkillService: GroupAttitudeSkillService,
     private empAttitudeSkillService: EmpAttitudeSkillService
   ) {}
 
   ngOnInit(): void {
-    this.groupAttitudeSkillService.getGroupAttitudeSkillsWithDetails().subscribe((response) => {
-      if (Array.isArray(response.content)) {
-        console.log('response', response.content);
-        this.attitudeSkills = response.content;
+  this.groupAttitudeSkillService.getGroupAttitudeSkillsWithDetails().subscribe((response) => {
+    if (Array.isArray(response.content)) {
+      console.log('response', response.content);
+      this.attitudeSkills = response.content;
 
-        const userId = localStorage.getItem('id');
-        if (userId) {
-          console.log('User ID', userId);
+      const userId = localStorage.getItem('id');
+      if (userId) {
+        console.log('User ID', userId);
 
-          this.empAttitudeSkillService.getEmpAttitudeSkillByUserId(userId).subscribe({
-  next: (attitudeSkillResponse: EmpAttitudeSkillResponse) => {
-    console.log('Data Emp Attitude Skill:', attitudeSkillResponse);
-
-    if (Array.isArray(attitudeSkillResponse.content) && attitudeSkillResponse.content.length > 0) {
-      this.isExistingData = true;
-
-      attitudeSkillResponse.content.forEach((empSkill: EmpAttitudeSkill) => {
-        this.attitudeSkills.forEach((group: GroupAttitudeSkills) => {
-          const skill = group.attitude_skills.find(s => s.id === empSkill.attitude_skill_id);
-          if (skill) {
-            skill.score = empSkill.score; // Update skor berdasarkan data API
-          }
-        });
-      });
-    } else {
-      this.isExistingData = false;
-    }
-  },
-  error: (err) => {
-    console.error('Error fetching emp attitude skills:', err);
-  }
-});
-
-
-        } else {
-          console.error('User ID is null or undefined');
-        }
+        this.onYearChange(); // Panggil fungsi filter berdasarkan tahun
       } else {
-        console.error('Response is not an array', response);
+        console.error('User ID is null or undefined');
+      }
+    } else {
+      console.error('Response is not an array', response);
+    }
+  });
+}
+
+
+onYearChange(): void {
+  const userId = localStorage.getItem('id');
+  if (userId) {
+    this.empAttitudeSkillService.getEmpAttitudeSkillsByUserIdAndAssesmentYear(userId, this.assessmentYear).subscribe({
+      next: (attitudeSkillResponse: EmpAttitudeSkillResponse) => {
+        console.log('Filtered Data Emp Attitude Skill:', attitudeSkillResponse);
+
+        if (Array.isArray(attitudeSkillResponse.content) && attitudeSkillResponse.content.length > 0) {
+          this.isExistingData = true;
+
+          attitudeSkillResponse.content.forEach((empSkill: EmpAttitudeSkill) => {
+            this.attitudeSkills.forEach((group: GroupAttitudeSkills) => {
+              const skill = group.attitude_skills.find(s => s.id === empSkill.attitude_skill_id);
+              if (skill) {
+                skill.score = empSkill.score; // Update skor berdasarkan data API
+              }
+            });
+          });
+        } else {
+          this.isExistingData = false;
+
+          // Reset skor jika data tidak ada
+          this.attitudeSkills.forEach((group: GroupAttitudeSkills) => {
+            group.attitude_skills.forEach(skill => {
+              skill.score = null;
+            });
+          });
+        }
+      },
+      error: (err) => {
+        console.error('Error fetching emp attitude skills:', err);
       }
     });
   }
+}
+
+
+
+  // ngOnInit(): void {
+  //   this.groupAttitudeSkillService.getGroupAttitudeSkillsWithDetails().subscribe((response) => {
+  //     if (Array.isArray(response.content)) {
+  //       console.log('response', response.content);
+  //       this.attitudeSkills = response.content;
+
+  //       const userId = localStorage.getItem('id');
+  //       if (userId) {
+  //         console.log('User ID', userId);
+
+  //         this.empAttitudeSkillService.getEmpAttitudeSkillByUserId(userId).subscribe({
+  //   next: (attitudeSkillResponse: EmpAttitudeSkillResponse) => {
+  //     console.log('Data Emp Attitude Skill:', attitudeSkillResponse);
+
+  //     if (Array.isArray(attitudeSkillResponse.content) && attitudeSkillResponse.content.length > 0) {
+  //       this.isExistingData = true;
+
+  //       attitudeSkillResponse.content.forEach((empSkill: EmpAttitudeSkill) => {
+  //         this.attitudeSkills.forEach((group: GroupAttitudeSkills) => {
+  //           const skill = group.attitude_skills.find(s => s.id === empSkill.attitude_skill_id);
+  //           if (skill) {
+  //             skill.score = empSkill.score; // Update skor berdasarkan data API
+  //           }
+  //         });
+  //       });
+  //     } else {
+  //       this.isExistingData = false;
+  //     }
+  //   },
+  //   error: (err) => {
+  //     console.error('Error fetching emp attitude skills:', err);
+  //   }
+  // });
+
+
+  //       } else {
+  //         console.error('User ID is null or undefined');
+  //       }
+  //     } else {
+  //       console.error('Response is not an array', response);
+  //     }
+  //   });
+  // }
+
+  
 
   saveAllEmpAttitudeSkills() {
     if (!this.isExistingData && this.attitudeSkills && this.attitudeSkills.length > 0) {
@@ -135,18 +216,28 @@ export class EmpAttitudeSkillComponent implements OnInit {
 
       this.empAttitudeSkillService.saveAllEmpAttitudeSkills(dataToSend).subscribe({
         next: (response) => {
-          alert('Multiple Emp Attitude Skills added successfully');
+          // alert('Multiple Emp Attitude Skills added successfully');
           this.isSaving = false;
           this.isExistingData = true;
+          Swal.fire({
+            icon: 'success',
+            title: 'Sukses!',
+            text: 'Berhasil menyimpan Sikap dan Keahlian Personal!'
+          });
         },
         error: (error) => {
           console.error('Error saving multiple attitude skills:', error);
-          alert('Failed to save multiple attitude skills. Please check console for details.');
+          // alert('Failed to save multiple attitude skills. Please check console for details.');
           this.isSaving = false;
+          Swal.fire({
+            icon: 'error',
+            title: 'Gagal!',
+            text: 'Gagal menyimpan Sikap dan Keahlian Personal!'
+          });
         }
       });
     } else {
-      alert('Data cannot be saved because it already exists or there is no data to save.');
+      // alert('Data cannot be saved because it already exists or there is no data to save.');
     }
   }
 }

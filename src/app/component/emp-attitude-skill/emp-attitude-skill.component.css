@@ -7,6 +7,15 @@
     margin-bottom: 15px;
 }
 
-.p-inputnumber {
+/* .p-inputnumber {
     width: 100px;
+} */
+
+.column1 {
+    width: 80%;
+}
+
+.column2 {
+    width: 20%;
+    text-align: center;
 }

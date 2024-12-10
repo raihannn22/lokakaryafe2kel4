@@ -1,30 +1,36 @@
-<!-- Tombol Tambah Data -->
-<p-button label="Tambah Data" icon="pi pi-plus" (click)="showAddDialog()" class="p-5 mt-5"></p-button>
-
-<!-- Tabel Data -->
 <div class="card">
     <div class="p-5">
-        <!-- Tabel Data dengan Filter Pencarian -->
-        <p-table [value]="technicalSkills" [paginator]="true" [rows]="10" [first]="first" [totalRecords]="totalRecords"
-            [loading]="loading" styleClass="p-datatable-gridlines" (onPage)="loadPage($event)">
-
-            <!-- <ng-template pTemplate="caption">
-                <div class="flex">
-                    <p-dropdown [options]="searchCategories" [(ngModel)]="selectedCategory"
-                        placeholder="Select Category" [ngClass]="{'p-dropdown-sm': true}" [style]="{'width': '150px'}"
-                        class="mr-3"></p-dropdown>
-
-                    <input pInputText type="text" (input)="searchData()" placeholder="Cari ..."
-                        [(ngModel)]="searchKeyword" />
+        <div class="text-center mb-2">
+            <h3 style="font-weight: bold; font-size: 2.25rem;">Keahlian Teknis</h3>
+        </div>
+        <p-table [value]="filteredTechnicalSkills" [paginator]="true" [rows]="5" [filters]="filters"
+            [globalFilterFields]="['technical_skill']" [loading]="loading"
+            styleClass="p-datatable-gridlines">
+            <ng-template pTemplate="caption">
+                <div class="flex justify-content-between">
+                    <p-button label="Keahlian Teknis" icon="pi pi-plus" (click)="showAddDialog()"
+                        class="p-button-text"></p-button>
+                    <div class="flex justify-content-end">
+                        <input pInputText type="text" (input)="searchData()" placeholder="Cari ..."
+                            [(ngModel)]="searchKeyword" />
+                    </div>
                 </div>
-            </ng-template> -->
+            </ng-template>
 
             <ng-template pTemplate="header">
                 <tr>
-                    <th>ID</th>
-                    <th>Technical Skill</th>
-                    <th>Enabled</th>
-                    <th>Action</th>
+                    <th>
+                        <p>No</p>
+                    </th>
+                    <th pSortableColumn="technical_skill">
+                        Keahlian Teknis
+                        <p-columnFilter type="text" field="technical_skill" display="menu"></p-columnFilter>
+                    </th>
+                    <th>
+                        <p>Status</p>
+                        <!-- <p-columnFilter type="text" field="enabled" display="menu"></p-columnFilter> -->
+                    </th>
+                    <th>Aksi</th>
                 </tr>
             </ng-template>
 
@@ -37,37 +43,43 @@
                             [value]="technicalSkill.enabled ? 'Enabled' : 'Disabled'">
                         </p-tag>
                     </td>
-                    <td class="flex gap-2">
-                        <button pButton type="button" label="" icon="pi pi-pencil" class="p-button-sm"
+                    <td>
+                        <button pButton type="button" icon="pi pi-pencil" class="p-button-sm mr-2"
                             (click)="editTechnicalSkill(technicalSkill)"></button>
-                        <button pButton type="button" label="" icon="pi pi-trash" class="p-button-danger p-button-sm"
+                        <button pButton type="button" icon="pi pi-trash" class="p-button-danger p-button-sm"
                             (click)="deleteTechnicalSkill(technicalSkill.id)"></button>
                     </td>
+
                 </tr>
             </ng-template>
         </p-table>
+
     </div>
 </div>
 
-<!-- Modal Form for Add/Edit Technical Skill -->
-<p-dialog header="Technical Skill" [(visible)]="technicalSkillDialog" [style]="{width: '50%', height: '50%'}"
+<!-- Modal Form for Add/Edit Techical Skill -->
+<p-dialog header="Keahlian Teknis" [(visible)]="technicalSkillDialog" [style]="{width: '50%', height: 'auto'}"
     [contentStyle]="{overflow: 'auto'}" modal="true" closable="false" [baseZIndex]="10000">
 
     <div class="p-fluid">
-        <!-- Input Technical Skill -->
+        <!-- Input Group Name -->
         <div class="field">
-            <label for="technicalSkill">Technical Skill</label>
+            <label for="technicalSkill">Keahlian Teknis</label>
             <input id="technicalSkill" [(ngModel)]="technicalSkill.technical_skill" pInputText />
+            <small class="p-error" *ngIf="isTechnicalSkillDuplicate && technicalSkillDialog">Keahlian Teknis sudah ada.</small>
         </div>
 
         <!-- Checkbox for Enabled -->
-        <div class="field">
+        <div class="field" *ngIf="technicalSkill.id">
             <label for="enabled">Status</label>
-            <p-dropdown [options]="enabledOptions" [(ngModel)]="technicalSkill.enabled" placeholder="Select Status"
-                id="enabled" required>
+            <p-dropdown [options]="enabledOptions" [(ngModel)]="technicalSkill.enabled" placeholder="Pilih Status"
+                id="enabled" required appendTo="body">
             </p-dropdown>
-            <small class="p-error" *ngIf="!technicalSkill.enabled && technicalSkillDialog">Status wajib dipilih.</small>
+            <!-- <small class="p-error" *ngIf="!technicalSkill.enabled && technicalSkillDialog">Status wajib
+                dipilih.</small> -->
         </div>
+
+
     </div>
 
     <p-footer>

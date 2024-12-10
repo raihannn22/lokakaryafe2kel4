@@ -16,6 +16,7 @@ interface EmpTechnicalSkill {
   technical_skill_id: string;
   criteria: string;
   score: number | null;
+  isExisting?: boolean; // Tambahkan properti ini
 }
 
 @Component({
@@ -36,14 +37,24 @@ export class EmpTechnicalSkillComponent implements OnInit {
   technicalSkills: TechnicalSkill[] = [];
   technicalSkillData: { skill: TechnicalSkill; empSkills: EmpTechnicalSkill[] }[] = [];
   scoreOptions = [
-    { label: 'Excellent', value: 100 },
-    { label: 'Good', value: 80 },
-    { label: 'Average', value: 60 },
-    { label: 'Poor', value: 40 },
-    { label: 'Very Poor', value: 20 },
+    { label: 'Ahli (Mampu memberikan solusi dan konsultasi)', value: 100 },
+    { label: 'Advance (Mampu sharing knowledge)', value: 80 },
+    { label: 'Praktisi (Pernah handle project)', value: 60 },
+    { label: 'Advance (Mampu sharing knowledge)', value: 40 },
+    { label: 'Ahli (Mampu memberikan solusi dan konsultasi)', value: 20 },
   ];
   isSaving = false;
   isExistingData: boolean = false;
+
+  isFormComplete(): boolean {
+  // Pastikan setiap `empSkill` dalam `technicalSkillData` memiliki `criteria` dan `score` yang valid
+  return this.technicalSkillData.every(techSkillData =>
+    techSkillData.empSkills.every(empSkill => 
+      empSkill.criteria && empSkill.criteria.trim() !== '' && empSkill.score !== null && empSkill.score !== undefined
+    )
+  );
+}
+
 
   constructor(private empTechnicalSkillService: EmpTechnicalSkillService) {}
 
@@ -85,34 +96,49 @@ export class EmpTechnicalSkillComponent implements OnInit {
   }
 
   populateFormWithExistingData(empSkills: any[]): void {
-    this.technicalSkillData = this.technicalSkills.map((skill) => {
-      const skillEmpSkills = empSkills.filter(
-        (empSkill) => empSkill.technical_skill_id === skill.id
-      );
-      return {
-        skill,
-        empSkills: skillEmpSkills.length > 0 ? skillEmpSkills : [{ technical_skill_id: skill.id, criteria: '', score: null }],
-      };
-    });
-  }
+  this.technicalSkillData = this.technicalSkills.map((skill) => {
+    const skillEmpSkills = empSkills
+      .filter((empSkill) => empSkill.technical_skill_id === skill.id)
+      .map((empSkill) => ({
+        ...empSkill,
+        isExisting: true, // Tandai sebagai data yang sudah ada di database
+      }));
+
+    return {
+      skill,
+      empSkills: skillEmpSkills.length > 0
+        ? skillEmpSkills
+        : [{ technical_skill_id: skill.id, criteria: '', score: null, isExisting: false }],
+    };
+  });
+}
+
+
 
   addRow(skillId: string): void {
-    const techSkillData = this.technicalSkillData.find((data) => data.skill.id === skillId);
-    if (techSkillData) {
-      techSkillData.empSkills.push({
-        technical_skill_id: skillId,
-        criteria: '',
-        score: null,
-      });
-    }
+  const techSkillData = this.technicalSkillData.find((data) => data.skill.id === skillId);
+  if (techSkillData) {
+    techSkillData.empSkills.push({
+      technical_skill_id: skillId,
+      criteria: '',
+      score: null,
+      isExisting: false, // Tandai sebagai data baru
+    });
   }
+}
+
+
 
   removeRow(skillId: string, index: number): void {
-    const techSkillData = this.technicalSkillData.find((data) => data.skill.id === skillId);
-    if (techSkillData && techSkillData.empSkills.length > 1) {
+  const techSkillData = this.technicalSkillData.find((data) => data.skill.id === skillId);
+  if (techSkillData) {
+    const empSkill = techSkillData.empSkills[index];
+    if (!empSkill.isExisting) { // Hanya hapus data baru
       techSkillData.empSkills.splice(index, 1);
     }
   }
+}
+
 
   saveAllEmpTechnicalSkills(): void {
   const userId = localStorage.getItem('id');
