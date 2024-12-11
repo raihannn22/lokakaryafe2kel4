@@ -202,32 +202,6 @@ scoreWarning: boolean = false;
     this.empAchievementSkillDialog = true;
   }
 
-// validateAchievement() {
-//     // Validasi group_name untuk data baru (add)
-//     if (!this.achievement.id) {
-//       const existingAchievement = this.achievements.find(achiev => 
-//         achiev.achievement.toLowerCase() === this.achievement.achievement.toLowerCase()
-//       );
-//       if (existingAchievement) {
-//         this.isAchievementDuplicate = true;
-//         return false; // Invalid, group name is duplicated
-//       }
-//     } else {
-//       // Validasi group_name untuk edit data (tidak boleh sama dengan grup lain, kecuali yang sedang diedit)
-//       const existingAchievement = this.achievements.find(achiev => 
-//         achiev.achievement.toLowerCase() === this.achievement.achievement.toLowerCase() && achiev.id !== this.achievement.id
-//       );
-//       if (existingAchievement) {
-//         this.isAchievementDuplicate = true;
-//         return false; // Invalid, group name is duplicated
-//       }
-//     }
-
-//     this.isAchievementDuplicate = false; // Reset flag
-
-
-//     return true; // All validations passed
-//   }
 
 saveEmpAchievementSkill() {
     // Panggil fungsi validasi
@@ -236,49 +210,99 @@ saveEmpAchievementSkill() {
     // }
 
     // Jika validasi berhasil, lanjutkan dengan save/update
-    if (this.empAchievementSkill.id) {
-      this.empAchievementSkillService.updateEmpAchievementSkill(this.empAchievementSkill.id, this.empAchievementSkill).subscribe({
-        next: () => {
-          this.getAllEmpAchievementSkills();
-          this.empAchievementSkillDialog = false;
-          this.resetEmpAchievementSkill();
-          Swal.fire({
-            icon: 'success',
-            title: 'Sukses!',
-            text: 'Berhasil memperbarui Pencapaian Personal!'
-          });
-        },
-        error: (error) => {
-          Swal.fire({
-            icon: 'error',
-            title: 'Gagal!',
-            text: 'Gagal memperbarui Pencapaian Personal!'
-          });
-        }
+  //   if (this.empAchievementSkill.id) {
+  //     this.empAchievementSkillService.updateEmpAchievementSkill(this.empAchievementSkill.id, this.empAchievementSkill).subscribe({
+  //       next: () => {
+  //         this.getAllEmpAchievementSkills();
+  //         this.empAchievementSkillDialog = false;
+  //         this.resetEmpAchievementSkill();
+  //         Swal.fire({
+  //           icon: 'success',
+  //           title: 'Sukses!',
+  //           text: 'Berhasil memperbarui Pencapaian Personal!'
+  //         });
+  //       },
+  //       error: (error) => {
+  //         Swal.fire({
+  //           icon: 'error',
+  //           title: 'Gagal!',
+  //           text: 'Gagal memperbarui Pencapaian Personal!'
+  //         });
+  //       }
+  //     });
+  //   } else {
+  //     console.log('Proses save, data yang dikirim:', this.empAchievementSkill);
+  //     this.empAchievementSkillService.saveEmpAchievementSkill(this.empAchievementSkill).subscribe({
+  //       next: () => {
+  //         this.getAllEmpAchievementSkills();
+  //         this.empAchievementSkillDialog = false;
+  //         this.resetEmpAchievementSkill();
+  //         Swal.fire({
+  //           icon: 'success',
+  //           title: 'Sukses!',
+  //           text: 'Berhasil menambahkan Pencapaian Personal!'
+  //         });
+  //       },
+  //       error: (error) => {
+  //         Swal.fire({
+  //           icon: 'error',
+  //           title: 'Gagal!',
+  //           text: 'Gagal menambahkan Pencapaian Personal!.'
+  //         });
+  //       }
+  //     });
+  //   }
+  // }
+
+  if (this.empAchievementSkill.id) {
+  this.empAchievementSkillService.updateEmpAchievementSkill(this.empAchievementSkill.id, this.empAchievementSkill).subscribe({
+    next: () => {
+      this.getAllEmpAchievementSkills();
+      this.empAchievementSkillDialog = false;
+      this.resetEmpAchievementSkill();
+      Swal.fire({
+        icon: 'success',
+        title: 'Sukses!',
+        text: 'Berhasil memperbarui Pencapaian Personal!'
       });
-    } else {
-      console.log('Proses save, data yang dikirim:', this.empAchievementSkill);
-      this.empAchievementSkillService.saveEmpAchievementSkill(this.empAchievementSkill).subscribe({
-        next: () => {
-          this.getAllEmpAchievementSkills();
-          this.empAchievementSkillDialog = false;
-          this.resetEmpAchievementSkill();
-          Swal.fire({
-            icon: 'success',
-            title: 'Sukses!',
-            text: 'Berhasil menambahkan Pencapaian Personal!'
-          });
-        },
-        error: (error) => {
-          Swal.fire({
-            icon: 'error',
-            title: 'Gagal!',
-            text: 'Gagal menambahkan Pencapaian Personal!.'
-          });
-        }
+    },
+    error: (error) => {
+      Swal.fire({
+        icon: 'error',
+        title: 'Gagal!',
+        text: 'Gagal memperbarui Pencapaian Personal!'
       });
     }
-  }
+  });
+} else {
+  // Mendapatkan tahun saat ini untuk assessment_year
+  const currentYear = new Date().getFullYear();
+  
+  // Set nilai assessment_year pada objek empAchievementSkill
+  this.empAchievementSkill.assessment_year = currentYear;
+
+  console.log('Proses save, data yang dikirim:', this.empAchievementSkill);
+  this.empAchievementSkillService.saveEmpAchievementSkill(this.empAchievementSkill).subscribe({
+    next: () => {
+      this.getAllEmpAchievementSkills();
+      this.empAchievementSkillDialog = false;
+      this.resetEmpAchievementSkill();
+      Swal.fire({
+        icon: 'success',
+        title: 'Sukses!',
+        text: 'Berhasil menambahkan Pencapaian Personal!'
+      });
+    },
+    error: (error) => {
+      Swal.fire({
+        icon: 'error',
+        title: 'Gagal!',
+        text: 'Gagal menambahkan Pencapaian Personal!.'
+      });
+    }
+  });
+}
+}
 
   resetEmpAchievementSkill() {
     this.empAchievementSkill = { achievement_id: null, user_id: null, notes: null, score: null, assessment_year: '' }; 

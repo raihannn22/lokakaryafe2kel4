@@ -51,7 +51,7 @@
                     <td>{{ rowIndex + 1 }}</td>
                     <!-- <td>{{ empAchievementSkill.group_name }}</td> -->
                     <td>{{ empAchievementSkill.full_name }}</td>
-                    <td>{{ empAchievementSkill.achievement }}</td>
+                    <td>{{ empAchievementSkill.achievement_name }}</td>
                     <td>{{ empAchievementSkill.notes }}</td>
                     <td>{{ empAchievementSkill.score }}</td>
                     <td>{{ empAchievementSkill.assessment_year }}</td>
@@ -106,11 +106,11 @@
             <small *ngIf="scoreWarning" class="p-error">Nilai tidak boleh lebih dari 100!</small>
         </div>
 
-        <div class="p-field">
+        <!-- <div class="p-field">
             <label for="score">Assessment Year</label>
             <input type="number" pInputText id="assessmentYear" [(ngModel)]="empAchievementSkill.assessment_year"
                 disabled/>
-        </div>
+        </div> -->
     </div>
 
     <p-footer>
