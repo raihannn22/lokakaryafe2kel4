@@ -50,7 +50,9 @@ export class SidebarComponent implements OnInit{
 
 
       'summary#read.self': { name: 'Summary View', path: '/user/summary-view', icon: 'pi pi-file-o' },
-      'emp-suggestion#all': { name: 'Employee Suggestion', path: '/employee/suggestion', icon: 'pi pi-list-check' },
+      'emp-suggestion#all': { name: 'Employee Suggestion', path: '/emp-suggestion', icon: 'pi pi-list-check' },
+
+
       'emp-technical-skill#all': { name: 'Employee Technical Skill', path: '/emp-technical-skill', icon: 'pi pi-list-check' },
       'emp-dev-plan#all': { name: 'Employee Development Plan', path: '/employee-development-plan', icon: 'pi pi-bullseye' },
       'emp-achievement#all': { name: 'Employee Achievement', path: '/emp-achievement-skill', icon: 'pi pi-list-check' },

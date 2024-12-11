@@ -1,37 +1,44 @@
-<!-- Tombol Tambah Data -->
-<p-button label="Tambah Group Achievement" icon="pi pi-plus" (click)="showAddDialog()" class="p-5 mt-5"></p-button>
-
 <div class="card">
     <div class="p-5">
+
         <h1>sisa total {{100 -totalPercentage}}</h1>
-        <!-- Tabel Data -->
-        <p-table [value]="filteredGroupAchievements" [paginator]="true" [rows]="5" [first]="first"
-            [totalRecords]="totalRecords" [loading]="loading" styleClass="p-datatable-gridlines"
-            (onPage)="loadPage($event)">
 
+        <div class="text-center mb-2">
+            <h3 style="font-weight: bold; font-size: 2.25rem;">Grup Pencapaian</h3>
+        </div>
+        <p-table [value]="filteredGroupAchievements" [paginator]="true" [rows]="5" [filters]="filters"
+            [globalFilterFields]="['group_name', 'percentage', 'enabled']" [loading]="loading" styleClass="p-datatable-gridlines">
             <ng-template pTemplate="caption">
-                <div class="flex">
-                    <!-- Dropdown Kategori Pencarian -->
-                    <p-dropdown [options]="searchCategories" [(ngModel)]="selectedCategory"
-                        placeholder="Select Category" [ngClass]="{'p-dropdown-sm': true}" [style]="{'width': '150px'}"
-                        class="mr-3"></p-dropdown>
-
-                    <!-- Input Pencarian -->
-                    <input pInputText type="text" (input)="searchData()" placeholder="Cari ..."
-                        [(ngModel)]="searchKeyword" />
+                <div class="flex justify-content-between">
+                    <p-button label="Grup Pencapaian" icon="pi pi-plus" (click)="showAddDialog()"
+                        class="p-button-text"></p-button>
+                    <div class="flex justify-content-end">
+                        <input pInputText type="text" (input)="searchData()" placeholder="Cari ..." [(ngModel)]="searchKeyword" />
+                    </div>
                 </div>
             </ng-template>
 
             <ng-template pTemplate="header">
                 <tr>
-                    <th>No</th>
-                    <th>Group Name</th>
-                    <th>Percentage</th>
-                    <th>Enabled</th>
-                    <th>Action</th>
+                    <th>
+                        <p>No</p>
+                    </th>
+                    <th pSortableColumn="group_name">
+                        Nama Grup
+                        <p-columnFilter type="text" field="group_name" display="menu"></p-columnFilter>
+                    </th>
+                    <th pSortableColumn="percentage">
+                        Persentasi
+                        <p-columnFilter type="text" field="percentage" display="menu"></p-columnFilter>
+                    </th>
+                    <th>
+                        <p>Status</p>
+                        <!-- <p-columnFilter type="text" field="enabled" display="menu"></p-columnFilter> -->
+                    </th>
+                    <th>Aksi</th>
                 </tr>
             </ng-template>
-
+        
             <ng-template pTemplate="body" let-groupAchievement let-rowIndex="rowIndex">
                 <tr>
                     <td>{{ rowIndex + 1 }}</td>
@@ -42,44 +49,52 @@
                             [value]="groupAchievement.enabled ? 'Enabled' : 'Disabled'">
                         </p-tag>
                     </td>
-                    <td class="flex gap-2">
-                        <button pButton type="button" label="" icon="pi pi-pencil" class="p-button-sm"
+                    <td>
+                        <button pButton type="button" icon="pi pi-pencil" class="p-button-sm mr-2"
                             (click)="editGroupAchievement(groupAchievement)"></button>
-                        <button pButton type="button" label="" icon="pi pi-trash" class="p-button-danger p-button-sm"
+                        <button pButton type="button" icon="pi pi-trash" class="p-button-danger p-button-sm"
                             (click)="deleteGroupAchievement(groupAchievement.id)"></button>
                     </td>
+
                 </tr>
             </ng-template>
         </p-table>
+
     </div>
 </div>
 
 <!-- Modal Form for Add/Edit Group Achievement -->
+
 <p-dialog header="Group Achievement" [(visible)]="groupAchievementDialog" [style]="{width: '50%', height: '50%'}"
     [contentStyle]="{overflow: 'auto'}" modal="true" closable="false" class="z-3" >
-
     <div class="p-fluid">
         <!-- Input Group Name -->
         <div class="field">
-            <label for="groupName">Group Name</label>
+            <label for="groupName">Nama Grup</label>
             <input id="groupName" [(ngModel)]="groupAchievement.group_name" pInputText />
+            <small class="p-error" *ngIf="isGroupNameDuplicate && groupAchievementDialog">Nama Grup sudah digunakan.</small>
         </div>
 
         <!-- Input Percentage -->
-        <div class="field">
-            <label for="percentage">Percentage</label>
-            <input id="percentage" [(ngModel)]="groupAchievement.percentage" pInputText type="number" max={{100-totalPercentage}}  />
+        <div class="p-field">
+            <label for="percentage">Persentasi</label>
+            <input type="number" pInputText id="percentage" [(ngModel)]="groupAchievement.percentage"
+                (ngModelChange)="validatePercentage()" />
+
+            <small *ngIf="percentageWarning" class="p-error">Persentasi tidak boleh lebih dari 100!</small>
+
         </div>
 
         <!-- Checkbox for Enabled -->
-        <div class="field">
+        <div class="field" *ngIf="groupAchievement.id">
             <label for="enabled">Status</label>
-            <p-dropdown [options]="enabledOptions" [(ngModel)]="groupAchievement.enabled" placeholder="Select Status"
-                id="enabled" required>
+            <p-dropdown [options]="enabledOptions" [(ngModel)]="groupAchievement.enabled" placeholder="Pilih Status"
+                        id="enabled" required appendTo="body">
             </p-dropdown>
-            <small class="p-error" *ngIf="!groupAchievement.enabled && groupAchievementDialog">Status wajib
-                dipilih.</small>
+            <!-- <small class="p-error" *ngIf="!groupAchievement.enabled && groupAchievementDialog">Status wajib dipilih.</small> -->
         </div>
+
+
     </div>
 
     <p-footer>

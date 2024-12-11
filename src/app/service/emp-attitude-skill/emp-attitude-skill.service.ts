@@ -22,6 +22,11 @@ export class EmpAttitudeSkillService {
     return this.http.get<any[]>(`${this.apiUrl}/user/${userId}`);
   }
 
+  getEmpAttitudeSkillsByUserIdAndAssesmentYear(userId: string, assessmentYear: number): Observable<any> {
+    return this.http.get<any[]>(`${this.apiUrl}/user/${userId}/year/${assessmentYear}`);
+  }
+
+
   // getEmpAttitudeSkillByUserId(userId: string): Observable<any[]> {
   // return this.http.get<any[]>(`/api/emp-attitude-skill/user/${userId}`); 
 // }

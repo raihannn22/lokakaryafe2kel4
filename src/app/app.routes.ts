@@ -20,6 +20,7 @@ import { EmpDevplanComponent } from './component/emp-devplan/emp-devplan.compone
 import { ViewEmpdevplanComponent } from './component/view-empdevplan/view-empdevplan.component';
 import { SummarySelfComponent } from './component/summary-self/summary-self.component';
 
+
 export const routes: Routes = [
   {
     path: '',
@@ -122,4 +123,5 @@ export const routes: Routes = [
     canActivate: [authGuard],
     component: SummarySelfComponent,
   }
+
 ];

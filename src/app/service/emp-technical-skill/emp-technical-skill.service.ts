@@ -10,15 +10,6 @@ export class EmpTechnicalSkillService {
 
   constructor(private http: HttpClient) {}
 
-  // getAllTechnicalSkills(): Observable<any[]> {
-  //   return this.http.get<any[]>(`${this.baseUrl}/technical-skills`);
-  // }
-
-  // getAllTechnicalSkills(): Observable<any> {
-  //   return this.http.get('http://localhost:8081/technical-skill/all');
-  //   // console.log(this.getAllTechnicalSkills)
-  // }
-
   getAllTechnicalSkills(): Observable<any> {
   return this.http.get<any>('http://localhost:8081/technical-skill/all');
 }

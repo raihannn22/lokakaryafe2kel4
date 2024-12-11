@@ -16,6 +16,9 @@ import { TagModule } from 'primeng/tag';
 import { InputIconModule } from 'primeng/inputicon';
 import { InputTextModule } from 'primeng/inputtext';
 import { IconFieldModule } from 'primeng/iconfield';
+import { FilterMetadata } from 'primeng/api';
+import Swal from 'sweetalert2';
+import { group } from 'console';
 
 @Component({
   selector: 'app-achievement',
@@ -55,12 +58,16 @@ export class AchievementComponent implements OnInit {
   loading: boolean = true;
   achievementDialog: boolean = false;
   achievement: any = { achievement: '', group_id: null, enabled: false };
+
   searchKeyword: string = ''; 
-  selectedCategory: string = ''; // Kategori yang dipilih dari dropdown
-  searchCategories: any[] = [
-    { label: 'Group Name', value: 'group_name' },
-    { label: 'Achievement', value: 'achievement' },
+  filters: { [s: string]: FilterMetadata } = {};
+
+  enabledOptions = [
+    { label: 'Enabled', value: 1 },
+    { label: 'Disabled', value: 0 }
   ];
+
+  isAchievementDuplicate: boolean = false;
 
   first: number = 0; // Untuk pagination
   totalRecords: number = 0; // Total jumlah data yang ada
@@ -97,10 +104,7 @@ export class AchievementComponent implements OnInit {
     this.getAllAchievements(); // Muat ulang data berdasarkan halaman baru
   }
 
-  enabledOptions = [
-    { label: 'Enabled', value: 1 },
-    { label: 'Disabled', value: 0 }
-  ];
+
 
   getAllGroupAchievements() {
     this.achievementService.getAllGroupAchievements().subscribe({
@@ -117,14 +121,26 @@ export class AchievementComponent implements OnInit {
   }
 
   searchData() {
-    if (!this.selectedCategory || this.searchKeyword.trim() === '') {
-      this.filteredAchievements = this.achievements; // Jika kategori kosong atau keyword kosong, tampilkan semua data
+    if (this.searchKeyword.trim() === '') {
+        // Jika kata kunci kosong, tampilkan semua data
+        this.filteredAchievements = this.achievements;
     } else {
-      this.filteredAchievements = this.achievements.filter(achievement => {
-        return achievement[this.selectedCategory]?.toLowerCase().includes(this.searchKeyword.toLowerCase());
-      });
+        this.filteredAchievements = this.achievements.filter(achievement => {
+            // Cek setiap kolom dan sesuaikan pencarian berdasarkan kolom
+            return Object.keys(achievement).some(key => {
+                const value = achievement[key];
+                if (typeof value === 'number') {
+                    // Jika nilai kolom adalah angka (percentage), bandingkan sebagai numerik
+                    return value.toString().includes(this.searchKeyword);
+                } else if (typeof value === 'string') {
+                    // Jika nilai kolom adalah string, bandingkan sebagai string
+                    return value.toLowerCase().includes(this.searchKeyword.toLowerCase());
+                }
+                return false;
+            });
+        });
     }
-  }
+}
   
 
   showAddDialog() {
@@ -139,57 +155,120 @@ export class AchievementComponent implements OnInit {
     this.achievementDialog = true;
   }
 
+validateAchievement() {
+    // Validasi group_name untuk data baru (add)
+    if (!this.achievement.id) {
+      const existingAchievement = this.achievements.find(achiev => 
+        achiev.achievement.toLowerCase() === this.achievement.achievement.toLowerCase()
+      );
+      if (existingAchievement) {
+        this.isAchievementDuplicate = true;
+        return false; // Invalid, group name is duplicated
+      }
+    } else {
+      // Validasi group_name untuk edit data (tidak boleh sama dengan grup lain, kecuali yang sedang diedit)
+      const existingAchievement = this.achievements.find(achiev => 
+        achiev.achievement.toLowerCase() === this.achievement.achievement.toLowerCase() && achiev.id !== this.achievement.id
+      );
+      if (existingAchievement) {
+        this.isAchievementDuplicate = true;
+        return false; // Invalid, group name is duplicated
+      }
+    }
 
+    this.isAchievementDuplicate = false; // Reset flag
+
+
+    return true; // All validations passed
+  }
 
 saveAchievement() {
-  const dataToSend = {
-    achievement: this.achievement.achievement, // Nama achievement
-    group_id: this.achievement.group_id,       // ID dari dropdown (langsung)
-    enabled: this.achievement.enabled
-  };
+    // Panggil fungsi validasi
+    if (!this.validateAchievement()) {
+      return; // Jika validasi gagal, hentikan proses penyimpanan
+    }
 
-  console.log('Data yang dikirim:', dataToSend);
-
-  if (this.achievement.id) {
-    // Update achievement
-    this.achievementService.updateAchievement(this.achievement.id, dataToSend).subscribe({
-      next: () => {
-        alert('Achievement updated successfully');
-        this.getAllAchievements();
-        this.achievementDialog = false;
-      },
-      error: (error) => {
-        console.error('Error updating achievement:', error);
-      }
-    });
-  } else {
-    // Save new achievement
-    this.achievementService.saveAchievement(dataToSend).subscribe({
-      next: () => {
-        alert('Achievement added successfully');
-        this.getAllAchievements();
-        this.achievementDialog = false;
-      },
-      error: (error) => {
-        console.error('Error saving achievement:', error);
-      }
-    });
-  }
-}
-
-
-
-  deleteAchievement(id: string) {
-    if (confirm('Are you sure you want to delete this achievement?')) {
-      this.achievementService.deleteAchievement(id).subscribe({
+    // Jika validasi berhasil, lanjutkan dengan save/update
+    if (this.achievement.id) {
+      this.achievementService.updateAchievement(this.achievement.id, this.achievement).subscribe({
         next: () => {
-          alert('Achievement deleted successfully');
           this.getAllAchievements();
+          this.achievementDialog = false;
+          this.resetAchievement();
+          Swal.fire({
+            icon: 'success',
+            title: 'Sukses!',
+            text: 'Berhasil memperbarui Pencapaian!'
+          });
         },
         error: (error) => {
-          console.error('Error deleting achievement:', error);
+          Swal.fire({
+            icon: 'error',
+            title: 'Gagal!',
+            text: 'Gagal memperbarui Pencapaian!'
+          });
+        }
+      });
+    } else {
+      this.achievementService.saveAchievement(this.achievement).subscribe({
+        next: () => {
+          this.getAllAchievements();
+          this.achievementDialog = false;
+          this.resetAchievement();
+          Swal.fire({
+            icon: 'success',
+            title: 'Sukses!',
+            text: 'Berhasil menambahkan Pencapaian!'
+          });
+        },
+        error: (error) => {
+          Swal.fire({
+            icon: 'error',
+            title: 'Gagal!',
+            text: 'Gagal menambahkan Pencapaian!.'
+          });
         }
       });
     }
   }
+
+  resetAchievement() {
+    this.achievement = { achievement: '', group_id: null, enabled: 1 }; 
+    this.isAchievementDuplicate = false; // Clear duplicate group name warning
+  }
+
+
+
+  deleteAchievement(id: string) {
+  Swal.fire({
+    title: 'Apakah anda yakin?',
+    text: "Data tidak dapat kembali jika dihapus!",
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonText: 'Hapus!',
+    cancelButtonText: 'Batal'
+  }).then((result) => {
+    if (result.isConfirmed) {
+      this.achievementService.deleteAchievement(id).subscribe({
+        next: () => {
+          Swal.fire({
+            icon: 'success',
+            title: 'Berhasil Menghapus Pencapaian!',
+            showConfirmButton: false,
+            timer: 1500
+          });
+          this.getAllAchievements();
+        },
+        error: (error) => {
+          Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: 'Gagal Menghapus Pencapaian!.',
+            confirmButtonText: 'Coba Lagi'
+          });
+        }
+      });
+    }
+  });
+}
 }
