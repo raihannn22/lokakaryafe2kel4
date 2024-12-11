@@ -38,6 +38,9 @@ export class SummaryComponent implements OnInit{
   groupedData: any[] = [];
   normalizedData: any = [];
 
+  totalPercentage: number = 0;
+  totalFinalScore: number = 0;
+
   constructor(private summaryService: SummaryService) {
   }
 
@@ -49,8 +52,9 @@ export class SummaryComponent implements OnInit{
     this.getAllEmpAttitudeSkill();
     this.getAllEmpAchievement();
     this.groupedData = this.groupAndSumData(this.combinedData);
-    // // this.normalizedData = this.normalizePercentages(this.groupedData);
-    // console.log('hasill', this.groupedData);
+    this.totalPercentage = this.groupedData.reduce((total, item) => total + item.percentage, 0);
+    this.totalFinalScore = this.groupedData.reduce((total, item) => total + (item.score * (item.percentage)/100), 0);
+;
   }
 
   closeDialog() {

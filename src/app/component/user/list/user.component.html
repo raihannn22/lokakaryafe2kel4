@@ -28,6 +28,7 @@
         'division_name'
       ]"
     >
+    
       <ng-template pTemplate="caption">
         <p-iconField iconPosition="left">
           <p-inputIcon>
@@ -45,68 +46,96 @@
 
       <ng-template pTemplate="header">
         <tr>
-          <th>Username</th>
-          <th>Nama Lengkap</th>
-          <th>Jabatan</th>
-          <th>Email</th>
-          <th>Status Karyawan</th>
+          <th>
+            <div class="flex align-items-center">
+              Username
+              <p-columnFilter type="text" field="username" display="menu" />
+            </div>
+          </th>
+
+          <th>
+            <div class="flex align-items-center">
+            Nama Lengkap
+            <p-columnFilter type="text" field="full_name" display="menu" />
+            </div>
+          </th>
+
+          <th>
+            <div class="flex align-items-center">
+              Jabatan
+              <p-columnFilter type="text" field="position" display="menu" />
+            </div>
+          </th>
+
+          <th>
+            <div class="flex align-items-center">
+              Email
+              <p-columnFilter type="text" field="email_address" display="menu" />
+            </div>
+          </th>
+
+          <th>
+            <div class="flex align-items-center">
+              status karyawan
+              <p-columnFilter field="employee_status" matchMode="equals" display="menu"  [showMatchModes]="false" [showOperator]="false" [showAddButton]="false">
+                  <ng-template pTemplate="filter" let-value let-filter="filterCallback">
+                    <p-dropdown
+                    [ngModel]="value"
+                    [options]="statuses"
+                    (onChange)="filter($event.value)"
+                    placeholder="Select One"
+                    [showClear]="true">
+                        <ng-template let-option pTemplate="item">
+                            <p-tag
+                                [value]="option.label"
+                                [severity]="getSeverity(option.label)" />
+                        </ng-template>
+                    </p-dropdown>
+                  </ng-template>
+              </p-columnFilter>
+            </div>
+          </th>
+
           <th>Tanggal Bergabung</th>
+
           <th>Status Akun</th>
-          <th>Divisi</th>
+          
+          <th>
+            <div class="flex align-items-center">
+              Divisi
+              <p-columnFilter field="division_name" matchMode="in" display="menu" [showMatchModes]="false" [showOperator]="false" [showAddButton]="false">
+                <ng-template pTemplate="header">
+                    <div class="px-3 pt-3 pb-0">
+                        <span class="font-bold">Agent Picker</span>
+                    </div>
+                </ng-template>
+                <ng-template pTemplate="filter" let-value let-filter="filterCallback">
+                    <p-multiSelect [ngModel]="value" [options]="divisionName" placeholder="Any" (onChange)="filter($event.value)" >
+                        <ng-template let-option pTemplate="item">
+                            <div class="inline-block vertical-align-middle">
+                            
+                                <span class="ml-1 mt-1">{{ option }}</span>
+                            </div>
+                        </ng-template>
+                    </p-multiSelect>
+                </ng-template>
+            </p-columnFilter>
+            </div>
+          </th>
+          
           <th class="aksi">Aksi</th>
         </tr>
 
-        <tr>
-          <th>
-              <p-columnFilter
-                  type="text"
-                  field="username"
-                  placeholder="Search by username"
-                  ariaLabel="Filter Name" />
-          </th>
+        <!-- <tr>
+          <th></th>
 
-          <th>
-            <p-columnFilter
-                  type="text"
-                  field="full_name"
-                  placeholder="Search by nama lengkap"
-                  ariaLabel="Filter Name" />
-          </th>
+          <th></th>
 
-          <th>
-            <p-columnFilter
-            type="text"
-            field="position"
-            placeholder="Search by jabatan"
-            ariaLabel="Filter Name" />
-          </th>
+          <th></th>
 
-          <th>
-            <p-columnFilter
-            type="text"
-            field="email_address"
-            placeholder="Search by email"
-            ariaLabel="Filter Name" />
-          </th>
+          <th> </th>
 
-          <th>
-            <p-columnFilter field="employee_status" matchMode="equals" [showMenu]="false">
-              <ng-template pTemplate="filter" let-value let-filter="filterCallback">
-                  <p-dropdown
-                      [ngModel]="value"
-                      [options]="statuses"
-                      (onChange)="filter($event.value)"
-                      placeholder="Select One"
-                      [showClear]="true">
-                          <ng-template let-option pTemplate="item">
-                              <p-tag
-                                  [value]="option.label"
-                                  [severity]="getSeverity(option.label)" />
-                          </ng-template>
-                  </p-dropdown>
-              </ng-template>
-          </p-columnFilter>
-          </th>
+          <th></th>
 
           <th></th>
 
@@ -117,13 +146,12 @@
               <ng-template pTemplate="filter" let-value let-filter="filterCallback">
                   <p-multiSelect
                       [ngModel]="value"
-                      [options]="divisi"
+                      [options]="divisionName"  
                       placeholder="Any"
-                      (onChange)="filter($event.value)"
-                      optionLabel="DIVISION_NAME">
+                      (onChange)="filter($event.value)">
                           <ng-template let-option pTemplate="item">
                                   <span>
-                                      {{ option.DIVISION_NAME }}
+                                      {{ option }}
                                   </span>
 
                           </ng-template>
@@ -134,7 +162,7 @@
 
           <th></th>
         
-      </tr>
+      </tr> -->
       </ng-template>
 
       <ng-template pTemplate="body" let-user>

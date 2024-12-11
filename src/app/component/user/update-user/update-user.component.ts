@@ -8,11 +8,12 @@ import { DropdownModule } from 'primeng/dropdown';
 import { CalendarModule } from 'primeng/calendar';
 import { UserService } from '../../../service/user/user.service';
 import { CheckboxModule } from 'primeng/checkbox';
+import { TooltipModule } from 'primeng/tooltip';
 
 @Component({
   selector: 'app-update-user',
   standalone: true,
-  imports: [DialogModule, InputTextModule, ButtonModule, CommonModule, CalendarModule, FormsModule, DropdownModule, CheckboxModule],
+  imports: [DialogModule, InputTextModule, ButtonModule, CommonModule, CalendarModule, FormsModule, DropdownModule, CheckboxModule, TooltipModule],
   templateUrl: './update-user.component.html',
   styleUrl: './update-user.component.css'
 })

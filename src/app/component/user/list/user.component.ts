@@ -46,6 +46,7 @@ export class UserComponent implements OnInit {
   userRoles: string = '';
   statuses!: any[];
   divisi!: any[];
+  divisionName: string[] = [];
 
 
   constructor(
@@ -68,6 +69,7 @@ export class UserComponent implements OnInit {
       { label: 'Permanen', value: '2' },
       { label: 'Kontrak', value: '1' },
     ];
+    // console.log(this.statuses);
   }
 
   getSeverity(status: string) {
@@ -105,8 +107,7 @@ export class UserComponent implements OnInit {
   getAllUsers() {
     this.userService.getAllUsers().subscribe({
       next: (response) => {
-        this.users = response.content; // Data ada di 'content'
-        console.log('ini isi usernyaa:', response.content);
+        this.users = response.content; 
         this.loading = false;
       },
       error: (error) => {
@@ -125,7 +126,14 @@ export class UserComponent implements OnInit {
       error: (error) => {
         console.error('Error fetching users:', error);
       },
+      complete: () => {
+        this.divisionName = this.divisi.map(item => item.DIVISION_NAME);
+        // console.log(this.divisionName, 'ini division name');
+      }
+    
+      
     });
+
   }
 
   openCreateDialog() {
