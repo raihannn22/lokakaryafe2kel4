@@ -1,8 +1,4 @@
-<div class="card flex justify-content-center">
-    <!-- Tombol untuk membuka dialog -->
-    <!-- <p-button label="Tambah Pengguna" icon="pi pi-plus" (click)="visible = true" class="mb-3"></p-button> -->
-    <p-dialog header="Assessment Summary" [modal]="true" (onHide)="closeDialog()" [(visible)]="visible" [style]="{ width: '70rem' , height: '50rem'}">
-        <p-table 
+<p-table 
         [value]="groupedData" 
         sortField="source" 
         sortMode="single" 
@@ -26,13 +22,7 @@
                     </td>
                 </tr>
             </ng-template>
-            <!-- <ng-template pTemplate="groupfooter" let-customer>
-                <tr>
-                    <td colspan="5" class="text-right font-bold pr-6">
-                        Total Customers: {{calculateCustomerTotal(customer.representative.name)}}
-                    </td>
-                </tr>
-            </ng-template> -->
+
             <ng-template pTemplate="body" let-customer let-rowIndex="rowIndex">
                 <tr>
                     <td >
@@ -62,8 +52,3 @@
                 </tr>
             </ng-template>
     </p-table>
-
-
-    </p-dialog>
-  </div>
-  

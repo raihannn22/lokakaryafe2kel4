@@ -5,7 +5,6 @@ import { SummaryService } from '../../summary.service';
 import { get } from 'http';
 import { CommonModule, NgIf } from '@angular/common';
 import { forkJoin } from 'rxjs';
-
 interface Item {
   group: string;
   percentage: number;
@@ -20,45 +19,41 @@ interface GroupedItem {
   source: string;
 }
 @Component({
-  selector: 'app-summary',
+  selector: 'app-summary-self',
   standalone: true,
   imports: [DialogModule, TableModule, CommonModule, NgIf,],
-  templateUrl: './summary.component.html',
-  styleUrl: './summary.component.css'
+  templateUrl: './summary-self.component.html',
+  styleUrl: './summary-self.component.css'
 })
-export class SummaryComponent implements OnInit{
- 
-  @Input() visible: boolean = false; // Menyambungkan dengan property di komponen induk
-  @Output() visibleChange = new EventEmitter<boolean>(); // Emit perubahan visibility
-  @Input() user: any = {};
+export class SummarySelfComponent {
+
   attitudeSkill: any[] = [];
   achievement: any[] = [];
   groupedAchievement: any[] = [];
   combinedData: any[] = []; 
   groupedData: any[] = [];
   normalizedData: any = [];
+  userId: any = '';
 
   constructor(private summaryService: SummaryService) {
   }
 
   ngOnInit() {
+      this.userId = localStorage.getItem('id');
+      this.getAllEmpAttitudeSkill();
+      this.getAllEmpAchievement();
+ 
   }
 
   ngOnChanges() {
-    console.log('ini data user di summary', this.user.id);
-    this.getAllEmpAttitudeSkill();
-    this.getAllEmpAchievement();
-    this.groupedData = this.groupAndSumData(this.combinedData);
-    // // this.normalizedData = this.normalizePercentages(this.groupedData);
-    // console.log('hasill', this.groupedData);
+
+  
   }
 
-  closeDialog() {
-    this.visibleChange.emit(false);
-  }
+
 
   getAllEmpAttitudeSkill() {
-    this.summaryService.getEmpAttitudeSkillById(this.user.id).subscribe({
+    this.summaryService.getEmpAttitudeSkillById(this.userId).subscribe({
       next: (response) => {
         this.attitudeSkill = response.content; // Data ada di 'content'
         console.log('ini isi attitude skill:', this.attitudeSkill);
@@ -73,41 +68,38 @@ export class SummaryComponent implements OnInit{
   }
 
   getAllEmpAchievement() {
-    // this.summaryService.getEmpAchievementById(this.user.id).subscribe({
-    //   next: (response) => {
-    //     this.achievement = response.content; // Data ada di 'content'
-    //     console.log('ini isi achievement:', this.achievement);
-    //     this.mapData(); // Lakukan mapping setelah data achievement diterima
-    //   },
-    //   error: (error) => {
-    //     console.error('Error fetching achievements:', error);
-    //   },
-    // });
-
     forkJoin({
-      emppAchievement:  this.summaryService.getEmpAchievementById(this.user.id),
+      empAtittudeSkill:  this.summaryService.getEmpAttitudeSkillById(this.userId),
+      empAchievement:  this.summaryService.getEmpAchievementById(this.userId),
       groupAchievement: this.summaryService.getAllAchievements()
-    }).subscribe(({emppAchievement, groupAchievement}) => {
-      this.achievement = emppAchievement.content;
+    }).subscribe(({empAchievement, groupAchievement, empAtittudeSkill}) => {
+      this.achievement = empAchievement.content;
       console.log('ini Achievement:', this.achievement)
       this.groupedAchievement = groupAchievement.content;
       console.log('Group Achievement:', this.groupedAchievement)
-    })   
+      this.attitudeSkill = empAtittudeSkill.content; // Data ada di 'content'
+      console.log('ini isi attitude skill:', this.attitudeSkill);
 
-    this.groupedAchievement = this.groupedAchievement.map(group => {
-      const matchingAchievements = this.achievement.filter(ach => ach.achievement_id === group.id);
-      const score = matchingAchievements.length > 0 
-        ? matchingAchievements.reduce((sum, ach) => sum + ach.score, 0) 
-        : 0;
+
+      this.groupedAchievement = this.groupedAchievement.map(group => {
+        const matchingAchievements = this.achievement.filter(ach => ach.achievement_id === group.id);
+        const score = matchingAchievements.length > 0 
+          ? matchingAchievements.reduce((sum, ach) => sum + ach.score, 0) 
+          : 0;
+    
+        return {
+          ...group,
+          score // Tambahkan score ke dalam setiap grup
+        };
   
-      return {
-        ...group,
-        score // Tambahkan score ke dalam setiap grup
-      };
+      });
+      console.log('Processed Group Achievement:', this.groupedAchievement);
+
+      
+      this.mapData();
+      this.groupedData = this.groupAndSumData(this.combinedData);
+      console.log('ini',this.groupedData); 
     });
-  
-    console.log('Processed Group Achievement:', this.groupedAchievement);
-    this.mapData();
   }
 
   mapData() {
@@ -167,17 +159,8 @@ export class SummaryComponent implements OnInit{
 
 }
 
-// normalizePercentages(data: any[]): any[] {
-//   // Hitung total percentage saat ini
-//   const totalPercentage = data.reduce((acc, item) => acc + item.percentage, 0);
-
-//   // Normalisasi percentage untuk setiap grup
-//   return data.map((item) => ({
-//     ...item,
-//     percentage: (item.percentage / totalPercentage) * 100, // Sesuaikan untuk total 100%
-//   }));
-// }
-
-  
-
 }
+function then(arg0: () => void) {
+  throw new Error('Function not implemented.');
+}
+

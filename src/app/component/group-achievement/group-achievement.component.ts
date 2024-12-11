@@ -15,8 +15,11 @@ import { TagModule } from 'primeng/tag';
 import { InputIconModule } from 'primeng/inputicon';
 import { InputText, InputTextModule } from 'primeng/inputtext';
 import { IconFieldModule } from 'primeng/iconfield';
-import { FilterMetadata } from 'primeng/api';
 import Swal from 'sweetalert2';
+import { GroupAttitudeSkillService } from '../../service/group-attitude-skill/group-attitude-skill.service';
+import { forkJoin } from 'rxjs';
+import { MessageModule } from 'primeng/message';
+import { FilterMetadata } from 'primeng/api';
 
 @Component({
   selector: 'app-group-achievement',
@@ -33,7 +36,8 @@ import Swal from 'sweetalert2';
     TagModule,
     InputIconModule,
     InputTextModule,
-    IconFieldModule
+    IconFieldModule,
+    MessageModule
   ],
   animations: [
     trigger('dialogAnimation', [
@@ -74,32 +78,88 @@ percentageWarning: boolean = false;
 // Pagination properties
 first: number = 0;
 totalRecords: number = 0;
+  percent: number = 100;
+  atitudeSkills: any[] = [];
+  
 
+  percentageAchieved: any[] = [];
+  percentageAttitude: any[] = [];
+  totalPercentageAttitude: number = 0;
+  totalPercentageAchieved: number = 0;
+  totalPercentage: number = 0;
+  userPercentage:number = 0;
 
   constructor(
     private groupAchievementService: GroupAchievementService,
-    private router: Router
+    private router: Router,
+    private atitudeSkillService: GroupAttitudeSkillService
   ) {}
 
   ngOnInit() {
-    this.getAllGroupAchievements();
+  
+    forkJoin({
+      groupAchievement: this.groupAchievementService.getAllGroupAchievements(this.first, 5),
+      attitudeSkill: this.atitudeSkillService.getGroupAttitudeSkillsWithDetails()
+    }).subscribe(({groupAchievement, attitudeSkill}) => {
+      this.groupAchievements = groupAchievement.content;
+      console.log('Group Achievement:', this.groupAchievements)
+      this.totalRecords = groupAchievement.totalRecords;
+      this.filteredGroupAchievements = this.groupAchievements;
+      this.loading = false;
+      this.percentageAchieved = this.groupAchievements.map((item) => item.percentage);
+      this.totalPercentageAchieved= this.percentageAchieved.reduce((acc, item) => acc + item, 0);
+
+
+      this.atitudeSkills = attitudeSkill.content;
+        this.percentageAttitude = this.atitudeSkills.map((item) => item.percentage);
+        this.totalPercentageAttitude = this.percentageAttitude.reduce((acc, item) => acc + item, 0);
+
+
+        this.sumPercentage();
+    })    
   }
+
+  async tempMethod(): Promise <void> {
+    await Promise.all([
+      this.getAllGroupAchievements()]).
+      finally(() => this.sumPercentage());
+  }
+  
+
 
   getAllGroupAchievements() {
     this.loading = true;
     this.groupAchievementService.getAllGroupAchievements(this.first, 5).subscribe({
       next: (response) => {
         this.groupAchievements = response.content;
+        console.log('Group Achievement:', this.groupAchievements)
         this.totalRecords = response.totalRecords;
         this.filteredGroupAchievements = this.groupAchievements;
         this.loading = false;
+        this.percentageAchieved = this.groupAchievements.map((item) => item.percentage);
+        this.totalPercentageAchieved= this.percentageAchieved.reduce((acc, item) => acc + item, 0);
+        console.log(this.totalPercentageAchieved);
       },
       error: (error) => {
         console.error('Error fetching achievements:', error);
         this.loading = false;
-      }
+      },
+      
+
     });
+
+
+   
   }
+
+
+  sumPercentage(){
+    this.totalPercentage = this.totalPercentageAttitude + this.totalPercentageAchieved;
+    console.log('ttal' , this.totalPercentage);
+  }
+ 
+
+
 
   loadPage(event: any) {
     this.first = event.first; // Dapatkan halaman yang dipilih
@@ -138,6 +198,18 @@ totalRecords: number = 0;
       this.percentageWarning = false;
     }
   }
+
+
+  validateMaxValue(event: any): void {
+    const maxValue = this.totalPercentage;
+    console.log(maxValue);
+    const inputValue = Number(event.target.value);
+
+    if (inputValue > maxValue) {
+      window.alert(`Nilai tidak boleh lebih dari ${maxValue}. Mohon dapat disesuaikan.`);
+    }
+  }
+
   showAddDialog() {
     console.log('Menampilkan dialog tambah');
     this.groupAchievement = { group_name: '', percentage: null, enabled: 1 };
@@ -149,64 +221,59 @@ totalRecords: number = 0;
   editGroupAchievement(groupAchievement: any) {
     console.log('Mengedit group achievement', groupAchievement);
     this.groupAchievement = { ...groupAchievement };
+    this.userPercentage = this.groupAchievement.percentage
+    console.log(this.userPercentage , 'ini user percentagenya');
+    console.log(this.totalPercentage , 'total persentase');
     this.groupAchievementDialog = true;
     this.isGroupNameDuplicate = false;
   }
 
-  validateGroupAchievement() {
-    // Validasi group_name untuk data baru (add)
-    if (!this.groupAchievement.id) {
-      const existingGroup = this.groupAchievements.find(group => 
-        group.group_name.toLowerCase() === this.groupAchievement.group_name.toLowerCase()
-      );
-      if (existingGroup) {
-        this.isGroupNameDuplicate = true;
-        return false; // Invalid, group name is duplicated
+  saveGroupAchievement() {
+    if (this.groupAchievement.id){
+      const maxValue = 100 - this.totalPercentage + this.userPercentage;
+      if (this.groupAchievement.percentage > maxValue) {
+        Swal.fire({
+          icon: 'error',
+          title: 'Gagal Menyimpan',
+          text: `Nilai Percentage tidak boleh lebih dari ${maxValue}.`,
+          confirmButtonText: 'Kembali',
+          // style: {
+          //   'z-index': 9999
+          // }
+          customClass: {
+            popup: 'custom-swal-popup'
+          }
+        });
+        return;
       }
-    } else {
-      // Validasi group_name untuk edit data (tidak boleh sama dengan grup lain, kecuali yang sedang diedit)
-      const existingGroup = this.groupAchievements.find(group => 
-        group.group_name.toLowerCase() === this.groupAchievement.group_name.toLowerCase() && group.id !== this.groupAchievement.id
-      );
-      if (existingGroup) {
-        this.isGroupNameDuplicate = true;
-        return false; // Invalid, group name is duplicated
-      }
+    }else{
+      const maxValue = 100 - this.totalPercentage;
+      if (this.groupAchievement.percentage > maxValue) {
+        Swal.fire({
+          icon: 'error',
+          title: 'Gagal Menyimpan',
+          text: `Nilai Percentage tidak boleh lebih dari ${maxValue}.`,
+          confirmButtonText: 'Kembali',
+          // style: {
+          //   'z-index': 9999
+          // }
+          customClass: {
+            popup: 'custom-swal-popup'
+          }
+        });
+        return;
     }
-
-    this.isGroupNameDuplicate = false; // Reset flag
-
-    // Validasi percentage tidak boleh lebih dari 100
-    if (this.groupAchievement.percentage > 100) {
-      this.percentageWarning = true;
-      this.groupAchievement.percentage = 100; // Set value to 100 if it's greater than 100
-      return false; // Invalid, percentage exceeds 100
-    } else {
-      this.percentageWarning = false; // Reset flag if valid
-    }
-
-    return true; // All validations passed
   }
 
 
-   saveGroupAchievement() {
-    // Panggil fungsi validasi
-    if (!this.validateGroupAchievement()) {
-      return; // Jika validasi gagal, hentikan proses penyimpanan
-    }
-
-    // Jika validasi berhasil, lanjutkan dengan save/update
+    // Validasi nilai percentage
+    console.log('Data yang dikirim:', this.groupAchievement);
     if (this.groupAchievement.id) {
       this.groupAchievementService.updateGroupAchievement(this.groupAchievement.id, this.groupAchievement).subscribe({
         next: () => {
           this.getAllGroupAchievements();
           this.groupAchievementDialog = false;
-          this.resetGroupAchievement();
-          Swal.fire({
-            icon: 'success',
-            title: 'Sukses!',
-            text: 'Berhasil memperbarui Group Pencapaian!'
-          });
+          window.location.reload()
         },
         error: (error) => {
           Swal.fire({
@@ -221,12 +288,7 @@ totalRecords: number = 0;
         next: () => {
           this.getAllGroupAchievements();
           this.groupAchievementDialog = false;
-          this.resetGroupAchievement();
-          Swal.fire({
-            icon: 'success',
-            title: 'Sukses!',
-            text: 'Berhasil menambahkan Grup Pencapaian!'
-          });
+          window.location.reload()
         },
         error: (error) => {
           Swal.fire({

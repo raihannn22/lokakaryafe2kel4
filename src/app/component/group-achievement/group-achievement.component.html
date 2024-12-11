@@ -1,5 +1,8 @@
 <div class="card">
     <div class="p-5">
+
+        <h1>sisa total {{100 -totalPercentage}}</h1>
+
         <div class="text-center mb-2">
             <h3 style="font-weight: bold; font-size: 2.25rem;">Grup Pencapaian</h3>
         </div>
@@ -61,9 +64,9 @@
 </div>
 
 <!-- Modal Form for Add/Edit Group Achievement -->
-<p-dialog header="Grup Pencapaian" [(visible)]="groupAchievementDialog" [style]="{width: '50%', height: 'auto'}"
-    [contentStyle]="{overflow: 'auto'}" modal="true" closable="false" [baseZIndex]="10000">
 
+<p-dialog header="Group Achievement" [(visible)]="groupAchievementDialog" [style]="{width: '50%', height: '50%'}"
+    [contentStyle]="{overflow: 'auto'}" modal="true" closable="false" class="z-3" >
     <div class="p-fluid">
         <!-- Input Group Name -->
         <div class="field">
@@ -73,12 +76,17 @@
         </div>
 
         <!-- Input Percentage -->
+        <div class="field">
+            <label for="percentage">Percentage</label>
+            <input id="percentage" [(ngModel)]="groupAchievement.percentage" pInputText type="number" max={{100-totalPercentage}}  />
+<!-- =======
         <div class="p-field">
             <label for="percentage">Persentasi</label>
             <input type="number" pInputText id="percentage" [(ngModel)]="groupAchievement.percentage"
                 (ngModelChange)="validatePercentage()" />
 
             <small *ngIf="percentageWarning" class="p-error">Persentasi tidak boleh lebih dari 100!</small>
+>>>>>>> d18459c6710ea7a1a09aef30f500f68f782564d0 -->
         </div>
 
         <!-- Checkbox for Enabled -->
