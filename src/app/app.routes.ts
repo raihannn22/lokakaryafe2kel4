@@ -122,6 +122,10 @@ export const routes: Routes = [
     path: 'user/summary-view',
     canActivate: [authGuard],
     component: SummarySelfComponent,
+  },
+  {
+    path: '**',
+    redirectTo: 'dashboard',
   }
 
 ];
