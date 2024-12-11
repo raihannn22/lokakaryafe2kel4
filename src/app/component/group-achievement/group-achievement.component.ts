@@ -15,6 +15,13 @@ import { TagModule } from 'primeng/tag';
 import { InputIconModule } from 'primeng/inputicon';
 import { InputText, InputTextModule } from 'primeng/inputtext';
 import { IconFieldModule } from 'primeng/iconfield';
+import Swal from 'sweetalert2';
+import { SummaryService } from '../../summary.service';
+import { GroupAttitudeSkillService } from '../../service/group-attitude-skill/group-attitude-skill.service';
+import { forkJoin } from 'rxjs';
+import { group } from 'console';
+import { MessageModule } from 'primeng/message';
+
 
 @Component({
   selector: 'app-group-achievement',
@@ -31,7 +38,8 @@ import { IconFieldModule } from 'primeng/iconfield';
     TagModule,
     InputIconModule,
     InputTextModule,
-    IconFieldModule
+    IconFieldModule,
+    MessageModule
   ],
   animations: [
     trigger('dialogAnimation', [
@@ -60,33 +68,91 @@ export class GroupAchievementComponent implements OnInit {
     { label: 'Percentage', value: 'percentage' },
   ];
 
+  percent: number = 100;
+
   first: number = 0;
   totalRecords: number = 0;
+  atitudeSkills: any[] = [];
+  
+
+  percentageAchieved: any[] = [];
+  percentageAttitude: any[] = [];
+  totalPercentageAttitude: number = 0;
+  totalPercentageAchieved: number = 0;
+  totalPercentage: number = 0;
+  userPercentage:number = 0;
 
   constructor(
     private groupAchievementService: GroupAchievementService,
-    private router: Router
+    private router: Router,
+    private atitudeSkillService: GroupAttitudeSkillService
   ) {}
 
   ngOnInit() {
-    this.getAllGroupAchievements();
+  
+    forkJoin({
+      groupAchievement: this.groupAchievementService.getAllGroupAchievements(this.first, 5),
+      attitudeSkill: this.atitudeSkillService.getGroupAttitudeSkillsWithDetails()
+    }).subscribe(({groupAchievement, attitudeSkill}) => {
+      this.groupAchievements = groupAchievement.content;
+      console.log('Group Achievement:', this.groupAchievements)
+      this.totalRecords = groupAchievement.totalRecords;
+      this.filteredGroupAchievements = this.groupAchievements;
+      this.loading = false;
+      this.percentageAchieved = this.groupAchievements.map((item) => item.percentage);
+      this.totalPercentageAchieved= this.percentageAchieved.reduce((acc, item) => acc + item, 0);
+
+
+      this.atitudeSkills = attitudeSkill.content;
+        this.percentageAttitude = this.atitudeSkills.map((item) => item.percentage);
+        this.totalPercentageAttitude = this.percentageAttitude.reduce((acc, item) => acc + item, 0);
+
+
+        this.sumPercentage();
+    })    
   }
+
+  async tempMethod(): Promise <void> {
+    await Promise.all([
+      this.getAllGroupAchievements()]).
+      finally(() => this.sumPercentage());
+  }
+  
+
 
   getAllGroupAchievements() {
     this.loading = true;
     this.groupAchievementService.getAllGroupAchievements(this.first, 5).subscribe({
       next: (response) => {
         this.groupAchievements = response.content;
+        console.log('Group Achievement:', this.groupAchievements)
         this.totalRecords = response.totalRecords;
         this.filteredGroupAchievements = this.groupAchievements;
         this.loading = false;
+        this.percentageAchieved = this.groupAchievements.map((item) => item.percentage);
+        this.totalPercentageAchieved= this.percentageAchieved.reduce((acc, item) => acc + item, 0);
+        console.log(this.totalPercentageAchieved);
       },
       error: (error) => {
         console.error('Error fetching achievements:', error);
         this.loading = false;
-      }
+      },
+      
+
     });
+
+
+   
   }
+
+
+  sumPercentage(){
+    this.totalPercentage = this.totalPercentageAttitude + this.totalPercentageAchieved;
+    console.log('ttal' , this.totalPercentage);
+  }
+ 
+
+
 
   loadPage(event: any) {
     this.first = event.first; // Dapatkan halaman yang dipilih
@@ -116,7 +182,15 @@ export class GroupAchievementComponent implements OnInit {
   }
 
 
+  validateMaxValue(event: any): void {
+    const maxValue = this.totalPercentage;
+    console.log(maxValue);
+    const inputValue = Number(event.target.value);
 
+    if (inputValue > maxValue) {
+      window.alert(`Nilai tidak boleh lebih dari ${maxValue}. Mohon dapat disesuaikan.`);
+    }
+  }
 
   showAddDialog() {
     console.log('Menampilkan dialog tambah');
@@ -127,10 +201,51 @@ export class GroupAchievementComponent implements OnInit {
   editGroupAchievement(groupAchievement: any) {
     console.log('Mengedit group achievement', groupAchievement);
     this.groupAchievement = { ...groupAchievement };
+    this.userPercentage = this.groupAchievement.percentage
+    console.log(this.userPercentage , 'ini user percentagenya');
+    console.log(this.totalPercentage , 'total persentase');
     this.groupAchievementDialog = true;
   }
 
   saveGroupAchievement() {
+    if (this.groupAchievement.id){
+      const maxValue = 100 - this.totalPercentage + this.userPercentage;
+      if (this.groupAchievement.percentage > maxValue) {
+        Swal.fire({
+          icon: 'error',
+          title: 'Gagal Menyimpan',
+          text: `Nilai Percentage tidak boleh lebih dari ${maxValue}.`,
+          confirmButtonText: 'Kembali',
+          // style: {
+          //   'z-index': 9999
+          // }
+          customClass: {
+            popup: 'custom-swal-popup'
+          }
+        });
+        return;
+      }
+    }else{
+      const maxValue = 100 - this.totalPercentage;
+      if (this.groupAchievement.percentage > maxValue) {
+        Swal.fire({
+          icon: 'error',
+          title: 'Gagal Menyimpan',
+          text: `Nilai Percentage tidak boleh lebih dari ${maxValue}.`,
+          confirmButtonText: 'Kembali',
+          // style: {
+          //   'z-index': 9999
+          // }
+          customClass: {
+            popup: 'custom-swal-popup'
+          }
+        });
+        return;
+    }
+  }
+
+
+    // Validasi nilai percentage
     console.log('Data yang dikirim:', this.groupAchievement);
     if (this.groupAchievement.id) {
       this.groupAchievementService.updateGroupAchievement(this.groupAchievement.id, this.groupAchievement).subscribe({
@@ -138,6 +253,7 @@ export class GroupAchievementComponent implements OnInit {
           alert('Group Achievement updated successfully');
           this.getAllGroupAchievements();
           this.groupAchievementDialog = false;
+          window.location.reload()
         },
         error: (error) => {
           console.error('Error updating group achievement:', error);
@@ -149,6 +265,7 @@ export class GroupAchievementComponent implements OnInit {
           alert('Group Achievement added successfully');
           this.getAllGroupAchievements();
           this.groupAchievementDialog = false;
+          window.location.reload()
         },
         error: (error) => {
           console.error('Error saving group achievement:', error);

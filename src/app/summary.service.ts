@@ -16,6 +16,10 @@ export class SummaryService {
     return this.http.get(`http://localhost:8081/emp-achievement-skill/get/user/${userId}`);
   }
 
+  getAllAchievements(): Observable<any> {
+    return this.http.get('http://localhost:8081/achievement/all');
+  }
+
   getEmpAttitudeSkillById(userId: string): Observable<any> {
     return this.http.get(`http://localhost:8081/emp-attitude-skill/user/${userId}`);
   }

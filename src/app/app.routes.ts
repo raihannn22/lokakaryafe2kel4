@@ -18,6 +18,7 @@ import { authGuard } from './guard/auth.guard';
 import { DashboardComponent } from './component/dashboard/dashboard.component';
 import { EmpDevplanComponent } from './component/emp-devplan/emp-devplan.component';
 import { ViewEmpdevplanComponent } from './component/view-empdevplan/view-empdevplan.component';
+import { SummarySelfComponent } from './component/summary-self/summary-self.component';
 
 export const routes: Routes = [
   {
@@ -116,4 +117,9 @@ export const routes: Routes = [
     canActivate: [authGuard],
     component: ViewEmpdevplanComponent,
   },
+  {
+    path: 'user/summary-view',
+    canActivate: [authGuard],
+    component: SummarySelfComponent,
+  }
 ];

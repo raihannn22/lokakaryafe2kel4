@@ -3,6 +3,7 @@
 
 <div class="card">
     <div class="p-5">
+        <h1>sisa total {{100 -totalPercentage}}</h1>
         <!-- Tabel Data -->
         <p-table [value]="filteredGroupAchievements" [paginator]="true" [rows]="5" [first]="first"
             [totalRecords]="totalRecords" [loading]="loading" styleClass="p-datatable-gridlines"
@@ -55,7 +56,7 @@
 
 <!-- Modal Form for Add/Edit Group Achievement -->
 <p-dialog header="Group Achievement" [(visible)]="groupAchievementDialog" [style]="{width: '50%', height: '50%'}"
-    [contentStyle]="{overflow: 'auto'}" modal="true" closable="false" [baseZIndex]="10000">
+    [contentStyle]="{overflow: 'auto'}" modal="true" closable="false" class="z-3" >
 
     <div class="p-fluid">
         <!-- Input Group Name -->
@@ -67,7 +68,7 @@
         <!-- Input Percentage -->
         <div class="field">
             <label for="percentage">Percentage</label>
-            <input id="percentage" [(ngModel)]="groupAchievement.percentage" pInputText type="number" />
+            <input id="percentage" [(ngModel)]="groupAchievement.percentage" pInputText type="number" max={{100-totalPercentage}}  />
         </div>
 
         <!-- Checkbox for Enabled -->
