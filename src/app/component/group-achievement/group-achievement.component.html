@@ -76,13 +76,17 @@
         </div>
 
         <!-- Input Percentage -->
+        <div class="field">
+            <label for="percentage">Percentage</label>
+            <input id="percentage" [(ngModel)]="groupAchievement.percentage" pInputText type="number" max={{100-totalPercentage}}  />
+<!-- =======
         <div class="p-field">
             <label for="percentage">Persentasi</label>
             <input type="number" pInputText id="percentage" [(ngModel)]="groupAchievement.percentage"
                 (ngModelChange)="validatePercentage()" />
 
             <small *ngIf="percentageWarning" class="p-error">Persentasi tidak boleh lebih dari 100!</small>
-
+>>>>>>> d18459c6710ea7a1a09aef30f500f68f782564d0 -->
         </div>
 
         <!-- Checkbox for Enabled -->
