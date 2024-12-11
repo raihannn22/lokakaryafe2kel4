@@ -5,7 +5,7 @@
         </div>
         <p-table [value]="filteredTechnicalSkills" [paginator]="true" [rows]="5" [filters]="filters"
             [globalFilterFields]="['technical_skill']" [loading]="loading"
-            styleClass="p-datatable-gridlines">
+            styleClass="p-datatable-gridlines" [rowsPerPageOptions]="[5, 10, 20]">
             <ng-template pTemplate="caption">
                 <div class="flex justify-content-between">
                     <p-button label="Keahlian Teknis" icon="pi pi-plus" (click)="showAddDialog()"

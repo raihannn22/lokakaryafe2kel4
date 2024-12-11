@@ -10,8 +10,8 @@ export class AttitudeSkillService {
 
   constructor(private http: HttpClient) {}
 
-  getAllAttitudeSkills(page: number, size: number): Observable<any> {
-    return this.http.get(`${this.apiUrl}/all?page=${page}&size=${size}`);
+  getAllAttitudeSkills(): Observable<any> {
+    return this.http.get(`${this.apiUrl}/all`);
   }
 
 

@@ -85,7 +85,7 @@ export class AchievementComponent implements OnInit {
 
   getAllAchievements() {
     this.loading = true;
-    this.achievementService.getAllAchievements(this.first, 5).subscribe({
+    this.achievementService.getAllAchievements().subscribe({
       next: (response) => {
         this.achievements = response.content;
         this.totalRecords = response.totalRecords;

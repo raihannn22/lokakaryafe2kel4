@@ -98,7 +98,7 @@ totalRecords: number = 0;
   ngOnInit() {
   
     forkJoin({
-      groupAchievement: this.groupAchievementService.getAllGroupAchievements(this.first, 5),
+      groupAchievement: this.groupAchievementService.getAllGroupAchievements(),
       attitudeSkill: this.atitudeSkillService.getGroupAttitudeSkillsWithDetails()
     }).subscribe(({groupAchievement, attitudeSkill}) => {
       this.groupAchievements = groupAchievement.content;
@@ -129,7 +129,7 @@ totalRecords: number = 0;
 
   getAllGroupAchievements() {
     this.loading = true;
-    this.groupAchievementService.getAllGroupAchievements(this.first, 5).subscribe({
+    this.groupAchievementService.getAllGroupAchievements().subscribe({
       next: (response) => {
         this.groupAchievements = response.content;
         console.log('Group Achievement:', this.groupAchievements)

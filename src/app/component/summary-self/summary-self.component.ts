@@ -5,6 +5,7 @@ import { SummaryService } from '../../summary.service';
 import { get } from 'http';
 import { CommonModule, NgIf } from '@angular/common';
 import { forkJoin } from 'rxjs';
+import { EmpSuggestionComponent } from '../emp-suggestion/emp-suggestion.component';
 interface Item {
   group: string;
   percentage: number;
@@ -21,7 +22,7 @@ interface GroupedItem {
 @Component({
   selector: 'app-summary-self',
   standalone: true,
-  imports: [DialogModule, TableModule, CommonModule, NgIf,],
+  imports: [DialogModule, TableModule, CommonModule, NgIf,EmpSuggestionComponent],
   templateUrl: './summary-self.component.html',
   styleUrl: './summary-self.component.css'
 })

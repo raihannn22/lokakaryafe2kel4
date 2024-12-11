@@ -7,7 +7,7 @@
             <h3 style="font-weight: bold; font-size: 2.25rem;">Grup Pencapaian</h3>
         </div>
         <p-table [value]="filteredGroupAchievements" [paginator]="true" [rows]="5" [filters]="filters"
-            [globalFilterFields]="['group_name', 'percentage', 'enabled']" [loading]="loading" styleClass="p-datatable-gridlines">
+            [globalFilterFields]="['group_name', 'percentage', 'enabled']" [loading]="loading" styleClass="p-datatable-gridlines" [rowsPerPageOptions]="[5, 10, 20]">
             <ng-template pTemplate="caption">
                 <div class="flex justify-content-between">
                     <p-button label="Grup Pencapaian" icon="pi pi-plus" (click)="showAddDialog()"

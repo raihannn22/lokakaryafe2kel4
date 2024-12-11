@@ -86,7 +86,7 @@ export class AttitudeSkillComponent implements OnInit {
 
   getAllAttitudeSkills() {
     this.loading = true;
-    this.attitudeSkillService.getAllAttitudeSkills(this.first, 5).subscribe({
+    this.attitudeSkillService.getAllAttitudeSkills().subscribe({
       next: (response) => {
         this.attitudeSkills = response.content;
         this.totalRecords = response.totalRecords;
