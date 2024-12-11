@@ -8,6 +8,7 @@
   </div>
 
   <!-- Stats Cards -->
+  @if (userRoles?.includes('HR') ) {
   <div class="grid">
       <!-- Total Users Card -->
       <div class="col-12 md:col-6 lg:col-3">
@@ -73,6 +74,7 @@
           </div>
       </div>
   </div>
+  }
 </div>
 
 <style>

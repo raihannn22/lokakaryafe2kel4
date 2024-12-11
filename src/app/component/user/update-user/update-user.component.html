@@ -105,7 +105,7 @@
 
       <div class="grid">
         <div class="col">
-          <p-button icon="pi pi-refresh" severity="help" pTooltip="reset password"></p-button>
+          <p-button icon="pi pi-refresh" severity="help" (click)="onResetPassword()" pTooltip="reset password"></p-button>
         </div>
         <div class="col flex-none">
           <p-button label="Batal" icon="pi pi-times" severity="secondary" (click)="closeDialog()" class="mr-2"></p-button>

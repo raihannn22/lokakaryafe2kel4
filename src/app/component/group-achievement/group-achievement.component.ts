@@ -25,7 +25,7 @@ import { FilterMetadata } from 'primeng/api';
   selector: 'app-group-achievement',
   standalone: true,
   imports: [
-    CommonModule, 
+    CommonModule,
     ButtonModule,
     CalendarModule,
     FormsModule,
@@ -80,8 +80,6 @@ first: number = 0;
 totalRecords: number = 0;
   percent: number = 100;
   atitudeSkills: any[] = [];
-  
-
   percentageAchieved: any[] = [];
   percentageAttitude: any[] = [];
   totalPercentageAttitude: number = 0;
@@ -91,12 +89,11 @@ totalRecords: number = 0;
 
   constructor(
     private groupAchievementService: GroupAchievementService,
-    private router: Router,
     private atitudeSkillService: GroupAttitudeSkillService
   ) {}
 
   ngOnInit() {
-  
+
     forkJoin({
       groupAchievement: this.groupAchievementService.getAllGroupAchievements(this.first, 5),
       attitudeSkill: this.atitudeSkillService.getGroupAttitudeSkillsWithDetails()
@@ -116,17 +113,8 @@ totalRecords: number = 0;
 
 
         this.sumPercentage();
-    })    
+    })
   }
-
-  async tempMethod(): Promise <void> {
-    await Promise.all([
-      this.getAllGroupAchievements()]).
-      finally(() => this.sumPercentage());
-  }
-  
-
-
   getAllGroupAchievements() {
     this.loading = true;
     this.groupAchievementService.getAllGroupAchievements(this.first, 5).subscribe({
@@ -144,12 +132,12 @@ totalRecords: number = 0;
         console.error('Error fetching achievements:', error);
         this.loading = false;
       },
-      
+
 
     });
 
 
-   
+
   }
 
 
@@ -157,16 +145,11 @@ totalRecords: number = 0;
     this.totalPercentage = this.totalPercentageAttitude + this.totalPercentageAchieved;
     console.log('ttal' , this.totalPercentage);
   }
- 
-
-
 
   loadPage(event: any) {
     this.first = event.first; // Dapatkan halaman yang dipilih
     this.getAllGroupAchievements(); // Muat ulang data berdasarkan halaman baru
   }
-
-  
 
   searchData() {
     if (this.searchKeyword.trim() === '') {
@@ -215,7 +198,7 @@ totalRecords: number = 0;
     this.groupAchievement = { group_name: '', percentage: null, enabled: 1 };
     this.groupAchievementDialog = true;
     this.isGroupNameDuplicate = false;
-    
+
   }
 
   editGroupAchievement(groupAchievement: any) {
@@ -303,7 +286,7 @@ totalRecords: number = 0;
 
 
   resetGroupAchievement() {
-    this.groupAchievement = { group_name: '', percentage: null, enabled: 1 }; 
+    this.groupAchievement = { group_name: '', percentage: null, enabled: 1 };
     this.isGroupNameDuplicate = false; // Clear duplicate group name warning
     this.percentageWarning = false; // Clear percentage warning
   }

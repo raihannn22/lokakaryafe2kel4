@@ -28,9 +28,16 @@
         'division_name'
       ]"
     >
-    
+
       <ng-template pTemplate="caption">
-        <p-iconField iconPosition="left">
+        <div class="flex">
+          <span class="p-input-icon-left mr-auto">
+              <i class="pi pi-search"></i>
+              <input #searchInput pInputText type="text" [(ngModel)]="searchValue" (input)="dt.filterGlobal(searchInput.value, 'contains')" placeholder="Search keyword" />
+          </span>
+          <p-button label="Clear" [outlined]="true" icon="pi pi-filter-slash" (onClick)="clear(dt)" />
+      </div>
+        <!-- <p-iconField iconPosition="left">
           <p-inputIcon>
             <i class="pi pi-search"></i>
           </p-inputIcon>
@@ -41,7 +48,7 @@
             (input)="dt.filterGlobal(searchInput.value, 'contains')"
             placeholder="Cari Pengguna..."
           />
-        </p-iconField>
+        </p-iconField> -->
       </ng-template>
 
       <ng-template pTemplate="header">
@@ -99,7 +106,7 @@
           <th>Tanggal Bergabung</th>
 
           <th>Status Akun</th>
-          
+
           <th>
             <div class="flex align-items-center">
               Divisi
@@ -113,7 +120,7 @@
                     <p-multiSelect [ngModel]="value" [options]="divisionName" placeholder="Any" (onChange)="filter($event.value)" >
                         <ng-template let-option pTemplate="item">
                             <div class="inline-block vertical-align-middle">
-                            
+
                                 <span class="ml-1 mt-1">{{ option }}</span>
                             </div>
                         </ng-template>
@@ -122,7 +129,7 @@
             </p-columnFilter>
             </div>
           </th>
-          
+
           <th class="aksi">Aksi</th>
         </tr>
 
@@ -146,7 +153,7 @@
               <ng-template pTemplate="filter" let-value let-filter="filterCallback">
                   <p-multiSelect
                       [ngModel]="value"
-                      [options]="divisionName"  
+                      [options]="divisionName"
                       placeholder="Any"
                       (onChange)="filter($event.value)">
                           <ng-template let-option pTemplate="item">
@@ -161,7 +168,7 @@
           </th>
 
           <th></th>
-        
+
       </tr> -->
       </ng-template>
 

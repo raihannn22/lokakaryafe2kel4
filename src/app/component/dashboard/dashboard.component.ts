@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { TableModule } from 'primeng/table';
 import { ButtonModule } from 'primeng/button';
 import { TagModule } from 'primeng/tag';
+import { jwtDecode } from 'jwt-decode';
 
 @Component({
   selector: 'app-dashboard',
@@ -17,6 +18,8 @@ export class DashboardComponent implements OnInit {
   totalRoles: number = 0;
   activeProjects: number = 0;
   completedTasks: number = 0;
+  token: string | null = '';
+  userRoles: string = '';
 
   getGreeting(): string {
     const hour = new Date().getHours();
@@ -35,17 +38,28 @@ export class DashboardComponent implements OnInit {
     });
   }
   ngOnInit() {
+    this.token = localStorage.getItem('token');
+    this.getRolesFromToken();
     this.nama = localStorage.getItem('full_name');
   }
 
-  recentUsers = [
-    { name: 'John Doe', role: 'Admin', status: 'active' },
-    // ... more users
-  ];
+  getRolesFromToken(): void {
+    if (this.token) {
+      try {
+        const decoded: any = jwtDecode(this.token);
+        let roles = decoded.role;
+        roles = roles
+          .slice(1, -1) // Hilangkan karakter "[" dan "]"
+          .split(',') // Pecah berdasarkan koma
+          .map((role: string) => role.trim()); // Hapus spasi di sekitar elemen
+        this.userRoles = roles.join(', ');
+      } catch (error) {
+        console.error('Error decoding roles from token:', error);
+      }
+    } else {
+      console.warn('Token not found');
+    }
+  }
 
-  recentActivities = [
-    { description: 'Created new project', user: 'John Doe', time: '2 hours ago' },
-    // ... more activities
-  ];
 
 }
