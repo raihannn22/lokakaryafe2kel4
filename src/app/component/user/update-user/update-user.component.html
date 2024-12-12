@@ -10,6 +10,7 @@
           <label for="username">Username<span class="text-red-600">*</span></label>
           <input pInputText id="username" [(ngModel)]="newUser.username" name="username" #username="ngModel" required />
           <small class="p-error" *ngIf="username.invalid && username.touched">Username wajib diisi.</small>
+          <small class="p-error" *ngIf="!isUniqueUsername() && newUser.username">username sudah digunakan.</small>
         </div>
 
         <div class="field">
@@ -28,6 +29,7 @@
           <label for="email">Alamat Email<span class="text-red-600">*</span></label>
           <input pInputText id="email" [(ngModel)]="newUser.email_address" name="email" type="email" #email="ngModel" required />
           <small class="p-error" *ngIf="email.invalid && email.touched">Alamat Email wajib diisi.</small>
+          <small class="p-error" *ngIf="!isUniqueEmail() && newUser.email_address">email sudah digunakan.</small>
         </div>
 
         <div class="field">

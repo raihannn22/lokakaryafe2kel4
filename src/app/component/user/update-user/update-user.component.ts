@@ -27,7 +27,24 @@ export class UpdateUserComponent {
            !!this.newUser.email_address &&
            !!this.newUser.employee_status &&
            !!this.newUser.join_date &&
-           !!this.newUser.division_id;
+           !!this.newUser.division_id&&
+           !!this.newUser.app_role
+  }
+
+  isUniqueUsername(): boolean {
+    if (!this.newUser.username) return false; // Validasi jika username kosong
+    return Array.isArray(this.oldUsers) && !this.oldUsers.some(
+      (user) => user.username.toLowerCase().trim() === this.newUser.username.toLowerCase().trim() &&
+                user.username.toLowerCase().trim() !== this.user.username.toLowerCase().trim()
+    );
+  }
+
+  isUniqueEmail(): boolean {
+    if (!this.newUser.email_address) return false; // Validasi jika email kosong
+    return Array.isArray(this.oldUsers) && !this.oldUsers.some(
+      (user) => user.email_address.toLowerCase().trim() === this.newUser.email_address.toLowerCase().trim() &&
+                user.email_address.toLowerCase().trim() !== this.user.email_address.toLowerCase().trim()
+    );
   }
 
 
@@ -38,6 +55,7 @@ export class UpdateUserComponent {
 
   divisions: any[] = [];
   roles: any[] = [];
+  oldUsers: any[] = [];
 
   constructor(
     private userService: UserService
@@ -57,6 +75,7 @@ export class UpdateUserComponent {
 
   ngOnInit() {
     this.getAllRole();
+    this.getAllUsers();
     this.newUser = { ...this.user
     };
   }
@@ -67,7 +86,7 @@ export class UpdateUserComponent {
     this.userService.getAllRole().subscribe({
       next: (response) => {
         this.roles = response.content; // Data ada di 'content'
-        console.log('Total rows:', this.roles);
+        // console.log('Total rows:', this.roles);
       },
       error: (error) => {
         console.error('Error fetching users:', error);
@@ -79,7 +98,19 @@ export class UpdateUserComponent {
     this.userService.getAllDivision().subscribe({
       next: (response) => {
         this.divisions = response.content; // Data ada di 'content'
-        console.log('Total rows:', this.divisions);
+        // console.log('Total rows:', this.divisions);
+      },
+      error: (error) => {
+        console.error('Error fetching users:', error);
+      },
+    });
+  }
+
+  getAllUsers() {
+    this.userService.getAllUsers().subscribe({
+      next: (response) => {
+        this.oldUsers = response.content; // Data ada di 'content'
+        // console.log('Total rows:', this.oldUsers);
       },
       error: (error) => {
         console.error('Error fetching users:', error);
@@ -112,7 +143,6 @@ export class UpdateUserComponent {
   ];
 
 
-
   closeDialog() {
     this.visibleChange.emit(false)
   }
@@ -131,7 +161,7 @@ export class UpdateUserComponent {
     // Kirim data yang sudah divalidasi ke server
     this.userService.updateUser(this.user.id, updatedData).subscribe({
       next: (response) => {
-        console.log('User updated successfully:', response);
+        // console.log('User updated successfully:', response);
         this.userCreated.emit(response);  // Emit event ke komponen induk
         this.closeDialog();               // Tutup dialog setelah berhasil
       },
