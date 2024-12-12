@@ -4,6 +4,7 @@ import { TableModule } from 'primeng/table';
 import { SummaryService } from '../../summary.service';
 import { CommonModule, NgIf } from '@angular/common';
 import { forkJoin } from 'rxjs';
+import { EmpSuggestionComponent } from '../emp-suggestion/emp-suggestion.component';
 import { DropdownModule } from 'primeng/dropdown';
 import { FormsModule } from '@angular/forms';
 interface Item {
@@ -22,7 +23,7 @@ interface GroupedItem {
 @Component({
   selector: 'app-summary-self',
   standalone: true,
-  imports: [DialogModule, TableModule, CommonModule, DropdownModule, FormsModule ],
+  imports: [DialogModule, TableModule, CommonModule, DropdownModule, FormsModule, EmpSuggestionComponent ],
   templateUrl: './summary-self.component.html',
   styleUrl: './summary-self.component.css'
 })

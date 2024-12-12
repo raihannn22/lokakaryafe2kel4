@@ -5,7 +5,7 @@
         </div>
         <p-table [value]="filteredEmpAchievementSkills" [paginator]="true" [rows]="5" [filters]="filters"
             [globalFilterFields]="['group_name', 'achievement']" [loading]="loading"
-            styleClass="p-datatable-gridlines">
+            styleClass="p-datatable-gridlines" [rowsPerPageOptions]="[5, 10, 20]">
             <ng-template pTemplate="caption">
                 <div class="flex justify-content-between">
                     <p-button label="Pencapaian" icon="pi pi-plus" (click)="showAddDialog()"

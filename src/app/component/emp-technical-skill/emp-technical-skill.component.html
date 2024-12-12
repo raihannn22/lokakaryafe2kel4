@@ -28,7 +28,9 @@
                 </ng-template>
                 <ng-template pTemplate="body" let-empSkill let-i="rowIndex">
                     <tr>
-                        <td class="column1"><input p pInputText [(ngModel)]="empSkill.criteria" class="pInputText" /></td>
+                        <td class="column1">
+                            <input p pInputText [(ngModel)]="empSkill.criteria" class="pInputText" />
+                        </td>
                         <td  class="column2">
                             <p-dropdown [options]="scoreOptions" [(ngModel)]="empSkill.score" placeholder="Select score" appendTo="body"
                                 [disabled]="empSkill.isExisting">

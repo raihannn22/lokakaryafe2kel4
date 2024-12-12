@@ -94,7 +94,7 @@ scoreWarning: boolean = false;
 
   getAllEmpAchievementSkills() {
     this.loading = true;
-    this.empAchievementSkillService.getAllEmpAchievementSkills(this.first, 5).subscribe({
+    this.empAchievementSkillService.getAllEmpAchievementSkills().subscribe({
       next: (response) => {
         this.empAchievementSkills = response.content;
         this.totalRecords = response.totalRecords;

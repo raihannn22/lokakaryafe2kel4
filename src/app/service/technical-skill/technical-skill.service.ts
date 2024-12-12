@@ -10,8 +10,8 @@ export class TechnicalSkillService {
 
   constructor(private http: HttpClient) {}
 
-  getAllTechnicalSkills(page: number, size: number): Observable<any> {
-    return this.http.get(`${this.apiUrl}/all?page=${page}&size=${size}`);
+  getAllTechnicalSkills(): Observable<any> {
+    return this.http.get(`${this.apiUrl}/all`);
   }
 
 

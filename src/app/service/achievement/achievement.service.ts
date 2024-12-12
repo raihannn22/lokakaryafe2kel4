@@ -10,8 +10,11 @@ export class AchievementService {
 
   constructor(private http: HttpClient) {}
 
-  getAllAchievements(page: number, size: number): Observable<any> {
-    return this.http.get(`${this.apiUrl}/all?page=${page}&size=${size}`);
+  // getAllAchievements(page: number, size: number): Observable<any> {
+  //   return this.http.get(`${this.apiUrl}/all?page=${page}&size=${size}`);
+  // }
+  getAllAchievements(): Observable<any> {
+    return this.http.get(`${this.apiUrl}/all`);
   }
 
 

@@ -86,7 +86,7 @@ totalRecords: number = 0;
 
   getAllGroupAttitudeSkills() {
     this.loading = true;
-    this.groupAttitudeSkillService.getAllGroupAttitudeSkills(this.first, 5).subscribe({
+    this.groupAttitudeSkillService.getAllGroupAttitudeSkills().subscribe({
       next: (response) => {
         this.groupAttitudeSkills = response.content;
         this.totalRecords = response.totalRecords;

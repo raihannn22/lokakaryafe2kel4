@@ -10,8 +10,8 @@ export class GroupAchievementService {
 
   constructor(private http: HttpClient) {}
 
-  getAllGroupAchievements(page: number, size: number): Observable<any> {
-    return this.http.get(`${this.apiUrl}/all?page=${page}&size=${size}`);
+  getAllGroupAchievements(): Observable<any> {
+    return this.http.get(`${this.apiUrl}/all`);
   }
 
 

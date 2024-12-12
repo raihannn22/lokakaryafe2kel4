@@ -87,7 +87,7 @@ totalRecords: number = 0;
 
   getAllTechnicalSkills() {
     this.loading = true;
-    this.technicalSkillService.getAllTechnicalSkills(this.first, 5).subscribe({
+    this.technicalSkillService.getAllTechnicalSkills().subscribe({
       next: (response) => {
         this.technicalSkills = response.content;
         this.totalRecords = response.totalRecords;
