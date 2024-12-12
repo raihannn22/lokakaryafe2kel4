@@ -21,13 +21,13 @@ export class UserService {
   getAllRole(): Observable<any> {
     return this.http.get(`http://localhost:8081/appRole/get/all`);
   }
-  
+
 
   saveUser(user: any): Observable<any> {
     return this.http.put(`${this.apiUrl}/save`, user);
   }
 
-  
+
 
   getUserById(id: string): Observable<any> {
     return this.http.get(`${this.apiUrl}/get/${id}`);
@@ -41,5 +41,9 @@ export class UserService {
     return this.http.delete(`${this.apiUrl}/delete/${id}`);
   }
 
-  
+  resertPassword(id: string): Observable<any> {
+    return this.http.patch(`${this.apiUrl}/reset-password/${id}`, {});
+  }
+
+
 }

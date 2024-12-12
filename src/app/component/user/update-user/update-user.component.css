@@ -1,0 +1,7 @@
+:host ::ng-deep .p-dialog-mask{
+  z-index: 1000 !important;
+}
+
+.custom-swal-popup {
+  z-index: 1050 !important; /* Pastikan lebih tinggi dari modal/dialog lainnya */
+}
