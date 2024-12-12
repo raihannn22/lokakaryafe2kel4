@@ -55,7 +55,7 @@
                     <td>{{ empAchievementSkill.notes }}</td>
                     <td>{{ empAchievementSkill.score }}</td>
                     <td>{{ empAchievementSkill.assessment_year }}</td>
-                    
+
                     <!-- <td>
                         <p-tag [severity]="empAchievementSkill.enabled ? 'success' : 'danger'"
                             [value]="empAchievementSkill.enabled ? 'Enabled' : 'Disabled'">
@@ -102,7 +102,7 @@
             <label for="score">Nilai</label>
             <input type="number" pInputText id="score" [(ngModel)]="empAchievementSkill.score"
                 (ngModelChange)="validateScore()" />
-        
+
             <small *ngIf="scoreWarning" class="p-error">Nilai tidak boleh lebih dari 100!</small>
         </div>
 
@@ -219,9 +219,9 @@
                 (click)="empAchievementSkillDialog = false"></p-button>
             <button pButton label="Save" icon="pi pi-check" [disabled]="!empAchievementSkill.user_id || !empAchievementSkill.notes || !empAchievementSkill.achievement_id ||
                 !empAchievementSkill.score || !empAchievementSkill.assessment_year" (click)="saveEmpAchievementSkill()"
-                
+
                 class="mr-2"></button>
-                
+
         </div>
     </p-footer>
 
@@ -248,16 +248,16 @@
                     </p-inputNumber>
                     <small *ngIf="assessmentYearError" class="p-error">Year must be a 4-digit number.</small>
                 </div>
-        
+
                 <div>
                     <label for="group-achievement">Select Group Achievement:</label>
-        
+
                     <p-dropdown id="group-achievement" [(ngModel)]="selectedGroupAchievement" [options]="groupAchievements"
                         optionLabel="group_name" optionValue="id" placeholder="-- Select Group --" (onChange)="filterAchievementsByGroup()"
                         appendTo="body">
                     </p-dropdown>
-        
-                </div>        
+
+                </div>
                 <p-table [value]="filteredAchievements" *ngIf="filteredAchievements.length > 0">
                     <ng-template pTemplate="header">
                         <tr>
@@ -281,7 +281,7 @@
                 <div *ngIf="filteredAchievements.length === 0 && selectedGroupAchievement !== null">
                     No achievements found for the selected group.
                 </div>
-        
+
             </div>
             <p-footer>
                 <div class="flex justify-content-end">

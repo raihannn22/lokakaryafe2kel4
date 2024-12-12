@@ -53,8 +53,9 @@
         <p-card *ngIf="selectedContent === 'changePassword'">
           <ng-template pTemplate="content">
             <form >
+          
                 <div class="input-group">
-                  <label for="newPassword">Current Password<span class="text-red-600">*</span></label>
+                  <label for="newPassword">Current Password<span class="text-red-600 mr-2">*</span></label>
                   <p-password 
                     [(ngModel)]="currentPassword" 
                     name="password" 
@@ -71,8 +72,8 @@
                   }
                 </div>
 
-                <div class="input-group">
-                  <label for="newPassword">New Password<span class="text-red-600">*</span></label>
+                <div class="input-group mr-auto">
+                  <label for="newPassword">New Password<span class="text-red-600 mr-5">*</span></label>
                   <p-password 
                     [(ngModel)]="newPassword" 
                     name="newPassword" 
@@ -89,8 +90,8 @@
                   }
                 </div>
   
-                <div class="input-group">
-                  <label for="confirmPassword">Confirm Password<span class="text-red-600">*</span></label>
+                <div class="input-group mr-auto">
+                  <label for="confirmPassword">Confirm Password<span class="text-red-600 mr-2">*</span></label>
                   <p-password 
                     [(ngModel)]="confirmPassword" 
                     name="confirmPassword" 

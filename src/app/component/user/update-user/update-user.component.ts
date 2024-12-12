@@ -8,11 +8,13 @@ import { DropdownModule } from 'primeng/dropdown';
 import { CalendarModule } from 'primeng/calendar';
 import { UserService } from '../../../service/user/user.service';
 import { CheckboxModule } from 'primeng/checkbox';
+import { TooltipModule } from 'primeng/tooltip';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-update-user',
   standalone: true,
-  imports: [DialogModule, InputTextModule, ButtonModule, CommonModule, CalendarModule, FormsModule, DropdownModule, CheckboxModule],
+  imports: [DialogModule, InputTextModule, ButtonModule, CommonModule, CalendarModule, FormsModule, DropdownModule, CheckboxModule, TooltipModule],
   templateUrl: './update-user.component.html',
   styleUrl: './update-user.component.css'
 })
@@ -137,6 +139,37 @@ export class UpdateUserComponent {
       error: (error) => {
         console.error('Error updating user:', error);
         // Tambahkan penanganan error di sini
+      }
+    });
+  }
+
+  onResetPassword() {
+    Swal.fire({
+      title: 'Are you sure?',
+      text: 'Apakah Anda yakin ingin reset password akun dengan username ' + this.user.username + ' ini?',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, Reset!',
+      customClass: {
+        popup: 'custom-swal-popup'
+      }
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.userService.resertPassword(this.user.id).subscribe({
+          next: () => {
+            Swal.fire({
+              title: "Reset Password!",
+              text: 'Password akun dengan username ' + this.user.username + ' di reset menjadi ogya123',
+              icon: "success"
+            });               // Tutup dialog setelah berhasil
+          },
+          error: (error) => {
+            console.error('Error updating user:', error);
+            // Tambahkan penanganan error di sini
+          }
+        })
       }
     });
   }

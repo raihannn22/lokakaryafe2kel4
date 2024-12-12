@@ -2,10 +2,11 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { DialogModule } from 'primeng/dialog';
 import { TableModule } from 'primeng/table';
 import { SummaryService } from '../../summary.service';
-import { get } from 'http';
 import { CommonModule, NgIf } from '@angular/common';
 import { forkJoin } from 'rxjs';
 import { EmpSuggestionComponent } from '../emp-suggestion/emp-suggestion.component';
+import { DropdownModule } from 'primeng/dropdown';
+import { FormsModule } from '@angular/forms';
 interface Item {
   group: string;
   percentage: number;
@@ -22,7 +23,7 @@ interface GroupedItem {
 @Component({
   selector: 'app-summary-self',
   standalone: true,
-  imports: [DialogModule, TableModule, CommonModule, NgIf,EmpSuggestionComponent],
+  imports: [DialogModule, TableModule, CommonModule, DropdownModule, FormsModule, EmpSuggestionComponent ],
   templateUrl: './summary-self.component.html',
   styleUrl: './summary-self.component.css'
 })
@@ -35,43 +36,55 @@ export class SummarySelfComponent {
   groupedData: any[] = [];
   normalizedData: any = [];
   userId: any = '';
+  years: number[] = [
+    2023, 2024, 2025, 2026, 2027, 2028, 2029, 2030, 2031, 2032, 2033, 2034,
+    2035, 2036, 2037, 2038, 2039, 2040, 2041, 2042, 2043, 2044, 2045, 2046,
+    2047, 2048, 2049, 2050,
+  ];
+  selectedYear: number = 2024;
+  totalPercentage: number = 0;
+  totalFinalScore: number = 0;
 
   constructor(private summaryService: SummaryService) {
   }
+  
 
   ngOnInit() {
       this.userId = localStorage.getItem('id');
-      this.getAllEmpAttitudeSkill();
+      // this.getAllEmpAttitudeSkill();
       this.getAllEmpAchievement();
  
   }
 
+  onYearChange(event: any){
+    console.log(this.selectedYear, 'ini selected year');
+    this.getAllEmpAchievement();
+  }
+
   ngOnChanges() {
 
-  
+
   }
 
 
 
-  getAllEmpAttitudeSkill() {
-    this.summaryService.getEmpAttitudeSkillById(this.userId).subscribe({
-      next: (response) => {
-        this.attitudeSkill = response.content; // Data ada di 'content'
-        console.log('ini isi attitude skill:', this.attitudeSkill);
-        this.mapData(); // Lakukan mapping setelah data attitude diterima
-      },
-      error: (error) => {
-        console.error('Error fetching attitude skills:', error);
-      },
-    });
-
-   
-  }
+  // getAllEmpAttitudeSkill() {
+  //   this.summaryService.getEmpAttitudeSkillById(this.userId).subscribe({
+  //     next: (response) => {
+  //       this.attitudeSkill = response.content; // Data ada di 'content'
+  //       console.log('ini isi attitude skill:', this.attitudeSkill);
+  //       this.mapData(); // Lakukan mapping setelah data attitude diterima
+  //     },
+  //     error: (error) => {
+  //       console.error('Error fetching attitude skills:', error);
+  //     },
+  //   });
+  // }
 
   getAllEmpAchievement() {
     forkJoin({
-      empAtittudeSkill:  this.summaryService.getEmpAttitudeSkillById(this.userId),
-      empAchievement:  this.summaryService.getEmpAchievementById(this.userId),
+      empAtittudeSkill:  this.summaryService.getEmpAttitudeSkillByIdandYear(this.userId, this.selectedYear),
+      empAchievement:  this.summaryService.getEmpAchievementByIdandYear(this.userId, this.selectedYear),
       groupAchievement: this.summaryService.getAllAchievements()
     }).subscribe(({empAchievement, groupAchievement, empAtittudeSkill}) => {
       this.achievement = empAchievement.content;
@@ -100,6 +113,12 @@ export class SummarySelfComponent {
       this.mapData();
       this.groupedData = this.groupAndSumData(this.combinedData);
       console.log('ini',this.groupedData); 
+
+      // Hitung total percentage
+      this.totalPercentage = this.groupedData.reduce((total, item) => total + item.percentage, 0);
+
+      // Hitung final score
+      this.totalFinalScore = this.groupedData.reduce((total, item) => total + (item.score * (item.percentage)/100), 0);
     });
   }
 

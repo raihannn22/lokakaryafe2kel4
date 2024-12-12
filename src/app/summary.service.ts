@@ -16,6 +16,10 @@ export class SummaryService {
     return this.http.get(`http://localhost:8081/emp-achievement-skill/get/user/${userId}`);
   }
 
+  getEmpAchievementByIdandYear(userId: string, year: number): Observable<any> {
+    return this.http.get(`http://localhost:8081/emp-achievement-skill/get/user/${userId}/year/${year}`);
+  }
+
   getAllAchievements(): Observable<any> {
     return this.http.get('http://localhost:8081/achievement/all');
   }
@@ -23,6 +27,11 @@ export class SummaryService {
   getEmpAttitudeSkillById(userId: string): Observable<any> {
     return this.http.get(`http://localhost:8081/emp-attitude-skill/user/${userId}`);
   }
+
+  getEmpAttitudeSkillByIdandYear(userId: string, year: number): Observable<any> {
+    return this.http.get(`http://localhost:8081/emp-attitude-skill/user/${userId}/year/${year}`);
+  }
+
 
 
 }
