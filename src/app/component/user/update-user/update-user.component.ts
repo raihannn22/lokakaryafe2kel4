@@ -158,10 +158,12 @@ export class UpdateUserComponent {
     }).then((result) => {
       if (result.isConfirmed) {
         this.userService.resertPassword(this.user.id).subscribe({
-          next: () => {
+
+          next: (data) => {
+            const newPassword = data.content
             Swal.fire({
               title: "Reset Password!",
-              text: 'Password akun dengan username ' + this.user.username + ' di reset menjadi ogya123',
+              text: 'Password akun dengan username ' + this.user.username + ' di reset menjadi ' +newPassword,
               icon: "success"
             });               // Tutup dialog setelah berhasil
           },

@@ -32,6 +32,10 @@ export class SummaryService {
     return this.http.get(`http://localhost:8081/emp-attitude-skill/user/${userId}/year/${year}`);
   }
 
+  getAllSuggestionByYear(userId: string, year: number): Observable<any> {
+    return this.http.get(`http://localhost:8081/emp-suggestion/user/${userId}/year/${year}`);
+  }
+
 
 
 }

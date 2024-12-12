@@ -312,6 +312,7 @@ totalRecords: number = 0;
             timer: 1500
           });
           this.getAllGroupAchievements();
+          window.location.reload()
         },
         error: (error) => {
           Swal.fire({

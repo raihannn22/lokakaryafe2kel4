@@ -1,9 +1,13 @@
+<div class="text-center mb-2">
+    <h3 style="font-weight: bold; font-size: 2.25rem;">Divisi Management</h3>
+</div>
+
 <p-button label="Tambah Divisi" icon="pi pi-plus" (click)="openCreateDialog()" class="p-5 mt-5" ></p-button>
 
     <!-- Tombol global untuk membuat pengguna baru -->
     
     <div class="p-5">
-    <p-table #dt [value]="divisions" [paginator]="true" [rows]="10" [loading]="loading" styleClass="p-datatable-gridlines" [globalFilterFields]="[ 'DIVISION_NAME']">
+    <p-table #dt [value]="divisions" [paginator]="true" [rows]="10" [loading]="loading" styleClass="p-datatable-gridlines" [globalFilterFields]="[ 'DIVISION_NAME']" [sortMode]="'single'" >
           <ng-template pTemplate="caption">
               <p-iconField iconPosition="left">
                   <p-inputIcon>
@@ -15,7 +19,10 @@
           
         <ng-template pTemplate="header">
           <tr>
-              <th>Nama Divisi</th>
+            <th pSortableColumn="DIVISION_NAME">
+                Nama Divisi
+                <p-sortIcon field="DIVISION_NAME"></p-sortIcon>
+            </th>
               <th>Aksi</th>
           </tr>
       </ng-template>
