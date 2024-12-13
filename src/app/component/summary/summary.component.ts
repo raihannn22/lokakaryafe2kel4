@@ -33,6 +33,7 @@ export class SummaryComponent implements OnInit{
   @Input() visible: boolean = false; // Menyambungkan dengan property di komponen induk
   @Output() visibleChange = new EventEmitter<boolean>(); // Emit perubahan visibility
   @Input() user: any = {};
+  @Input() year: number = new Date().getFullYear()
   attitudeSkill: any[] = [];
   achievement: any[] = [];
   groupedAchievement: any[] = [];
@@ -44,7 +45,7 @@ export class SummaryComponent implements OnInit{
   totalPercentage: number = 0;
   totalFinalScore: number = 0;
 
-  selectedYear: number = 2024;
+  selectedYear: number = 0;
   years: number[] = [
     2023, 2024, 2025, 2026, 2027, 2028, 2029, 2030, 2031, 2032, 2033, 2034,
     2035, 2036, 2037, 2038, 2039, 2040, 2041, 2042, 2043, 2044, 2045, 2046,
@@ -73,6 +74,7 @@ export class SummaryComponent implements OnInit{
     // this.totalPercentage = this.groupedData.reduce((total, item) => total + item.percentage, 0);
     // this.totalFinalScore = this.groupedData.reduce((total, item) => total + (item.score * (item.percentage)/100), 0);
     // this.getAllSuggestion();
+    this.selectedYear = this.year;
   }
 
   closeDialog() {

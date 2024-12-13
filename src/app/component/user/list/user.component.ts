@@ -172,7 +172,7 @@ export class UserComponent implements OnInit {
       },
       complete: () => {
         this.divisionName = this.divisi.map(item => item.DIVISION_NAME);
-        // console.log(this.divisionName, 'ini division name');
+        console.log(this.divisionName, 'ini division name');
       }
 
 

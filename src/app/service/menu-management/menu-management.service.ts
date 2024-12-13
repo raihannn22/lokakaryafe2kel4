@@ -29,4 +29,8 @@ export class MenuManagementService {
   getMenuByUserId(userId: any): Observable<any> {
     return this.http.get(`${this.apiUrl}/appMenu/get/byUserId/${userId}`); // Endpoint get menu by user id
   }
+
+  getMenuByUsername(username: any): Observable<any> {
+    return this.http.get(`${this.apiUrl}/appMenu/get/byUsername/${username}`); // Endpoint get menu by user id
+  }
 }

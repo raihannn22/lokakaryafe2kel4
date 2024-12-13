@@ -36,6 +36,7 @@ export class DetailUserComponent {
   @Input() visible: boolean = false; // Menyambungkan dengan property di komponen induk
   @Output() visibleChange = new EventEmitter<boolean>(); // Emit perubahan visibility
   @Input() user: any = {};
+  @Input() year: number = 0;
 
   divisions: any[] = [];
   roles: any[] = [];

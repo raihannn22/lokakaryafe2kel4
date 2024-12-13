@@ -20,6 +20,7 @@ import { EmpDevplanComponent } from './component/emp-devplan/emp-devplan.compone
 import { ViewEmpdevplanComponent } from './component/view-empdevplan/view-empdevplan.component';
 import { SummarySelfComponent } from './component/summary-self/summary-self.component';
 import { FullAssSumComponent } from './component/full-ass-sum/full-ass-sum.component';
+import { roleGuard } from './guard/role.guard';
 
 
 export const routes: Routes = [
@@ -32,6 +33,7 @@ export const routes: Routes = [
     path: 'dashboard',
     canActivate: [authGuard],
     component: DashboardComponent,
+    
   },
   {
     path: 'login',
@@ -39,8 +41,9 @@ export const routes: Routes = [
   },
   {
     path: 'user-management',
-    canActivate: [authGuard],
+    canActivate: [authGuard, roleGuard],
     component: UserComponent,
+    data: {permission: 'user#all'}
   },
   {
     path: 'achievement',
