@@ -18,3 +18,16 @@ td.flex.gap-2 {
 th.aksi {
     text-align: center;
 }
+
+.year-selector {
+    flex-direction: column;
+    margin-bottom: 15px;
+  }
+  
+  .custom-label {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #4a4a4a;
+    margin-bottom: 5px;
+    font-family: 'Arial', sans-serif;
+  }

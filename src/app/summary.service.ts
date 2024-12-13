@@ -44,6 +44,10 @@ export class SummaryService {
     return this.http.get(`http://localhost:8081/emp-achievement-skill/get/year/${year}`);
   }
 
+  getTotalScore(year: number): Observable<any> {
+    return this.http.get(`http://localhost:8081/assessmentSummary/total/${year}`);
+  }
+
 
 
 }

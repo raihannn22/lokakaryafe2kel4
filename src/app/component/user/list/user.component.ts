@@ -22,6 +22,8 @@ import { jwtDecode } from 'jwt-decode';
 import { Router } from '@angular/router';
 import { DropdownModule } from 'primeng/dropdown';
 import { MultiSelectModule } from 'primeng/multiselect';
+import { forkJoin } from 'rxjs';
+import { SummaryService } from '../../../summary.service';
 
 @Component({
   selector: 'app-user',
@@ -36,6 +38,7 @@ export class UserComponent implements OnInit {
 
 
   users: any[] = [];
+  usersWithScore: any[] = [];
   loading: boolean = true;
   displayCreateDialog = false;
   displayUpdateDialog = false;
@@ -47,11 +50,22 @@ export class UserComponent implements OnInit {
   statuses!: any[];
   divisi!: any[];
   divisionName: string[] = [];
+  selectedYear: number = 2024;
+  scoreUsers: any[] = [];
+  years: number[] = [
+    2023, 2024, 2025, 2026, 2027, 2028, 2029, 2030, 2031, 2032, 2033, 2034,
+    2035, 2036, 2037, 2038, 2039, 2040, 2041, 2042, 2043, 2044, 2045, 2046,
+    2047, 2048, 2049, 2050,
+  ];
 
+  onYearChange(event: any) {
+    this.getAllUsers();
+  }
 
   constructor(
     private userService: UserService,
     private messageService: MessageService,
+    private summaryService: SummaryService,
     private router: Router
   ) {}
 
@@ -110,23 +124,48 @@ export class UserComponent implements OnInit {
   }
 
   getAllUsers() {
-    this.userService.getAllUsers().subscribe({
-      next: (response) => {
-        this.users = response.content;
-        this.loading = false;
-      },
-      error: (error) => {
-        console.error('Error fetching users:', error);
-        this.loading = false;
-      },
-    });
+    // this.userService.getAllUsers().subscribe({
+    //   next: (response) => {
+    //     this.users = response.content;
+    //     console.log('ini usernyaa', this.users);
+    //     this.loading = false;
+    //   },
+    //   error: (error) => {
+    //     console.error('Error fetching users:', error);
+    //     this.loading = false;
+    //   },
+    // });
+
+    forkJoin({
+      user : this.userService.getAllUsers(),
+      total : this.summaryService.getTotalScore(this.selectedYear)
+    }).subscribe(({user, total})=>{
+      this.loading = false;
+      this.scoreUsers = total
+      this.users = user.content
+
+      this.usersWithScore = this.users.map(user => {
+        // Temukan skor berdasarkan ID pengguna
+        const score = this.scoreUsers.find(s => s.userId === user.id);
+        return {
+          ...user, // Data pengguna asli
+          totalScore: score ? score.totalScore : 0 // Tambahkan totalScore
+        };
+      });
+      
+      
+      console.log( this.usersWithScore);
+      
+    })
+    
+
   }
 
   getAllDivision() {
     this.userService.getAllDivision().subscribe({
       next: (response) => {
         this.divisi = response.content; // Data ada di 'content'
-        console.log('Total divisi:', this.divisi);
+        // console.log('Total divisi:', this.divisi);
       },
       error: (error) => {
         console.error('Error fetching users:', error);
