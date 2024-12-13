@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 // import { GroupAchievementService } from '../../service/group-achievement/group-achievement.service';
-import { CommonModule } from '@angular/common';  // Import CommonModule for directives like ngIf, ngFor
+import { CommonModule } from '@angular/common'; // Import CommonModule for directives like ngIf, ngFor
 import { ButtonModule } from 'primeng/button';
 import { CalendarModule } from 'primeng/calendar';
 import { FormsModule } from '@angular/forms';
@@ -37,47 +37,45 @@ import { FilterMetadata } from 'primeng/api';
     InputIconModule,
     InputTextModule,
     IconFieldModule,
-    MessageModule
+    MessageModule,
   ],
   animations: [
     trigger('dialogAnimation', [
       transition(':enter', [
         style({ opacity: 0 }),
-        animate('300ms', style({ opacity: 1 }))
+        animate('300ms', style({ opacity: 1 })),
       ]),
-      transition(':leave', [
-        animate('300ms', style({ opacity: 0 }))
-      ])
-    ])
+      transition(':leave', [animate('300ms', style({ opacity: 0 }))]),
+    ]),
   ],
   templateUrl: './group-achievement.component.html',
-  styleUrls: ['./group-achievement.component.css']
+  styleUrls: ['./group-achievement.component.css'],
 })
 export class GroupAchievementComponent implements OnInit {
   // Data properties
-groupAchievements: any[] = [];
-filteredGroupAchievements: any[] = [];
-loading: boolean = true;
-groupAchievementDialog: boolean = false;
-groupAchievement: any = { group_name: '', percentage: null, enabled: false };
+  groupAchievements: any[] = [];
+  filteredGroupAchievements: any[] = [];
+  loading: boolean = true;
+  groupAchievementDialog: boolean = false;
+  groupAchievement: any = { group_name: '', percentage: null, enabled: false };
 
-// Search and Filter properties
-searchKeyword: string = '';
-filters: { [s: string]: FilterMetadata } = {};
+  // Search and Filter properties
+  searchKeyword: string = '';
+  filters: { [s: string]: FilterMetadata } = {};
 
-// Dropdown and options
-enabledOptions = [
-  { label: 'Enabled', value: 1 },
-  { label: 'Disabled', value: 0 }
-];
+  // Dropdown and options
+  enabledOptions = [
+    { label: 'Enabled', value: 1 },
+    { label: 'Disabled', value: 0 },
+  ];
 
-// Validation flags
-isGroupNameDuplicate: boolean = false;
-percentageWarning: boolean = false;
+  // Validation flags
+  isGroupNameDuplicate: boolean = false;
+  percentageWarning: boolean = false;
 
-// Pagination properties
-first: number = 0;
-totalRecords: number = 0;
+  // Pagination properties
+  first: number = 0;
+  totalRecords: number = 0;
   percent: number = 100;
   atitudeSkills: any[] = [];
   percentageAchieved: any[] = [];
@@ -85,7 +83,7 @@ totalRecords: number = 0;
   totalPercentageAttitude: number = 0;
   totalPercentageAchieved: number = 0;
   totalPercentage: number = 0;
-  userPercentage:number = 0;
+  userPercentage: number = 0;
 
   constructor(
     private groupAchievementService: GroupAchievementService,
@@ -93,57 +91,65 @@ totalRecords: number = 0;
   ) {}
 
   ngOnInit() {
-
     forkJoin({
       groupAchievement: this.groupAchievementService.getAllGroupAchievements(),
-      attitudeSkill: this.atitudeSkillService.getGroupAttitudeSkillsWithDetails()
-    }).subscribe(({groupAchievement, attitudeSkill}) => {
+      attitudeSkill:
+        this.atitudeSkillService.getGroupAttitudeSkillsWithDetails(),
+    }).subscribe(({ groupAchievement, attitudeSkill }) => {
       this.groupAchievements = groupAchievement.content;
-      console.log('Group Achievement:', this.groupAchievements)
+      console.log('Group Achievement:', this.groupAchievements);
       this.totalRecords = groupAchievement.totalRecords;
       this.filteredGroupAchievements = this.groupAchievements;
       this.loading = false;
-      this.percentageAchieved = this.groupAchievements.map((item) => item.percentage);
-      this.totalPercentageAchieved= this.percentageAchieved.reduce((acc, item) => acc + item, 0);
-
+      this.percentageAchieved = this.groupAchievements.map(
+        (item) => item.percentage
+      );
+      this.totalPercentageAchieved = this.percentageAchieved.reduce(
+        (acc, item) => acc + item,
+        0
+      );
 
       this.atitudeSkills = attitudeSkill.content;
-        this.percentageAttitude = this.atitudeSkills.map((item) => item.percentage);
-        this.totalPercentageAttitude = this.percentageAttitude.reduce((acc, item) => acc + item, 0);
+      this.percentageAttitude = this.atitudeSkills.map(
+        (item) => item.percentage
+      );
+      this.totalPercentageAttitude = this.percentageAttitude.reduce(
+        (acc, item) => acc + item,
+        0
+      );
 
-
-        this.sumPercentage();
-    })
+      this.sumPercentage();
+    });
   }
   getAllGroupAchievements() {
     this.loading = true;
     this.groupAchievementService.getAllGroupAchievements().subscribe({
       next: (response) => {
         this.groupAchievements = response.content;
-        console.log('Group Achievement:', this.groupAchievements)
+        console.log('Group Achievement:', this.groupAchievements);
         this.totalRecords = response.totalRecords;
         this.filteredGroupAchievements = this.groupAchievements;
         this.loading = false;
-        this.percentageAchieved = this.groupAchievements.map((item) => item.percentage);
-        this.totalPercentageAchieved= this.percentageAchieved.reduce((acc, item) => acc + item, 0);
+        this.percentageAchieved = this.groupAchievements.map(
+          (item) => item.percentage
+        );
+        this.totalPercentageAchieved = this.percentageAchieved.reduce(
+          (acc, item) => acc + item,
+          0
+        );
         console.log(this.totalPercentageAchieved);
       },
       error: (error) => {
         console.error('Error fetching achievements:', error);
         this.loading = false;
       },
-
-
     });
-
-
-
   }
 
-
-  sumPercentage(){
-    this.totalPercentage = this.totalPercentageAttitude + this.totalPercentageAchieved;
-    console.log('ttal' , this.totalPercentage);
+  sumPercentage() {
+    this.totalPercentage =
+      this.totalPercentageAttitude + this.totalPercentageAchieved;
+    console.log('ttal', this.totalPercentage);
   }
 
   loadPage(event: any) {
@@ -153,25 +159,29 @@ totalRecords: number = 0;
 
   searchData() {
     if (this.searchKeyword.trim() === '') {
-        // Jika kata kunci kosong, tampilkan semua data
-        this.filteredGroupAchievements = this.groupAchievements;
+      // Jika kata kunci kosong, tampilkan semua data
+      this.filteredGroupAchievements = this.groupAchievements;
     } else {
-        this.filteredGroupAchievements = this.groupAchievements.filter(groupAchievement => {
-            // Cek setiap kolom dan sesuaikan pencarian berdasarkan kolom
-            return Object.keys(groupAchievement).some(key => {
-                const value = groupAchievement[key];
-                if (typeof value === 'number') {
-                    // Jika nilai kolom adalah angka (percentage), bandingkan sebagai numerik
-                    return value.toString().includes(this.searchKeyword);
-                } else if (typeof value === 'string') {
-                    // Jika nilai kolom adalah string, bandingkan sebagai string
-                    return value.toLowerCase().includes(this.searchKeyword.toLowerCase());
-                }
-                return false;
-            });
-        });
+      this.filteredGroupAchievements = this.groupAchievements.filter(
+        (groupAchievement) => {
+          // Cek setiap kolom dan sesuaikan pencarian berdasarkan kolom
+          return Object.keys(groupAchievement).some((key) => {
+            const value = groupAchievement[key];
+            if (typeof value === 'number') {
+              // Jika nilai kolom adalah angka (percentage), bandingkan sebagai numerik
+              return value.toString().includes(this.searchKeyword);
+            } else if (typeof value === 'string') {
+              // Jika nilai kolom adalah string, bandingkan sebagai string
+              return value
+                .toLowerCase()
+                .includes(this.searchKeyword.toLowerCase());
+            }
+            return false;
+          });
+        }
+      );
     }
-}
+  }
 
   validatePercentage() {
     if (this.groupAchievement.percentage > 100) {
@@ -182,14 +192,15 @@ totalRecords: number = 0;
     }
   }
 
-
   validateMaxValue(event: any): void {
     const maxValue = this.totalPercentage;
     console.log(maxValue);
     const inputValue = Number(event.target.value);
 
     if (inputValue > maxValue) {
-      window.alert(`Nilai tidak boleh lebih dari ${maxValue}. Mohon dapat disesuaikan.`);
+      window.alert(
+        `Nilai tidak boleh lebih dari ${maxValue}. Mohon dapat disesuaikan.`
+      );
     }
   }
 
@@ -198,21 +209,54 @@ totalRecords: number = 0;
     this.groupAchievement = { group_name: '', percentage: null, enabled: 1 };
     this.groupAchievementDialog = true;
     this.isGroupNameDuplicate = false;
-
   }
 
   editGroupAchievement(groupAchievement: any) {
     console.log('Mengedit group achievement', groupAchievement);
     this.groupAchievement = { ...groupAchievement };
-    this.userPercentage = this.groupAchievement.percentage
-    console.log(this.userPercentage , 'ini user percentagenya');
-    console.log(this.totalPercentage , 'total persentase');
+    this.userPercentage = this.groupAchievement.percentage;
+    console.log(this.userPercentage, 'ini user percentagenya');
+    console.log(this.totalPercentage, 'total persentase');
     this.groupAchievementDialog = true;
     this.isGroupNameDuplicate = false;
   }
 
+  validateGroupAchievement() {
+    // Validasi group_name untuk data baru (add)
+    if (!this.groupAchievement.id) {
+      const existingGroup = this.groupAchievements.find(
+        (group) =>
+          group.group_name.toLowerCase() ===
+          this.groupAchievement.group_name.toLowerCase()
+      );
+      if (existingGroup) {
+        this.isGroupNameDuplicate = true;
+        return false; // Invalid, group name is duplicated
+      }
+    } else {
+      // Validasi group_name untuk edit data (tidak boleh sama dengan grup lain, kecuali yang sedang diedit)
+      const existingGroup = this.groupAchievements.find(
+        (group) =>
+          group.group_name.toLowerCase() ===
+            this.groupAchievement.group_name.toLowerCase() &&
+          group.id !== this.groupAchievement.id
+      );
+      if (existingGroup) {
+        this.isGroupNameDuplicate = true;
+        return false; // Invalid, group name is duplicated
+      }
+    }
+
+    this.isGroupNameDuplicate = false; // Reset flag
+
+    return true; // Valid
+  }
+
   saveGroupAchievement() {
-    if (this.groupAchievement.id){
+    if (!this.validateGroupAchievement()) {
+      return; // Jika validasi gagal, hentikan proses penyimpanan
+    }
+    if (this.groupAchievement.id) {
       const maxValue = 100 - this.totalPercentage + this.userPercentage;
       if (this.groupAchievement.percentage > maxValue) {
         Swal.fire({
@@ -224,12 +268,12 @@ totalRecords: number = 0;
           //   'z-index': 9999
           // }
           customClass: {
-            popup: 'custom-swal-popup'
-          }
+            popup: 'custom-swal-popup',
+          },
         });
         return;
       }
-    }else{
+    } else {
       const maxValue = 100 - this.totalPercentage;
       if (this.groupAchievement.percentage > maxValue) {
         Swal.fire({
@@ -241,49 +285,51 @@ totalRecords: number = 0;
           //   'z-index': 9999
           // }
           customClass: {
-            popup: 'custom-swal-popup'
-          }
+            popup: 'custom-swal-popup',
+          },
         });
         return;
+      }
     }
-  }
-
 
     // Validasi nilai percentage
     console.log('Data yang dikirim:', this.groupAchievement);
     if (this.groupAchievement.id) {
-      this.groupAchievementService.updateGroupAchievement(this.groupAchievement.id, this.groupAchievement).subscribe({
-        next: () => {
-          this.getAllGroupAchievements();
-          this.groupAchievementDialog = false;
-          window.location.reload()
-        },
-        error: (error) => {
-          Swal.fire({
-            icon: 'error',
-            title: 'Gagal!',
-            text: 'Gagal memperbarui Grup Pencapaian!'
-          });
-        }
-      });
+      this.groupAchievementService
+        .updateGroupAchievement(this.groupAchievement.id, this.groupAchievement)
+        .subscribe({
+          next: () => {
+            this.getAllGroupAchievements();
+            this.groupAchievementDialog = false;
+            window.location.reload();
+          },
+          error: (error) => {
+            Swal.fire({
+              icon: 'error',
+              title: 'Gagal!',
+              text: 'Gagal memperbarui Grup Pencapaian!',
+            });
+          },
+        });
     } else {
-      this.groupAchievementService.saveGroupAchievement(this.groupAchievement).subscribe({
-        next: () => {
-          this.getAllGroupAchievements();
-          this.groupAchievementDialog = false;
-          window.location.reload()
-        },
-        error: (error) => {
-          Swal.fire({
-            icon: 'error',
-            title: 'Gagal!',
-            text: 'Gagal menambahkan Grup Pencapaian!.'
-          });
-        }
-      });
+      this.groupAchievementService
+        .saveGroupAchievement(this.groupAchievement)
+        .subscribe({
+          next: () => {
+            this.getAllGroupAchievements();
+            this.groupAchievementDialog = false;
+            window.location.reload();
+          },
+          error: (error) => {
+            Swal.fire({
+              icon: 'error',
+              title: 'Gagal!',
+              text: 'Gagal menambahkan Grup Pencapaian!.',
+            });
+          },
+        });
     }
   }
-
 
   resetGroupAchievement() {
     this.groupAchievement = { group_name: '', percentage: null, enabled: 1 };
@@ -291,9 +337,40 @@ totalRecords: number = 0;
     this.percentageWarning = false; // Clear percentage warning
   }
 
-
-
   deleteGroupAchievement(id: string) {
+// <<<<<<< banu
+//     Swal.fire({
+//       title: 'Apakah anda yakin?',
+//       text: 'Data tidak dapat kembali jika dihapus!',
+//       icon: 'warning',
+//       showCancelButton: true,
+//       confirmButtonText: 'Hapus!',
+//       cancelButtonText: 'Batal',
+//     }).then((result) => {
+//       if (result.isConfirmed) {
+//         this.groupAchievementService.deleteGroupAchievement(id).subscribe({
+//           next: () => {
+//             Swal.fire({
+//               icon: 'success',
+//               title: 'Berhasil Menghapus Grup Pencapaian!',
+//               showConfirmButton: false,
+//               timer: 1500,
+//             });
+//             this.getAllGroupAchievements();
+//           },
+//           error: (error) => {
+//             Swal.fire({
+//               icon: 'error',
+//               title: 'Error',
+//               text: 'Gagal Menghapus Grup Pencapaian!.',
+//               confirmButtonText: 'Coba Lagi',
+//             });
+//           },
+//         });
+//       }
+//     });
+//   }
+// =======
   Swal.fire({
     title: 'Apakah anda yakin?',
     text: "Data tidak dapat kembali jika dihapus!",
@@ -326,5 +403,4 @@ totalRecords: number = 0;
     }
   });
 }
-
 }
