@@ -15,7 +15,13 @@ import { DivisiService } from '../../../service/divisi/divisi.service';
 export class UpdateDivisionComponent {
 
   isValidForm(): boolean {
-    return !!this.newDivision.DIVISION_NAME 
+    const isNotEmpty = !!this.newDivision.DIVISION_NAME;
+
+    const isUnique = Array.isArray(this.oldDivisions) && !this.oldDivisions.some(
+      (role) => role.DIVISION_NAME.toLowerCase() === this.newDivision.DIVISION_NAME.toLowerCase()
+    );
+  
+    return isNotEmpty && isUnique;
   }
 
   
@@ -24,20 +30,30 @@ export class UpdateDivisionComponent {
   @Input() division: any;
   @Output() divisionCreated = new EventEmitter<any>();  
 
-  divisions: any[] = [];
-  roles: any[] = [];
+  // divisions: any[] = [];
+  oldDivisions: any[] = [];
+  // roles: any[] = [];
 
   constructor(
     private divisionService: DivisiService
   ) {}
 
   ngOnInit() {
+    this.divisionService.getAllDivisions().subscribe({
+      next: (response) => {
+        this.oldDivisions = response.content; // Simpan data divisi yang ada
+      },
+      error: (error) => {
+        console.error('Error fetching divisions:', error);
+      }
+    });
   }
 
   ngOnChanges() {
     if (this.division) {
       this.newDivision = { ...this.division };
     }
+
   }
 
 

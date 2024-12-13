@@ -6,16 +6,31 @@
   class="p-5 mt-5"
 ></p-button>
 }
-@if (userRoles?.includes('HR') || userRoles?.includes('SVP')|| userRoles?.includes('MGR')) {
 
-}
 <div class="card">
   <!-- Tombol global untuk membuat pengguna baru -->
 
   <div class="p-5">
+    @if (isViewUserRoute()) {
+      <div class="year-selector">
+        <label for="year-dropdown" class="custom-label">Tahun:  </label>
+        
+        <p-dropdown
+          id="year-dropdown"
+          [options]="years"
+          [(ngModel)]="selectedYear"
+          placeholder="Pilih Tahun"
+          (onChange)="onYearChange($event)"
+          [virtualScroll]="true"
+          [virtualScrollItemSize]="38"
+          styleClass="mb-3">
+        </p-dropdown>
+      </div>
+    }
+
     <p-table
       #dt
-      [value]="users"
+      [value]="usersWithScore"
       [paginator]="true"
       [rows]="10"
       [loading]="loading"
@@ -129,8 +144,15 @@
             </p-columnFilter>
             </div>
           </th>
+          
+          @if (isViewUserRoute()) {
+          <th pSortableColumn="totalScore" style="width:20%">
+            Score <p-sortIcon field="totalScore" />
+          </th>
+          }
 
           <th class="aksi">Aksi</th>
+
         </tr>
 
         <!-- <tr>
@@ -199,6 +221,10 @@
 
           <td>{{ user.division_name }}</td>
 
+          @if (isViewUserRoute()) {
+            <td>{{ user.totalScore }}</td>
+          }
+
           <td class="flex gap-2">
             @if (userRoles?.includes('HR') && !isViewUserRoute()) {
             <button
@@ -226,6 +252,8 @@
               ></button>
             }
           </td>
+
+          
         </tr>
       </ng-template>
     </p-table>

@@ -18,26 +18,43 @@ import { CheckboxModule } from 'primeng/checkbox';
   styleUrls: ['./create-user.component.css']
 })
 export class CreateUserComponent {
-  
+
   isValidForm(): boolean {
-    return !!this.newUser.username && 
+    // const isUniqueUsername = Array.isArray(this.oldUsers) && !this.oldUsers.some(
+    //   (user) => user.username.toLowerCase().trim() === this.newUser.username.toLowerCase().trim()
+    // );
+
+    return !!this.newUser.username &&
            !!this.newUser.full_name &&
            !!this.newUser.position &&
            !!this.newUser.email_address &&
            !!this.newUser.employee_status &&
            !!this.newUser.join_date &&
            !!this.newUser.enabled &&
-           !!this.newUser.division_id;
+           !!this.newUser.division_id
   }
 
-  
+  isUniqueUsername(): boolean {
+    return Array.isArray(this.oldUsers) && !this.oldUsers.some(
+      (user) => user.username.toLowerCase().trim() === this.newUser.username.toLowerCase().trim()
+    );
+  }
+
+  isUniqueEmail(): boolean {
+    return Array.isArray(this.oldUsers) && !this.oldUsers.some(
+      (user) => user.email_address.toLowerCase().trim() === this.newUser.email_address.toLowerCase().trim()
+    );
+  }
+
+
   @Input() visible: boolean = false;  // Menyambungkan dengan property di komponen induk
   @Output() visibleChange = new EventEmitter<boolean>();  // Emit perubahan visibility
 
-  @Output() userCreated = new EventEmitter<any>();  
+  @Output() userCreated = new EventEmitter<any>();
 
   divisions: any[] = [];
   roles: any[] = [];
+  oldUsers: any[] = [];
 
   constructor(
     private userService: UserService
@@ -46,6 +63,7 @@ export class CreateUserComponent {
   ngOnInit() {
     this.getAllDivision();
     this.getAllRole();
+    this.getAllUsers();
   }
 
   getAllRole() {
@@ -72,6 +90,18 @@ export class CreateUserComponent {
     });
   }
 
+  getAllUsers() {
+    this.userService.getAllUsers().subscribe({
+      next: (response) => {
+        this.oldUsers = response.content; // Data ada di 'content'
+        // console.log('Total rows:', this.oldUsers);
+      },
+      error: (error) => {
+        console.error('Error fetching users:', error);
+      },
+    });
+  }
+
   newUser = {
     username: '',
     full_name: '',
@@ -84,7 +114,7 @@ export class CreateUserComponent {
     division_id: ''
   };
 
-  
+
 
   employeeStatusOptions = [
     { label: 'Kontrak', value: 1 },
@@ -96,7 +126,7 @@ export class CreateUserComponent {
     { label: 'Disabled', value: 0 }
   ];
 
- 
+
 
   closeDialog() {
     this.visibleChange.emit(false)

@@ -16,6 +16,9 @@ import { IconFieldModule } from 'primeng/iconfield';
 import { FilterMetadata } from 'primeng/api';
 import Swal from 'sweetalert2';
 import { GroupAttitudeSkillService } from '../../service/group-attitude-skill/group-attitude-skill.service';
+import { forkJoin } from 'rxjs';
+import { GroupAchievementService } from '../../service/group-achievement/group-achievement.service';
+import { MessageModule } from 'primeng/message';
 
 @Component({
   selector: 'app-group-attitude-skill',
@@ -32,7 +35,8 @@ import { GroupAttitudeSkillService } from '../../service/group-attitude-skill/gr
     TagModule,
     InputIconModule,
     InputTextModule,
-    IconFieldModule
+    IconFieldModule,
+    MessageModule
   ],
   animations: [
     trigger('dialogAnimation', [
@@ -55,33 +59,65 @@ filteredGroupAttitudeSkills: any[] = [];
 loading: boolean = true;
 groupAttitudeSkillDialog: boolean = false;
 groupAttitudeSkill: any = { group_name: '', percentage: null, enabled: false };
-
-// Search and Filter properties
 searchKeyword: string = '';
 filters: { [s: string]: FilterMetadata } = {};
-
 // Dropdown and options
 enabledOptions = [
   { label: 'Enabled', value: 1 },
   { label: 'Disabled', value: 0 }
 ];
-
 // Validation flags
 isGroupNameDuplicate: boolean = false;
 percentageWarning: boolean = false;
-
 // Pagination properties
 first: number = 0;
 totalRecords: number = 0;
 
+groupAchievements: any[] = [];
+percentageAchieved: any[] = [];
+percentageAttitude: any[] = [];
+totalPercentageAttitude: number = 0;
+totalPercentageAchieved: number = 0;
+totalPercentage: number = 0;
+userPercentage:number = 0;
 
   constructor(
     private groupAttitudeSkillService: GroupAttitudeSkillService,
-    private router: Router
+    private groupAchievementService: GroupAchievementService
   ) {}
 
   ngOnInit() {
-    this.getAllGroupAttitudeSkills();
+    this.getAllGroup();
+  }
+
+  getAllGroup(){
+    
+    forkJoin({
+      groupAchievement: this.groupAchievementService.getAllGroupAchievements(),
+      attitudeSkill:  this.groupAttitudeSkillService.getAllGroupAttitudeSkills()
+    }).subscribe(({groupAchievement, attitudeSkill}) => {
+      this.groupAchievements = groupAchievement.content;
+      console.log('Group Achievement:', this.groupAchievements)
+      this.totalRecords = groupAchievement.totalRecords;
+      this.percentageAchieved = this.groupAchievements.map((item) => item.percentage);
+      this.totalPercentageAchieved= this.percentageAchieved.reduce((acc, item) => acc + item, 0);
+
+
+      this.groupAttitudeSkills = attitudeSkill.content;
+      this.totalRecords = attitudeSkill.totalRecords;
+      this.filteredGroupAttitudeSkills = this.groupAttitudeSkills;
+      this.loading = false;
+      this.percentageAttitude = this.groupAttitudeSkills.map((item) => item.percentage);
+      this.totalPercentageAttitude = this.percentageAttitude.reduce((acc, item) => acc + item, 0);
+
+
+        this.sumPercentage();
+    })
+  }
+
+  sumPercentage(){
+    this.totalPercentage = this.totalPercentageAttitude + this.totalPercentageAchieved;
+    // console.log('ttal' , this.totalPercentage);
   }
 
   getAllGroupAttitudeSkills() {
@@ -148,6 +184,8 @@ validatePercentage() {
   editGroupAttitudeSkill(groupAttitudeSkill: any) {
     console.log('Mengedit group AttitudeSkill', groupAttitudeSkill);
     this.groupAttitudeSkill = { ...groupAttitudeSkill };
+    this.userPercentage = this.groupAttitudeSkill.percentage;
+    // console.log('user percentage', this.userPercentage);
     this.groupAttitudeSkillDialog = true;
     this.isGroupNameDuplicate = false;
   }
@@ -190,6 +228,41 @@ validatePercentage() {
 
    saveGroupAttitudeSkill() {
     // Panggil fungsi validasi
+    if (this.groupAttitudeSkill.id){
+      const maxValue = 100 - this.totalPercentage + this.userPercentage;
+      if (this.groupAttitudeSkill.percentage > maxValue) {
+        Swal.fire({
+          icon: 'error',
+          title: 'Gagal Menyimpan',
+          text: `Nilai Percentage tidak boleh lebih dari ${maxValue}.`,
+          confirmButtonText: 'Kembali',
+          // style: {
+          //   'z-index': 9999
+          // }
+          customClass: {
+            popup: 'custom-swal-popup'
+          }
+        });
+        return;
+      }
+    }else{
+      const maxValue = 100 - this.totalPercentage;
+      if (this.groupAttitudeSkill.percentage > maxValue) {
+        Swal.fire({
+          icon: 'error',
+          title: 'Gagal Menyimpan',
+          text: `Nilai Percentage tidak boleh lebih dari ${maxValue}.`,
+          confirmButtonText: 'Kembali',
+          // style: {
+          //   'z-index': 9999
+          // }
+          customClass: {
+            popup: 'custom-swal-popup'
+          }
+        });
+        return;
+    }
+  }
     if (!this.validateGroupAttitudeSkill()) {
       return; // Jika validasi gagal, hentikan proses penyimpanan
     }
@@ -206,6 +279,7 @@ validatePercentage() {
             title: 'Sukses!',
             text: 'Berhasil memperbarui Grup Sikap dan Keahlian!'
           });
+          window.location.reload()
         },
         error: (error) => {
           Swal.fire({
@@ -226,6 +300,7 @@ validatePercentage() {
             title: 'Sukses!',
             text: 'Berhasil menambahkan Grup Sikap dan Keahlian!'
           });
+          window.location.reload()
         },
         error: (error) => {
           Swal.fire({
@@ -266,6 +341,7 @@ validatePercentage() {
             timer: 1500
           });
           this.getAllGroupAttitudeSkills();
+          window.location.reload()
         },
         error: (error) => {
           Swal.fire({

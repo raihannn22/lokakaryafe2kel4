@@ -19,6 +19,7 @@ import { DashboardComponent } from './component/dashboard/dashboard.component';
 import { EmpDevplanComponent } from './component/emp-devplan/emp-devplan.component';
 import { ViewEmpdevplanComponent } from './component/view-empdevplan/view-empdevplan.component';
 import { SummarySelfComponent } from './component/summary-self/summary-self.component';
+import { FullAssSumComponent } from './component/full-ass-sum/full-ass-sum.component';
 
 
 export const routes: Routes = [
@@ -122,6 +123,11 @@ export const routes: Routes = [
     path: 'user/summary-view',
     canActivate: [authGuard],
     component: SummarySelfComponent,
+  },
+  {
+    path: 'user/full-ass-summary',
+    canActivate: [authGuard],
+    component: FullAssSumComponent,
   },
   {
     path: '**',

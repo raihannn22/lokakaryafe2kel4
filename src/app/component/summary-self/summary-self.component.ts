@@ -32,7 +32,7 @@ export class SummarySelfComponent {
   attitudeSkill: any[] = [];
   achievement: any[] = [];
   groupedAchievement: any[] = [];
-  combinedData: any[] = []; 
+  combinedData: any[] = [];
   groupedData: any[] = [];
   normalizedData: any = [];
   userId: any = '';
@@ -47,41 +47,25 @@ export class SummarySelfComponent {
 
   constructor(private summaryService: SummaryService) {
   }
-  
+
 
   ngOnInit() {
       this.userId = localStorage.getItem('id');
       // this.getAllEmpAttitudeSkill();
-      this.getAllEmpAchievement();
- 
+      this.getAll();
+
   }
 
   onYearChange(event: any){
     console.log(this.selectedYear, 'ini selected year');
-    this.getAllEmpAchievement();
+    this.getAll();
   }
 
   ngOnChanges() {
 
-
   }
 
-
-
-  // getAllEmpAttitudeSkill() {
-  //   this.summaryService.getEmpAttitudeSkillById(this.userId).subscribe({
-  //     next: (response) => {
-  //       this.attitudeSkill = response.content; // Data ada di 'content'
-  //       console.log('ini isi attitude skill:', this.attitudeSkill);
-  //       this.mapData(); // Lakukan mapping setelah data attitude diterima
-  //     },
-  //     error: (error) => {
-  //       console.error('Error fetching attitude skills:', error);
-  //     },
-  //   });
-  // }
-
-  getAllEmpAchievement() {
+  getAll() {
     forkJoin({
       empAtittudeSkill:  this.summaryService.getEmpAttitudeSkillByIdandYear(this.userId, this.selectedYear),
       empAchievement:  this.summaryService.getEmpAchievementByIdandYear(this.userId, this.selectedYear),
@@ -97,22 +81,22 @@ export class SummarySelfComponent {
 
       this.groupedAchievement = this.groupedAchievement.map(group => {
         const matchingAchievements = this.achievement.filter(ach => ach.achievement_id === group.id);
-        const score = matchingAchievements.length > 0 
-          ? matchingAchievements.reduce((sum, ach) => sum + ach.score, 0) 
+        const score = matchingAchievements.length > 0
+          ? matchingAchievements.reduce((sum, ach) => sum + ach.score, 0)
           : 0;
-    
+
         return {
           ...group,
           score // Tambahkan score ke dalam setiap grup
         };
-  
+
       });
       console.log('Processed Group Achievement:', this.groupedAchievement);
 
-      
+
       this.mapData();
       this.groupedData = this.groupAndSumData(this.combinedData);
-      console.log('ini',this.groupedData); 
+      console.log('ini',this.groupedData);
 
       // Hitung total percentage
       this.totalPercentage = this.groupedData.reduce((total, item) => total + item.percentage, 0);
@@ -180,7 +164,5 @@ export class SummarySelfComponent {
 }
 
 }
-function then(arg0: () => void) {
-  throw new Error('Function not implemented.');
-}
+
 
