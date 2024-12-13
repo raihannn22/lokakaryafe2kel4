@@ -1,5 +1,10 @@
 <div class="card">
     <div class="p-5">
+        @if (totalPercentage == 100) {
+            <p-message severity="success" text="percentage grup sudah 100%" ></p-message>
+           }@else {
+             <p-message severity="error" text="percentage belum 100% masih tersisa total {{100 -totalPercentage}}%" ></p-message>
+           }
         <div class="text-center mb-2">
             <h3 style="font-weight: bold; font-size: 2.25rem;">Grup Sikap dan Keahlian</h3>
         </div>
@@ -58,7 +63,6 @@
                 </tr>
             </ng-template>
         </p-table>
-
     </div>
 </div>
 
@@ -78,7 +82,7 @@
         <div class="p-field">
             <label for="percentage">Persentasi</label>
             <input type="number" pInputText id="percentage" [(ngModel)]="groupAttitudeSkill.percentage"
-                (ngModelChange)="validatePercentage()" />
+                (ngModelChange)="validatePercentage()" max={{100-totalPercentage+userPercentage}} />
 
             <small *ngIf="percentageWarning" class="p-error">Persentasi tidak boleh lebih dari 100!</small>
         </div>

@@ -338,35 +338,69 @@ export class GroupAchievementComponent implements OnInit {
   }
 
   deleteGroupAchievement(id: string) {
-    Swal.fire({
-      title: 'Apakah anda yakin?',
-      text: 'Data tidak dapat kembali jika dihapus!',
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonText: 'Hapus!',
-      cancelButtonText: 'Batal',
-    }).then((result) => {
-      if (result.isConfirmed) {
-        this.groupAchievementService.deleteGroupAchievement(id).subscribe({
-          next: () => {
-            Swal.fire({
-              icon: 'success',
-              title: 'Berhasil Menghapus Grup Pencapaian!',
-              showConfirmButton: false,
-              timer: 1500,
-            });
-            this.getAllGroupAchievements();
-          },
-          error: (error) => {
-            Swal.fire({
-              icon: 'error',
-              title: 'Error',
-              text: 'Gagal Menghapus Grup Pencapaian!.',
-              confirmButtonText: 'Coba Lagi',
-            });
-          },
-        });
-      }
-    });
-  }
+// <<<<<<< banu
+//     Swal.fire({
+//       title: 'Apakah anda yakin?',
+//       text: 'Data tidak dapat kembali jika dihapus!',
+//       icon: 'warning',
+//       showCancelButton: true,
+//       confirmButtonText: 'Hapus!',
+//       cancelButtonText: 'Batal',
+//     }).then((result) => {
+//       if (result.isConfirmed) {
+//         this.groupAchievementService.deleteGroupAchievement(id).subscribe({
+//           next: () => {
+//             Swal.fire({
+//               icon: 'success',
+//               title: 'Berhasil Menghapus Grup Pencapaian!',
+//               showConfirmButton: false,
+//               timer: 1500,
+//             });
+//             this.getAllGroupAchievements();
+//           },
+//           error: (error) => {
+//             Swal.fire({
+//               icon: 'error',
+//               title: 'Error',
+//               text: 'Gagal Menghapus Grup Pencapaian!.',
+//               confirmButtonText: 'Coba Lagi',
+//             });
+//           },
+//         });
+//       }
+//     });
+//   }
+// =======
+  Swal.fire({
+    title: 'Apakah anda yakin?',
+    text: "Data tidak dapat kembali jika dihapus!",
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonText: 'Hapus!',
+    cancelButtonText: 'Batal'
+  }).then((result) => {
+    if (result.isConfirmed) {
+      this.groupAchievementService.deleteGroupAchievement(id).subscribe({
+        next: () => {
+          Swal.fire({
+            icon: 'success',
+            title: 'Berhasil Menghapus Grup Pencapaian!',
+            showConfirmButton: false,
+            timer: 1500
+          });
+          this.getAllGroupAchievements();
+          window.location.reload()
+        },
+        error: (error) => {
+          Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: 'Gagal Menghapus Grup Pencapaian!.',
+            confirmButtonText: 'Coba Lagi'
+          });
+        }
+      });
+    }
+  });
+}
 }

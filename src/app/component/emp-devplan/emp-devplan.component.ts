@@ -21,6 +21,7 @@ export class EmpDevplanComponent implements OnInit {
   Year: number = new Date().getFullYear();
   empdevplans: any[] = [];
   userId: any;
+  remove:boolean = true;
 
   constructor(private empDevplanService: EmpDevplanService) { }
   validateKeterangan(keterangan: any) {
@@ -130,8 +131,9 @@ export class EmpDevplanComponent implements OnInit {
       }  else {
 
         Swal.fire({
+          html: 'Apakah Anda yakin ingin menyimpan data ini? <br> data yang di submit tidak dapat diubah',
           title: 'Are you sure?',
-          text: 'Apakah Anda yakin ingin menyimpan data ini?',
+          // text: 'Apakah Anda yakin ingin menyimpan data ini? \ data yang di submit tidak dapat diubah',
           icon: 'warning',
           showCancelButton: true,
           confirmButtonColor: '#3085d6',

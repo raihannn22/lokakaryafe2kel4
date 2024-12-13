@@ -109,6 +109,8 @@ export class DivisiComponent {
       }
     });
   }
+
+  
   
 }
 

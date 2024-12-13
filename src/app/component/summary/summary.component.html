@@ -1,69 +1,124 @@
-<div class="card flex justify-content-center">
-    <!-- Tombol untuk membuka dialog -->
-    <!-- <p-button label="Tambah Pengguna" icon="pi pi-plus" (click)="visible = true" class="mb-3"></p-button> -->
-    <p-dialog header="Assessment Summary" [modal]="true" (onHide)="closeDialog()" [(visible)]="visible" [style]="{ width: '70rem' , height: '50rem'}">
-        <p-table 
-        [value]="groupedData" 
-        sortField="source" 
-        sortMode="single" 
-        [scrollable]="true" 
-        rowGroupMode="subheader" 
-        groupRowsBy="source" 
-        styleClass="p-datatable-gridlines"
-        [tableStyle]="{'min-width': '60rem'}">
-            <ng-template pTemplate="header">
-                <tr>
-                    <th>Aspect</th>
-                    <th class="text-center">Score</th>
-                    <th class="text-center">Weight</th>
-                    <th class="text-center"r>Final Score</th>            
-                </tr>
-            </ng-template>
-            <ng-template pTemplate="groupheader" let-customer>
-                <tr pRowGroupHeader>
-                    <td colspan="4" class="text-center font-bold">
-                        <span class="font-bold ml-2">{{customer.source}}</span>
-                    </td>
-                </tr>
-            </ng-template>
-            <!-- <ng-template pTemplate="groupfooter" let-customer>
-                <tr>
-                    <td colspan="5" class="text-right font-bold pr-6">
-                        Total Customers: {{calculateCustomerTotal(customer.representative.name)}}
-                    </td>
-                </tr>
-            </ng-template> -->
-            <ng-template pTemplate="body" let-customer let-rowIndex="rowIndex">
-                <tr>
-                    <td >
-                        {{customer.group}}
-                    </td>
-                    <td class="text-center">
-                        {{customer.score}}
-                    </td>
-                    <td class="text-center">
-                        {{customer.percentage}}
-                    </td>
-                    <td class="text-center">
-                        {{customer.score * customer.percentage / 100}}
-                    </td>
-                </tr>
-            </ng-template>
-            <ng-template pTemplate="footer" let-customer>
-                <tr>
-                    <td></td>
-                    <td></td>
-                    <td class="text-center">
-                       {{totalPercentage}}%
-                    </td>
-                    <td  class="text-center font-bold pr-6">
-                        {{totalFinalScore}}
-                    </td>
-                </tr>
-            </ng-template>
-    </p-table>
+<div class="card">
+    <p-dialog 
+        header="Assessment Summary" 
+        [modal]="true" 
+        (onHide)="closeDialog()" 
+        [(visible)]="visible" 
+        [style]="{ width: '75vw', maxWidth: '75rem' }"
+        [contentStyle]="{ 'max-height': '80vh', 'overflow': 'auto' }"
+        styleClass="assessment-dialog">
+        
+        <!-- Header Section -->
+        <div class="p-4 bg-gray-50 rounded-lg mb-4">
+           
+            <!-- Year Selection Section -->
+            <div class="grid grid-cols-1 md:grid-cols-12 gap-4 items-end">
+                <div class="md:col-span-9">
+                    <!-- <label class="block mb-2 font-medium text-gray-700">Select Year</label> -->
+                    <p-dropdown
+                        [options]="years"
+                        [(ngModel)]="selectedYear"
+                        placeholder="Select Year"
+                        (onChange)="onYearChange($event)"
+                        [virtualScroll]="true"
+                        [virtualScrollItemSize]="38"
+                        styleClass="w-full"
+                        [style]="{'width': '100%'}">
+                    </p-dropdown>
+                </div>
+                <div class="md:col-span-3">
+                    <button pButton
+                        pRipple
+                        type="button"
+                        label="Search"
+                        icon="pi pi-search"
+                        class="p-button-primary w-full"
+                        (click)="submit()">
+                    </button>
+                </div>
+            </div>
 
+            <div class="text-center mb-1">
+                <h2 class="text-2xl font-bold text-gray-800 m-0">Assessment Summary</h2>
+            </div>
+        </div>
 
+        <!-- Table Section -->
+        <div class="mb-6">
+            <p-table 
+                [value]="groupedData" 
+                sortField="source" 
+                sortMode="single" 
+                [scrollable]="true" 
+                rowGroupMode="subheader" 
+                groupRowsBy="source" 
+                styleClass="p-datatable-gridlines p-datatable-sm"
+                [tableStyle]="{'min-width': '100%'}">
+                
+                <ng-template pTemplate="header">
+                    <tr class="bg-gray-100">
+                        <th class="w-4/12">Aspect</th>
+                        <th class="w-2/12 text-center">Score</th>
+                        <th class="w-2/12 text-center">Weight</th>
+                        <th class="w-4/12 text-center">Final Score</th>            
+                    </tr>
+                </ng-template>
+
+                <ng-template pTemplate="groupheader" let-customer>
+                    <tr pRowGroupHeader class="bg-blue-50">
+                        <td colspan="4" class="text-center py-3">
+                            <span class="font-bold text-blue-800">{{customer.source}}</span>
+                        </td>
+                    </tr>
+                </ng-template>
+
+                <ng-template pTemplate="body" let-customer let-rowIndex="rowIndex">
+                    <tr class="hover:bg-gray-50">
+                        <td class="py-3">{{customer.group}}</td>
+                        <td class="text-center">{{customer.score}}</td>
+                        <td class="text-center">{{customer.percentage}}</td>
+                        <td class="text-center">{{customer.score * customer.percentage / 100}}</td>
+                    </tr>
+                </ng-template>
+
+                <ng-template pTemplate="footer" let-customer>
+                    <tr class="bg-gray-100 font-semibold">
+                        <td colspan="2" class="text-right pr-4">Total:</td>
+                        <td class="text-center">{{totalPercentage}}%</td>
+                        <td class="text-center">{{totalFinalScore}}</td>
+                    </tr>
+                </ng-template>
+            </p-table>
+        </div>
+
+        <div class="bg-blue-50 p-6 rounded-lg shadow-sm">
+            <div class="flex items-center justify-center mb-5">
+                <i class="pi pi-lightbulb text-blue-500 mr-2 text-xl"></i>
+                <h3 class="text-xl font-bold text-blue-800 m-0">Suggestions</h3>
+            </div>
+            
+            <div class="suggestion-container">
+                @if (suggestion == '') {
+                    <div class="flex items-center justify-center p-4 bg-white rounded-lg">
+                        <i class="pi pi-info-circle text-gray-400 mr-2"></i>
+                        <span class="text-gray-500">No suggestions available at the moment</span>
+                    </div>
+                }
+                @for (item of suggestion; track $index) {
+                    <div class="bg-white p-4 rounded-lg mb-3 shadow-sm hover:shadow-md transition-shadow duration-200">
+                        <div class="flex">
+                            <div class="flex-shrink-0 mr-3">
+                                <div class="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
+                                    <span class="text-blue-600 font-semibold">{{$index + 1}}</span>
+                                </div>
+                            </div>
+                            <div class="flex-grow">
+                                <p class="text-gray-700 mb-0 leading-relaxed">{{item.suggestion}}</p>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
     </p-dialog>
-  </div>
-  
+</div>

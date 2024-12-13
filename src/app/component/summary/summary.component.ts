@@ -5,6 +5,9 @@ import { SummaryService } from '../../summary.service';
 import { get } from 'http';
 import { CommonModule, NgIf } from '@angular/common';
 import { forkJoin } from 'rxjs';
+import { DropdownModule } from 'primeng/dropdown';
+import { FormsModule } from '@angular/forms';
+import { ButtonModule } from 'primeng/button';
 
 interface Item {
   group: string;
@@ -22,12 +25,11 @@ interface GroupedItem {
 @Component({
   selector: 'app-summary',
   standalone: true,
-  imports: [DialogModule, TableModule, CommonModule, NgIf,],
+  imports: [DialogModule, TableModule, CommonModule, DropdownModule, FormsModule, ButtonModule],
   templateUrl: './summary.component.html',
   styleUrl: './summary.component.css'
 })
 export class SummaryComponent implements OnInit{
- 
   @Input() visible: boolean = false; // Menyambungkan dengan property di komponen induk
   @Output() visibleChange = new EventEmitter<boolean>(); // Emit perubahan visibility
   @Input() user: any = {};
@@ -37,81 +39,106 @@ export class SummaryComponent implements OnInit{
   combinedData: any[] = []; 
   groupedData: any[] = [];
   normalizedData: any = [];
+  suggestion: any = [];
 
   totalPercentage: number = 0;
   totalFinalScore: number = 0;
 
+  selectedYear: number = 2024;
+  years: number[] = [
+    2023, 2024, 2025, 2026, 2027, 2028, 2029, 2030, 2031, 2032, 2033, 2034,
+    2035, 2036, 2037, 2038, 2039, 2040, 2041, 2042, 2043, 2044, 2045, 2046,
+    2047, 2048, 2049, 2050,
+  ];
+
+  onYearChange(event: any) {
+    console.log(this.selectedYear);
+  }
+
+  submit() {
+    this.getAllEmpAchievement();
+  }
   constructor(private summaryService: SummaryService) {
   }
 
   ngOnInit() {
+    
   }
 
   ngOnChanges() {
     console.log('ini data user di summary', this.user.id);
-    this.getAllEmpAttitudeSkill();
+    // this.getAllEmpAttitudeSkill();
     this.getAllEmpAchievement();
-    this.groupedData = this.groupAndSumData(this.combinedData);
-    this.totalPercentage = this.groupedData.reduce((total, item) => total + item.percentage, 0);
-    this.totalFinalScore = this.groupedData.reduce((total, item) => total + (item.score * (item.percentage)/100), 0);
-;
+    // this.groupedData = this.groupAndSumData(this.combinedData);
+    // this.totalPercentage = this.groupedData.reduce((total, item) => total + item.percentage, 0);
+    // this.totalFinalScore = this.groupedData.reduce((total, item) => total + (item.score * (item.percentage)/100), 0);
+    // this.getAllSuggestion();
   }
 
   closeDialog() {
     this.visibleChange.emit(false);
   }
 
-  getAllEmpAttitudeSkill() {
-    this.summaryService.getEmpAttitudeSkillById(this.user.id).subscribe({
-      next: (response) => {
-        this.attitudeSkill = response.content; // Data ada di 'content'
-        console.log('ini isi attitude skill:', this.attitudeSkill);
-        this.mapData(); // Lakukan mapping setelah data attitude diterima
-      },
-      error: (error) => {
-        console.error('Error fetching attitude skills:', error);
-      },
-    });
+  // getAllEmpAttitudeSkill() {
+  //   this.summaryService.getEmpAttitudeSkillByIdandYear(this.user.id, this.selectedYear).subscribe({
+  //     next: (response) => {
+  //       this.attitudeSkill = response.content; // Data ada di 'content'
+  //       console.log('ini isi attitude skill:', this.attitudeSkill);
+  //       this.mapData(); // Lakukan mapping setelah data attitude diterima
+  //     },
+  //     error: (error) => {
+  //       console.error('Error fetching attitude skills:', error);
+  //     },
+  //   });
+  // }
 
-   
-  }
+  // getAllSuggestion(){
+  //   this.summaryService.getAllSuggestionByYear(this.user.id, this.selectedYear).subscribe({
+  //     next: (response) => {
+  //       this.suggestion = response.content; // Data ada di 'content'
+  //       console.log('ini isi suggestionnya:', this.suggestion); 
+  //   }, 
+  //     error: (error) => {
+  //       console.error('Error fetching attitude skills:', error);
+  //   },
+  // })
+  // }
 
   getAllEmpAchievement() {
-    // this.summaryService.getEmpAchievementById(this.user.id).subscribe({
-    //   next: (response) => {
-    //     this.achievement = response.content; // Data ada di 'content'
-    //     console.log('ini isi achievement:', this.achievement);
-    //     this.mapData(); // Lakukan mapping setelah data achievement diterima
-    //   },
-    //   error: (error) => {
-    //     console.error('Error fetching achievements:', error);
-    //   },
-    // });
-
     forkJoin({
-      emppAchievement:  this.summaryService.getEmpAchievementById(this.user.id),
+      suggestion:  this.summaryService.getAllSuggestionByYear(this.user.id, this.selectedYear),
+      empAtt :  this.summaryService.getEmpAttitudeSkillByIdandYear(this.user.id, this.selectedYear),
+      emppAchievement:  this.summaryService.getEmpAchievementByIdandYear(this.user.id, this.selectedYear),
       groupAchievement: this.summaryService.getAllAchievements()
-    }).subscribe(({emppAchievement, groupAchievement}) => {
+    }).subscribe(({emppAchievement, groupAchievement, empAtt, suggestion}) => {
       this.achievement = emppAchievement.content;
-      console.log('ini Achievement:', this.achievement)
+      // console.log('ini Achievement:', this.achievement)
       this.groupedAchievement = groupAchievement.content;
-      console.log('Group Achievement:', this.groupedAchievement)
-    })   
+      // console.log('Group Achievement:', this.groupedAchievement);
+      this.attitudeSkill = empAtt.content; // Data ada di 'content'
+      // console.log('ini isi attitude skill:', this.attitudeSkill);
+      this.suggestion = suggestion.content; // Data ada di 'content'
+        // console.log('ini isi suggestionnya:', this.suggestion); 
+      
+        this.groupedAchievement = this.groupedAchievement.map(group => {
+          const matchingAchievements = this.achievement.filter(ach => ach.achievement_id === group.id);
+          const score = matchingAchievements.length > 0 
+            ? matchingAchievements.reduce((sum, ach) => sum + ach.score, 0) 
+            : 0;
+      
+          return {
+            ...group,
+            score // Tambahkan score ke dalam setiap grup
+          };
+        });
+        this.mapData();
+        this.groupedData = this.groupAndSumData(this.combinedData);
+        this.totalPercentage = this.groupedData.reduce((total, item) => total + item.percentage, 0);
+        this.totalFinalScore = this.groupedData.reduce((total, item) => total + (item.score * (item.percentage)/100), 0);
+        console.log('Processed Group Achievement:', this.groupedData);
+    })
 
-    this.groupedAchievement = this.groupedAchievement.map(group => {
-      const matchingAchievements = this.achievement.filter(ach => ach.achievement_id === group.id);
-      const score = matchingAchievements.length > 0 
-        ? matchingAchievements.reduce((sum, ach) => sum + ach.score, 0) 
-        : 0;
   
-      return {
-        ...group,
-        score // Tambahkan score ke dalam setiap grup
-      };
-    });
-  
-    console.log('Processed Group Achievement:', this.groupedAchievement);
-    this.mapData();
   }
 
   mapData() {

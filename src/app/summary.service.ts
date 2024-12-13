@@ -32,6 +32,22 @@ export class SummaryService {
     return this.http.get(`http://localhost:8081/emp-attitude-skill/user/${userId}/year/${year}`);
   }
 
+  getAllSuggestionByYear(userId: string, year: number): Observable<any> {
+    return this.http.get(`http://localhost:8081/emp-suggestion/user/${userId}/year/${year}`);
+  }
+
+  getEmpAttitudeSkillByYear(year: number): Observable<any> {
+    return this.http.get(`http://localhost:8081/emp-attitude-skill/get/year/${year}`);
+  }
+
+  getEmpAchievementByYear(year: number): Observable<any> {
+    return this.http.get(`http://localhost:8081/emp-achievement-skill/get/year/${year}`);
+  }
+
+  getTotalScore(year: number): Observable<any> {
+    return this.http.get(`http://localhost:8081/assessmentSummary/total/${year}`);
+  }
+
 
 
 }
