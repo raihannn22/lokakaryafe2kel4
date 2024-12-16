@@ -11,8 +11,8 @@ export class EmpTechnicalSkillService {
   constructor(private http: HttpClient) {}
 
   getAllTechnicalSkills(): Observable<any> {
-  return this.http.get<any>('http://localhost:8081/technical-skill/all');
-}
+    return this.http.get<any>('http://localhost:8081/technical-skill/all');
+  }
 
   saveAllEmpTechnicalSkills(data: any[]): Observable<any> {
     return this.http.post(`${this.apiUrl}/save-all`, data);
@@ -21,5 +21,13 @@ export class EmpTechnicalSkillService {
   getEmpTechnicalSkillByUserId(userId: string): Observable<any> {
     return this.http.get<any[]>(`${this.apiUrl}/user/${userId}`);
   }
-  
+
+  getEmpTechnicalSkillsByUserIdAndAssesmentYear(
+    userId: string,
+    assessmentYear: number
+  ): Observable<any> {
+    return this.http.get<any[]>(
+      `${this.apiUrl}/user/${userId}/year/${assessmentYear}`
+    );
+  }
 }
