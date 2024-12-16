@@ -36,7 +36,6 @@ export class ProfilComponent {
     this.userService.getUserById(this.userId).subscribe(
       (userDetails: any) => {
         this.userDetails = userDetails.content;
-        console.log('User details:', this.userDetails);
       },
       (error: any) => {
         console.error('Error fetching user details:', error);

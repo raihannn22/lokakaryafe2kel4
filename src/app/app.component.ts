@@ -14,13 +14,16 @@ import { NavbarComponent } from './component/navbar/navbar.component';
 export class AppComponent {
   constructor(private router: Router) {}
   title = 'lokakaryafe2';
-
+  
   sidebarVisible: boolean = false;
-
+  
   onToggleSidebar(): void {
-    this.sidebarVisible = !this.sidebarVisible;  // Toggle nilai sidebarVisible
+    this.sidebarVisible = true;  // Toggle nilai sidebarVisible
   }
-
+  
+  onSidebarHide() {
+    this.sidebarVisible = false;
+  }
   isLoginRoute(): boolean {
     return this.router.url === '/login'; // Memeriksa jika URL adalah /login
   }

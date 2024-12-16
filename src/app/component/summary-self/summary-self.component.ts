@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { DialogModule } from 'primeng/dialog';
 import { TableModule } from 'primeng/table';
-import { SummaryService } from '../../summary.service';
+import { SummaryService } from '../../service/summary/summary.service';
 import { CommonModule, NgIf } from '@angular/common';
 import { forkJoin } from 'rxjs';
 import { EmpSuggestionComponent } from '../emp-suggestion/emp-suggestion.component';

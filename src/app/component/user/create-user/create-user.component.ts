@@ -69,8 +69,7 @@ export class CreateUserComponent {
   getAllRole() {
     this.userService.getAllRole().subscribe({
       next: (response) => {
-        this.roles = response.content; // Data ada di 'content'
-        console.log('Total rows:', this.roles);
+        this.roles = response.content;
       },
       error: (error) => {
         console.error('Error fetching users:', error);
@@ -81,8 +80,7 @@ export class CreateUserComponent {
   getAllDivision() {
     this.userService.getAllDivision().subscribe({
       next: (response) => {
-        this.divisions = response.content; // Data ada di 'content'
-        console.log('Total rows:', this.divisions);
+        this.divisions = response.content;
       },
       error: (error) => {
         console.error('Error fetching users:', error);
@@ -93,8 +91,7 @@ export class CreateUserComponent {
   getAllUsers() {
     this.userService.getAllUsers().subscribe({
       next: (response) => {
-        this.oldUsers = response.content; // Data ada di 'content'
-        // console.log('Total rows:', this.oldUsers);
+        this.oldUsers = response.content;
       },
       error: (error) => {
         console.error('Error fetching users:', error);

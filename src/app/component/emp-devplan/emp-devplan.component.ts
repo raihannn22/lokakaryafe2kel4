@@ -45,14 +45,11 @@ export class EmpDevplanComponent implements OnInit {
         title: item.PLAN,
         keterangans: [{ value: '' }]  // Gunakan objek untuk tiap keterangan
       }));
-      console.log('ini perihal', this.empdevplans);
     });
   }
 
   loadExistingData() {
     this.empDevplanService.getAllEmpDevPlan(this.userId, this.Year).subscribe(data => {
-      console.log('Data yang diterima:', data);
-
       data.content.forEach((item: any) => {
         const perihal = this.empdevplans.find(p => p.id === item.DEV_PLAN_ID);
         if (perihal) {
@@ -111,10 +108,10 @@ export class EmpDevplanComponent implements OnInit {
   // Simpan data ke database
     saveToDatabase() {
       const dataToSave = this.empdevplans.flatMap((perihal: any) =>
-        perihal.keterangans.map((keterangan: { value: string }) => ({  // Berikan tipe yang benar
-          DEV_PLAN_ID: perihal.id,             // dev_plan_id dari perihal.id
-          DETAIL: keterangan.value.trim(),     // detail dari keterangan input
-          ASSESSMENT_YEAR: this.Year           // assessment_year dari currentYear
+        perihal.keterangans.map((keterangan: { value: string }) => ({ 
+          DEV_PLAN_ID: perihal.id,
+          DETAIL: keterangan.value.trim(),
+          ASSESSMENT_YEAR: this.Year          
         }))
       );
       const isAnyInputEmpty = this.empdevplans.some(empdevplan =>
@@ -133,7 +130,6 @@ export class EmpDevplanComponent implements OnInit {
         Swal.fire({
           html: 'Apakah Anda yakin ingin menyimpan data ini? <br> data yang di submit tidak dapat diubah',
           title: 'Are you sure?',
-          // text: 'Apakah Anda yakin ingin menyimpan data ini? \ data yang di submit tidak dapat diubah',
           icon: 'warning',
           showCancelButton: true,
           confirmButtonColor: '#3085d6',
@@ -141,7 +137,6 @@ export class EmpDevplanComponent implements OnInit {
           confirmButtonText: 'Yes, change it!'
         }).then((result) => {
           if (result.isConfirmed) {
-            // Panggil service untuk ubah password jika user konfirmasi
             this.empDevplanService.saveEmpDevPlan(dataToSave).subscribe(
               () => {
                 Swal.fire({
@@ -149,16 +144,13 @@ export class EmpDevplanComponent implements OnInit {
                   title: 'Success',
                   text: 'data berhasil disimpan!',
                 }).then((result) => {
-                  // Cek jika tombol OK ditekan
                   if (result.isConfirmed) {
-                    // Reload halaman setelah menekan OK
                     window.location.reload();
                   }
                 });
               }
               ,
               (error: any) => {
-                // Tampilkan Swal error jika ada kesalahan
                 Swal.fire({
                   icon: 'error',
                   title: 'Error',
@@ -171,6 +163,5 @@ export class EmpDevplanComponent implements OnInit {
         });
 
       }
-    // Lakukan penyimpanan ke database di sini
     }
 }

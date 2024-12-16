@@ -49,13 +49,6 @@ export class NavbarComponent {
                 command: () => this.toggleSidebar.emit()
                 
             },
-            // {
-            //     label: 'Logout',
-            //     styleClass: 'p-mr-auto',
-            //     icon: 'pi pi-fw pi-sign-out',
-            //     command: () => {this.confirmDelete()
-            //     }
-            // }, 
              {
               label: `${nama}`,
               icon: 'pi pi-user',

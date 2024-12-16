@@ -23,7 +23,7 @@ import { Router } from '@angular/router';
 import { DropdownModule } from 'primeng/dropdown';
 import { MultiSelectModule } from 'primeng/multiselect';
 import { forkJoin } from 'rxjs';
-import { SummaryService } from '../../../summary.service';
+import { SummaryService } from '../../../service/summary/summary.service';
 
 @Component({
   selector: 'app-user',
@@ -124,17 +124,6 @@ export class UserComponent implements OnInit {
   }
 
   getAllUsers() {
-    // this.userService.getAllUsers().subscribe({
-    //   next: (response) => {
-    //     this.users = response.content;
-    //     console.log('ini usernyaa', this.users);
-    //     this.loading = false;
-    //   },
-    //   error: (error) => {
-    //     console.error('Error fetching users:', error);
-    //     this.loading = false;
-    //   },
-    // });
 
     forkJoin({
       user : this.userService.getAllUsers(),
@@ -152,10 +141,6 @@ export class UserComponent implements OnInit {
           totalScore: score ? score.totalScore : 0 // Tambahkan totalScore
         };
       });
-      
-      
-      console.log( this.usersWithScore);
-      
     })
     
 
@@ -172,7 +157,6 @@ export class UserComponent implements OnInit {
       },
       complete: () => {
         this.divisionName = this.divisi.map(item => item.DIVISION_NAME);
-        // console.log(this.divisionName, 'ini division name');
       }
 
 
@@ -191,7 +175,6 @@ export class UserComponent implements OnInit {
 
   openDetailDialog(user: any) {
     this.selectedUser = user;
-    console.log(this.selectedUser, 'ini detail user!!!');
     this.displayDetailDialog = true;
   }
 
@@ -199,7 +182,6 @@ export class UserComponent implements OnInit {
 
   // Fungsi menangani event user yang dibuat
   onUserCreated(newUser: any) {
-    console.log('User baru:', newUser);
     // Logika untuk menyimpan user ke database (via API)
     this.getAllUsers();
     this.displayCreateDialog = false;
