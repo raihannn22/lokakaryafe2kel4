@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { SidebarModule } from 'primeng/sidebar';
 import { ButtonModule } from 'primeng/button';
 import { RippleModule } from 'primeng/ripple';
@@ -8,6 +8,7 @@ import { Sidebar } from 'primeng/sidebar';
 import { RouterLink } from '@angular/router';
 import { MenuManagementService } from '../../service/menu-management/menu-management.service';
 import { CommonModule } from '@angular/common';
+import { emit } from 'process';
 
 @Component({
   selector: 'app-sidebar',
@@ -18,11 +19,16 @@ import { CommonModule } from '@angular/common';
 })
 export class SidebarComponent implements OnInit{
   constructor(private menuManagementService: MenuManagementService) {}
-  @ViewChild('sidebarRef') sidebarRef!: Sidebar;
+  @ViewChild('sidebarRef') sidebarRef !: Sidebar;
   @Input() sidebarVisible: boolean = false;
+  @Output() sidebarClosed = new EventEmitter<void>();
   menus: any[] = [];
   closeCallback(e: Event): void {
       this.sidebarRef.close(e);
+  }
+
+  onSidebarHide(): void {
+    this.sidebarClosed.emit();
   }
   role: string | null = '';
 

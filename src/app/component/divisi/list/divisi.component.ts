@@ -51,8 +51,7 @@ export class DivisiComponent {
   getAllDivisions() {
     this.divisiService.getAllDivisions().subscribe({
       next: (response) => {
-        this.divisions = response.content; // Data ada di 'content'
-        console.log('Total rows:',  response.content);
+        this.divisions = response.content;
         this.loading = false;
       },
       error: (error) => {
@@ -69,7 +68,6 @@ export class DivisiComponent {
 
   openUpdateDialog(divisions: any) {
     this.selecteddivision = divisions;
-    console.log(this.selecteddivision);
     this.displayUpdateDialog = true;
   }
 

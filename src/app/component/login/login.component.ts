@@ -7,10 +7,12 @@ import { PasswordModule } from 'primeng/password';
 import { Router } from '@angular/router';
 import Swal from 'sweetalert2';
 import { AuthService } from '../../service/login/auth.service';
+import { InputTextModule } from 'primeng/inputtext';
+import { ButtonModule } from 'primeng/button';
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [FloatLabelModule, CommonModule, FormsModule, PasswordModule],
+  imports: [FloatLabelModule, CommonModule, FormsModule, PasswordModule, InputTextModule, ButtonModule],
   templateUrl: './login.component.html',
   styleUrl: './login.component.css'
 })

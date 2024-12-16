@@ -68,7 +68,6 @@ export class UpdateUserComponent {
     if (this.user && this.user.app_role) {
       // Ambil hanya ID dari setiap role di array app_role
       this.newUser.app_role = this.user.app_role.map((role: any) => role.id);
-      console.log('Updated newUser app_role:', this.newUser.app_role); // Debug log
     }
     this.getAllDivision();
   }
@@ -109,8 +108,7 @@ export class UpdateUserComponent {
   getAllUsers() {
     this.userService.getAllUsers().subscribe({
       next: (response) => {
-        this.oldUsers = response.content; // Data ada di 'content'
-        // console.log('Total rows:', this.oldUsers);
+        this.oldUsers = response.content;
       },
       error: (error) => {
         console.error('Error fetching users:', error);

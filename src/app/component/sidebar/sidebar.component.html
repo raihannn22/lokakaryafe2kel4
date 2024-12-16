@@ -1,5 +1,5 @@
 <div class="card flex justify-content-center">
-    <p-sidebar #sidebarRef [(visible)]="sidebarVisible">
+    <p-sidebar #sidebarRef [(visible)]="sidebarVisible"  (onHide)="onSidebarHide()">
         <ng-template pTemplate="headless">
             <div class="flex flex-column h-full">
                 <div class="flex align-items-center justify-content-between px-4 pt-3 flex-shrink-0">

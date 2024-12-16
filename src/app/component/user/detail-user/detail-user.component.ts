@@ -56,7 +56,6 @@ export class DetailUserComponent {
       this.newUser.app_role = this.user.app_role.map(
         (role: any) => role.roleName
       );
-      console.log('Updated newUser app_role:', this.newUser); // Debug log
     }
 
     this.token = localStorage.getItem('token');
@@ -66,7 +65,6 @@ export class DetailUserComponent {
   ngOnInit() {
     this.getAllDivision();
     this.getAllRole();
-    console.log(this.user, 'ini on inir');
     // this.newUser = { ...this.user };
     this.newUser = { ...this.user };
   }
@@ -93,8 +91,7 @@ export class DetailUserComponent {
   getAllRole() {
     this.userService.getAllRole().subscribe({
       next: (response) => {
-        this.roles = response.content; // Data ada di 'content'
-        console.log('Total rows:', this.roles);
+        this.roles = response.content; 
       },
       error: (error) => {
         console.error('Error fetching users:', error);
@@ -105,8 +102,7 @@ export class DetailUserComponent {
   getAllDivision() {
     this.userService.getAllDivision().subscribe({
       next: (response) => {
-        this.divisions = response.content; // Data ada di 'content'
-        console.log('Total rows:', this.divisions);
+        this.divisions = response.content;
       },
       error: (error) => {
         console.error('Error fetching users:', error);

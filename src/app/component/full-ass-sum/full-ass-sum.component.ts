@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { SummaryService } from '../../summary.service';
+import { SummaryService } from '../../service/summary/summary.service';
 import { forkJoin } from 'rxjs';
 import { UserService } from '../../service/user/user.service';
 import { CommonModule } from '@angular/common';
