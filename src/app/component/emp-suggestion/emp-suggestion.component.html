@@ -21,8 +21,8 @@
             <ng-template pTemplate="body" let-suggestion let-i="rowIndex">
                 <tr>
                     <td>
-                        <input pInputText [(ngModel)]="suggestion.suggestion" placeholder="Tulis saran..."
-                            [readonly]="suggestion.isExisting" /> <!-- Readonly untuk data lama -->
+                        <textarea  pInputTextarea  [(ngModel)]="suggestion.suggestion" placeholder="Tulis saran..."
+                        [disabled]="suggestion.isExisting" > </textarea> <!-- Readonly untuk data lama -->
                     </td>
                     <td>
                         <button pButton icon="pi pi-trash" severity="danger" (click)="removeRow(i)"

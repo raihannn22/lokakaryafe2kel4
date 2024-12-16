@@ -3,9 +3,23 @@
         <div class="text-center mb-2">
             <h3 style="font-weight: bold; font-size: 2.25rem;">Sikap dan Keahlian</h3>
         </div>
-        <p-table [value]="filteredAttitudeSkill" [paginator]="true" [rows]="5" [filters]="filters"
+        <!-- <p-table [value]="filteredAttitudeSkill" [paginator]="true" [rows]="5" [filters]="filters"
             [globalFilterFields]="['group_name', 'attitude_skill', 'enabled']" [loading]="loading"
-            styleClass="p-datatable-gridlines" [rowsPerPageOptions]="[5, 10, 20]">
+            styleClass="p-datatable-gridlines" [rowsPerPageOptions]="[5, 10, 20]"> -->
+            <p-table 
+            [value]="filteredAttitudeSkill" 
+            sortField="group_name" 
+            sortMode="single"
+            rowGroupMode="subheader" 
+            groupRowsBy="group_name"
+            [paginator]="true" 
+            [rows]="5" 
+            [filters]="filters"
+            [globalFilterFields]="['group_name', 'attitude_skill', 'enabled']" 
+            [loading]="loading"
+            styleClass="p-datatable-gridlines" 
+            [rowsPerPageOptions]="[5, 10, 20]"
+            >
             <ng-template pTemplate="caption">
                 <div class="flex justify-content-between">
                     <p-button label="Pencapaian" icon="pi pi-plus" (click)="showAddDialog()"
@@ -22,10 +36,10 @@
                     <th>
                         <p>No</p>
                     </th>
-                    <th pSortableColumn="group_name">
+                    <!-- <th pSortableColumn="group_name">
                         Grup Sikap dan Keahlian
                         <p-columnFilter type="text" field="group_name" display="menu"></p-columnFilter>
-                    </th>
+                    </th> -->
                     <th pSortableColumn="attitude_skill">
                         Sikap dan Keahlian
                         <p-columnFilter type="text" field="attitude_skill" display="menu"></p-columnFilter>
@@ -38,10 +52,19 @@
                 </tr>
             </ng-template>
 
+            <ng-template pTemplate="groupheader" let-att>
+                <tr pRowGroupHeader>
+                    <td colspan="5">
+                    
+                        <span class="font-bold ml-2">{{att.group_name}}</span>
+                    </td>
+                </tr>
+            </ng-template>
+
             <ng-template pTemplate="body" let-attitudeSkill let-rowIndex="rowIndex">
                 <tr>
                     <td>{{ rowIndex + 1 }}</td>
-                    <td>{{ attitudeSkill.group_name }}</td>
+                    <!-- <td>{{ attitudeSkill.group_name }}</td> -->
                     <td>{{ attitudeSkill.attitude_skill }}</td>
                     <td>
                         <p-tag [severity]="attitudeSkill.enabled ? 'success' : 'danger'"
