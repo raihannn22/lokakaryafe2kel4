@@ -63,7 +63,7 @@ export const routes: Routes = [
     path: 'emp-achievement-skill',
     canActivate: [authGuard, roleGuard],
     component: EmpAchievementSkillComponent,
-    data: {permission: 'emp-achievement-skill#all'}
+    data: {permission: 'emp-achievement#all'}
   },
   {
     path: 'attitude-skill',
@@ -122,7 +122,7 @@ export const routes: Routes = [
     path: 'development-plan',
     canActivate: [authGuard, roleGuard],
     component: DevplanComponent,
-    data: {permission: 'devplan#all'}
+    data: {permission: 'dev-plan#all'}
   },
   {
     path: 'employee-development-plan',
@@ -140,7 +140,7 @@ export const routes: Routes = [
     path: 'view-empdevplan',
     canActivate: [authGuard, roleGuard],
     component: ViewEmpdevplanComponent,
-    
+    data: {permission: 'emp-dev-plan#read'}
   },
   {
     path: 'user/summary-view',
