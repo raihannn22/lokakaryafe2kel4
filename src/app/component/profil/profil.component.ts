@@ -52,7 +52,7 @@ export class ProfilComponent {
   // Data untuk menu panel
   menuItems = [
     {
-      label: 'Profil Detail',
+      label: 'Detail Profile',
       icon: 'pi pi-user',
       command: () => this.loadContent('profileDetail')
     },

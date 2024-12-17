@@ -14,8 +14,9 @@ import { DivisiService } from '../../../service/divisi/divisi.service';
 })
 export class UpdateDivisionComponent {
 
-  isValidForm(): boolean {
+  isValidForm2(): boolean {
     const isNotEmpty = !!this.newDivision.DIVISION_NAME;
+
 
     const isUnique = Array.isArray(this.oldDivisions) && !this.oldDivisions.some(
       (role) => role.DIVISION_NAME.toLowerCase() === this.newDivision.DIVISION_NAME.toLowerCase()
@@ -23,6 +24,16 @@ export class UpdateDivisionComponent {
   
     return isNotEmpty && isUnique;
   }
+
+  
+  isValidForm(): boolean {
+    if (!this.newDivision.DIVISION_NAME) return false; // Validasi jika email kosong
+    return Array.isArray(this.oldDivisions) && !this.oldDivisions.some(
+      (devplan) => devplan.DIVISION_NAME.toLowerCase().trim() === this.newDivision.DIVISION_NAME.toLowerCase().trim() &&
+       devplan.DIVISION_NAME.toLowerCase().trim() !== this.division.DIVISION_NAME.toLowerCase().trim()
+    );
+  }
+  
 
   
   @Input() visible: boolean = false;  // Menyambungkan dengan property di komponen induk

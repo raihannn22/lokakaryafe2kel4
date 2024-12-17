@@ -9,45 +9,45 @@
         <div class="field">
           <label for="username">Username<span class="text-red-600">*</span></label>
           <input pInputText id="username" [(ngModel)]="newUser.username" name="username" #username="ngModel" required />
-          <small class="p-error" *ngIf="username.invalid && username.touched">Username wajib diisi.</small>
-          <small class="p-error" *ngIf="!isUniqueUsername() && newUser.username">username sudah digunakan.</small>
+          <small class="p-error" *ngIf="username.invalid && username.touched">Username is required.</small>
+          <small class="p-error" *ngIf="!isUniqueUsername() && newUser.username">Username already in use.</small>
         </div>
 
         <div class="field">
-          <label for="full_name">Nama Lengkap<span class="text-red-600">*</span></label>
+          <label for="full_name">Full Name<span class="text-red-600">*</span></label>
           <input pInputText id="full_name" [(ngModel)]="newUser.full_name" name="full_name" #fullName="ngModel" required />
-          <small class="p-error" *ngIf="fullName.invalid && fullName.touched">Nama Lengkap wajib diisi.</small>
+          <small class="p-error" *ngIf="fullName.invalid && fullName.touched">Full Name is required.</small>
         </div>
 
         <div class="field">
-          <label for="position">Jabatan<span class="text-red-600">*</span></label>
+          <label for="position">Position<span class="text-red-600">*</span></label>
           <input pInputText id="position" [(ngModel)]="newUser.position" name="position" #position="ngModel" required />
-          <small class="p-error" *ngIf="position.invalid && position.touched">Jabatan wajib diisi.</small>
+          <small class="p-error" *ngIf="position.invalid && position.touched">Position required to be filled.</small>
         </div>
 
         <div class="field">
-          <label for="email">Alamat Email<span class="text-red-600">*</span></label>
+          <label for="email">Email Address<span class="text-red-600">*</span></label>
           <input pInputText id="email" [(ngModel)]="newUser.email_address" name="email" type="email" #email="ngModel" required />
-          <small class="p-error" *ngIf="email.invalid && email.touched">Alamat Email wajib diisi.</small>
-          <small class="p-error" *ngIf="!isUniqueEmail() && newUser.email_address">email sudah digunakan.</small>
+          <small class="p-error" *ngIf="email.invalid && email.touched">Email Address is required.</small>
+          <small class="p-error" *ngIf="!isUniqueEmail() && newUser.email_address">Email Address already in used.</small>
         </div>
 
         <div class="field">
-          <label for="employee_status">Status Karyawan<span class="text-red-600">*</span></label>
+          <label for="employee_status">Employee Status<span class="text-red-600">*</span></label>
           <p-dropdown
             [options]="employeeStatusOptions"
             [(ngModel)]="newUser.employee_status"
-            placeholder="Pilih Status"
+            placeholder="Choose Status"
             id="employee_status"
             name="employee_status"
             #employeeStatus="ngModel"
             required>
           </p-dropdown>
-          <small class="p-error" *ngIf="employeeStatus.invalid && employeeStatus.touched">Status Karyawan wajib dipilih.</small>
+          <small class="p-error" *ngIf="employeeStatus.invalid && employeeStatus.touched">Employee Status must be selected.</small>
         </div>
 
         <div class="field">
-          <label for="join_date">Tanggal Bergabung<span class="text-red-600">*</span></label>
+          <label for="join_date">Date Joined<span class="text-red-600">*</span></label>
           <p-calendar
             [(ngModel)]="newUser.join_date"
             dateFormat="yy-mm-dd"
@@ -57,36 +57,36 @@
             [showIcon]="true"
             required>
           </p-calendar>
-          <small class="p-error" *ngIf="joinDate.invalid && joinDate.touched">Tanggal Bergabung wajib diisi.</small>
+          <small class="p-error" *ngIf="joinDate.invalid && joinDate.touched">Join Date is required.</small>
         </div>
 
         <div class="field">
-          <label for="enabled">Status Akun<span class="text-red-600">*</span></label>
+          <label for="enabled">Account Status<span class="text-red-600">*</span></label>
           <p-dropdown
             [options]="enabledOptions"
             [(ngModel)]="newUser.enabled"
-            placeholder="Pilih Status"
+            placeholder="Choose Status"
             id="enabled"
             name="enabled"
             #enabled="ngModel"
             required>
           </p-dropdown>
-          <small class="p-error" *ngIf="enabled.invalid && enabled.touched">Status Akun wajib dipilih.</small>
+          <small class="p-error" *ngIf="enabled.invalid && enabled.touched">Account Status must be selected.</small>
         </div>
 
         <div class="field">
-          <label for="division_id">ID Divisi<span class="text-red-600">*</span></label>
+          <label for="division_id">Division<span class="text-red-600">*</span></label>
           <p-dropdown
             [options]="divisions"
             [(ngModel)]="newUser.division_id"
             optionLabel="DIVISION_NAME"
             optionValue="ID"
-            placeholder="Pilih Divisi"
+            placeholder="Choose Division"
             name="division_id"
             #division="ngModel"
             required>
           </p-dropdown>
-          <small class="p-error" *ngIf="division.invalid && division.touched">ID Divisi wajib dipilih.</small>
+          <small class="p-error" *ngIf="division.invalid && division.touched">Division must be selected.</small>
         </div>
 
         <div class="field">
@@ -110,8 +110,8 @@
           <p-button icon="pi pi-refresh" severity="help" (click)="onResetPassword()" pTooltip="reset password"></p-button>
         </div>
         <div class="col flex-none">
-          <p-button label="Batal" icon="pi pi-times" severity="secondary" (click)="closeDialog()" class="mr-2"></p-button>
-          <p-button label="Simpan" icon="pi pi-check" (click)="onSubmit()" [disabled]="!isValidForm()"></p-button>
+          <p-button label="Cancel" icon="pi pi-times" severity="secondary" (click)="closeDialog()" class="mr-2"></p-button>
+          <p-button label="Save" icon="pi pi-check" (click)="onSubmit()" [disabled]="!isValidForm()"></p-button>
         </div>
       </div>
 

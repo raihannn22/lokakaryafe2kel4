@@ -1,6 +1,17 @@
+<div class="text-center mb-2">
+  <h3 style="font-weight: bold; font-size: 2.25rem;">Employee Development Plan View</h3>
+</div>
+
+
 <div class="container p-4">
-    <!-- Tag tahun dengan styling -->
-    <p-tag severity="secondary" value="Tahun: {{ Year }}" styleClass="text-xl mb-4 block"></p-tag>
+  <!-- Tag tahun dengan styling -->
+  <p-toolbar styleClass="mb-4 inline-block bg-blue-50 border-blue-200">
+    <div class="p-toolbar-group-left">
+      <i class="pi pi-calendar mr-2 text-blue-500"></i>
+      <span class="font-semibold text-xl text-blue-700">Tahun:  {{ Year }}</span>
+    </div>
+  </p-toolbar>
+    
 
     <div *ngFor="let empdevplan of empdevplans; let j = index" class="card mb-4 p-4 shadow-sm border-round">
       <h3 class="text-xl font-semibold mb-3 text-secondary">{{ empdevplan.title }}</h3>

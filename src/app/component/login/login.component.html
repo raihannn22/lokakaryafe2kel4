@@ -1,24 +1,26 @@
-<div id="body">
-    <div class="login-container">
-        <h2>Login</h2>
-        <form (submit)="onLogin()">
-            <!-- <div class="input-group"> -->
+<div class="bg">
+    <div id="body">
+        <div class="login-container">
+            <h2>Login</h2>
+            <form (submit)="onLogin()">
+                <!-- <div class="input-group"> -->
                 <div class="input-group">
                     <label for="username">Email/Username</label>
                     <input 
-                        pInputText 
-                        id="username" 
-                        aria-describedby="username-help" 
-                        name="username"
-                        [(ngModel)]="email" />
+                    pInputText 
+                    id="username" 
+                    aria-describedby="username-help" 
+                    name="username"
+                    [(ngModel)]="email" />
                 </div>
-            <!-- </div> -->
-            <div class="input-group">
-                <label for="password">Password</label>
-                <p-password [(ngModel)]="password" id="password"  name="password" [feedback]="false" [toggleMask]="true" />
-            </div>
-            <button type="submit" >Masuk</button>
-            <div *ngIf="errorMessage" class="error">{{ errorMessage }}</div>
-        </form>
-    </div>
+                <!-- </div> -->
+                <div class="input-group">
+                    <label for="password">Password</label>
+                    <p-password [(ngModel)]="password" id="password"  name="password" [feedback]="false" [toggleMask]="true" />
+                </div>
+                <button type="submit" >Masuk</button>
+                <div *ngIf="errorMessage" class="error">{{ errorMessage }}</div>
+            </form>
+        </div>
+    </div>   
 </div> 

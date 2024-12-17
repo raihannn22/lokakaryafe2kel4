@@ -1,3 +1,5 @@
+
+
 #body {
     font-family: Arial, sans-serif;
     background-color: #f0f0f0;
@@ -6,7 +8,43 @@
     align-items: center;
     height: 100vh;
     margin: 0;
+    background-image: url(https://media.licdn.com/dms/image/v2/D560BAQHEUtBzmp51ig/company-logo_200_200/company-logo_200_200/0/1690187720655/ogya_tekno_nusantara_logo?e=1742428800&v=beta&t=727hFZsaaogGejtuh94QHP1DpLk96agzTip0LZsF6fg);
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
 }
+
+#body::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: inherit;
+    filter: blur(7px); /* Efek blur */
+    z-index: 1;
+}
+
+.blur-overlay::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: inherit;
+    filter: blur(10px); /* Efek blur */
+    z-index: 1;
+}
+
+.login-container {
+    position: relative;
+    z-index: 2;
+    color: white;
+    padding: 20px;
+}
+
 
 .login-container {
     background-color: #fff;
