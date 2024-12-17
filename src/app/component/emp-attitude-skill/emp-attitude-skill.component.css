@@ -6,37 +6,31 @@
 .skill-item {
   margin-bottom: 15px;
 }
-
-/* .p-inputnumber {
-    width: 100px;
-} */
-
 .p-table {
-  table-layout: fixed; /* Mengatur tabel agar menggunakan lebar kolom tetap */
-  width: 100%; /* Pastikan tabel mengambil lebar penuh */
+  table-layout: fixed;
+  width: 100%;
 }
 
 .column1 {
-  width: 80%; /* Atur lebar kolom 1 sesuai kebutuhan */
-  text-align: left; /* Rata kiri untuk kolom 1 */
-  overflow: hidden; /* Sembunyikan teks yang melampaui batas */
-  white-space: nowrap; /* Mencegah teks membungkus ke baris baru */
-  text-overflow: ellipsis; /* Tampilkan elipsis untuk teks yang terpotong */
+  width: 80%;
+  text-align: left;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 
 .column2-th {
-  width: 20%; /* Atur lebar kolom 2 sesuai kebutuhan */
-  text-align: center; /* Rata kanan untuk kolom 2 */
+  width: 20%;
+  text-align: center;
 }
 
 .column2-td {
-  width: 20%; /* Atur lebar kolom 2 sesuai kebutuhan */
-  text-align: right; /* Rata kanan untuk kolom 2 */
+  width: 20%;
+  text-align: right;
 }
 
-/* Tambahkan padding untuk estetika */
 .p-table td {
-  padding: 10px; /* Padding untuk sel tabel */
+  padding: 10px;
 }
 
 .btn-simpan {

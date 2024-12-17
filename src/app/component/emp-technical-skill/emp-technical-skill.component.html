@@ -1,26 +1,28 @@
 <div class="card">
   <div class="p-5">
     <div class="text-center mb-2">
-      <h3 style="font-weight: bold; font-size: 2.25rem">
-        Keahlian Teknis Personal
+      <h3 class="font-bold text-2xl">
+        {{ userName || "Nama Tidak Ditemukan" }}'s Technical Skill
       </h3>
     </div>
-    <div class="flex justify-content-between">
-      <h2 class="mt-5">Form Penilaian Sikap dan Keahlian Personal</h2>
-      <p-dropdown
-        [options]="yearOptions"
-        [(ngModel)]="assessmentYear"
-        placeholder="Pilih Tahun"
-        (onChange)="onYearChange()"
-      ></p-dropdown>
-
-      <div class="flex justify-content-end">
+    <div class="flex justify-between mb-4">
+      <div class="flex align-items-center">
+        <h3 class="mt-5 mr-3">Assessment Year :</h3>
+        <p-dropdown
+          [options]="yearOptions"
+          [(ngModel)]="assessmentYear"
+          placeholder="Pilih Tahun"
+          (onChange)="onYearChange()"
+        ></p-dropdown>
+      </div>
+      <div class="flex align-items-center">
         <button
           pButton
-          label="Simpan"
+          label="Save"
           icon="pi pi-save"
           (click)="saveAllEmpTechnicalSkills()"
           [disabled]="isSaving || isExistingData || !isFormComplete()"
+          class="ml-3"
         ></button>
       </div>
     </div>
@@ -28,29 +30,37 @@
     <div *ngFor="let groupedSkill of groupedTechnicalSkills">
       <h3>{{ groupedSkill.technical_skill }}</h3>
 
-      <p-table [value]="groupedSkill.empSkills">
+      <p-table [value]="groupedSkill.empSkills" responsiveLayout="scroll">
+        <ng-template pTemplate="header">
+          <tr>
+            <th class="column1">Criteria</th>
+            <th class="column2-th">Score</th>
+            <th class="column3-th">Action</th>
+          </tr>
+        </ng-template>
         <ng-template pTemplate="body" let-empSkill let-i="rowIndex">
           <tr>
-            <td>
-              <input
-                pInputText
+            <td class="column1">
+              <textarea
+                pInputTextarea
                 [(ngModel)]="empSkill.criteria"
                 [disabled]="empSkill.isDisabled"
-              />
+                rows="2"
+              ></textarea>
             </td>
-            <td>
+            <td class="column2-td">
               <p-dropdown
                 [options]="scoreOptions"
                 [(ngModel)]="empSkill.score"
-                placeholder="Select score"
+                placeholder="Pilih Level"
                 appendTo="body"
                 [disabled]="empSkill.isDisabled"
               ></p-dropdown>
             </td>
-            <td>
+            <td class="column3-td">
               <button
                 pButton
-                label="Hapus"
+                label=""
                 icon="pi pi-trash"
                 severity="danger"
                 (click)="removeRow(groupedSkill, i)"
@@ -70,186 +80,3 @@
     </div>
   </div>
 </div>
-
-<!-- <div class="card">
-  <div class="p-5">
-    <div class="text-center mb-2">
-      <h3 style="font-weight: bold; font-size: 2.25rem">
-        Keahlian Teknis Personal
-      </h3>
-    </div>
-    <div class="flex justify-content-between">
-      <h2 class="mt-5">Form Penilaian Sikap dan Keahlian Personal</h2>
-      <p-dropdown
-        [options]="yearOptions"
-        [(ngModel)]="assessmentYear"
-        placeholder="Pilih Tahun"
-        (onChange)="onYearChange()"
-      ></p-dropdown>
-
-      <div class="flex justify-content-end">
-        <button
-          pButton
-          label="Simpan"
-          icon="pi pi-save"
-          (click)="saveAllEmpTechnicalSkills()"
-          [disabled]="isSaving || isExistingData || !isFormComplete()"
-        ></button>
-      </div>
-    </div>
-
-    <div *ngFor="let techSkillData of technicalSkills">
-      <p-table [value]="technicalSkills">
-        <ng-template pTemplate="body" let-empSkill let-i="rowIndex">
-          <tr>
-            <td>
-              <input pInputText [(ngModel)]="empSkill.criteria" />
-            </td>
-            <td>
-              <p-dropdown
-                [options]="scoreOptions"
-                [(ngModel)]="empSkill.score"
-                placeholder="Select score"
-              ></p-dropdown>
-            </td>
-            <td>
-              <button
-                pButton
-                label="Hapus"
-                icon="pi pi-trash"
-                severity="danger"
-                (click)="removeRow(empSkill.id, i)"
-              ></button>
-            </td>
-          </tr>
-        </ng-template>
-      </p-table>
-    </div>
-  </div>
-</div> -->
-
-<!-- <div class="card">
-  <div class="p-5">
-    <div class="text-center mb-2">
-      <h3 class="font-bold text-2xl">Keahlian Teknis</h3>
-    </div>
-
-    <div class="flex justify-between mb-4">
-      <div class="flex align-items-center">
-        <h4 class="mt-5 mr-3">Form Penilaian Keahlian Teknis</h4>
-        <p-dropdown
-          id="assessmentYear"
-          [options]="yearOptions"
-          [(ngModel)]="assessmentYear"
-          placeholder="Pilih Tahun"
-          (onChange)="onYearChange()"
-        ></p-dropdown>
-      </div>
-      <div class="flex align-items-center">
-        <button
-          pButton
-          label="Simpan"
-          icon="pi pi-save"
-          (click)="saveAllEmpTechnicalSkills()"
-          [disabled]="isSaving || technicalSkills.length === 0"
-          class="ml-3"
-        ></button>
-      </div>
-    </div>
-
-    <p-table [value]="technicalSkills">
-      <ng-template pTemplate="header">
-        <tr>
-          <th>Technical Skill</th>
-          <th>Criteria</th>
-          <th>Score</th>
-        </tr>
-      </ng-template>
-      <ng-template pTemplate="body" let-skill>
-        <tr>
-          <td>{{ skill.technical_skill }}</td>
-          <td>{{ skill.criteria }}</td>
-          <td>{{ skill.score }}</td>
-        </tr>
-      </ng-template>
-    </p-table>
-  </div>
-</div> -->
-
-<!-- <div class="card">
-  <div class="p-5">
-    <div class="text-center mb-2">
-      <h3 style="font-weight: bold; font-size: 2.25rem">
-        Keahlian Teknis Personal
-      </h3>
-    </div>
-    <div class="flex justify-content-between">
-      <h2 class="mt-5">Form Penilaian Sikap dan Keahlian Personal</h2>
-      <div class="flex justify-content-end">
-        <button
-          pButton
-          label="Simpan"
-          icon="pi pi-save"
-          (click)="saveAllEmpTechnicalSkills()"
-          [disabled]="isSaving || isExistingData || !isFormComplete()"
-        ></button>
-      </div>
-    </div>
-
-    <div *ngFor="let techSkillData of technicalSkillData">
-      <p-table [value]="techSkillData.empSkills">
-        <ng-template pTemplate="caption">
-          <h3>{{ techSkillData.skill.technical_skill }}</h3>
-        </ng-template>
-        <ng-template pTemplate="header">
-          <tr>
-            <th class="column1">Keahlian</th>
-            <th class="column2">Nilai</th>
-            <th class="column3">Aksi</th>
-          </tr>
-        </ng-template>
-        <ng-template pTemplate="body" let-empSkill let-i="rowIndex">
-          <tr>
-            <td class="column1">
-              <input
-                p
-                pInputText
-                [(ngModel)]="empSkill.criteria"
-                class="pInputText"
-              />
-            </td>
-            <td class="column2">
-              <p-dropdown
-                [options]="scoreOptions"
-                [(ngModel)]="empSkill.score"
-                placeholder="Select score"
-                appendTo="body"
-                [disabled]="empSkill.isExisting"
-              >
-              </p-dropdown>
-            </td>
-            <td class="column3">
-              <button
-                pButton
-                label=""
-                icon="pi pi-trash"
-                severity="danger"
-                (click)="removeRow(techSkillData.skill.id, i)"
-                [disabled]="empSkill.isExisting"
-              ></button>
-            </td>
-          </tr>
-        </ng-template>
-      </p-table>
-      <div class="row-for-add my-5">
-        <button
-          pButton
-          label=""
-          icon="pi pi-plus"
-          severity="primary"
-          (click)="addRow(techSkillData.skill.id)"
-        ></button>
-      </div>
-    </div>
-  </div>
-</div> -->

@@ -17,5 +17,13 @@ export class EmpSuggestionService {
   getEmpSuggestionByUserId(userId: string): Observable<any> {
     return this.http.get<any[]>(`${this.apiUrl}/user/${userId}`);
   }
-  
+
+  getEmpSuggestionByUserIdAndAssesmentYear(
+    userId: string,
+    assessmentYear: number
+  ): Observable<any> {
+    return this.http.get<any[]>(
+      `${this.apiUrl}/user/${userId}/year/${assessmentYear}`
+    );
+  }
 }

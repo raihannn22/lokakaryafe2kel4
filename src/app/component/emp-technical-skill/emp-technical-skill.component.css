@@ -1,61 +1,76 @@
-.technical-skills-container {
-    margin: 20px;
+.justify-between {
+  justify-content: space-between;
 }
 
-.skills-group {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 15px;
+.align-items-center {
+  align-items: center;
 }
 
-.skill-item {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    width: 200px;
-    background-color: #f9f9f9;
+.p-table {
+  table-layout: fixed;
+  width: 100%;
+  margin-bottom: 20px;
+  border-collapse: collapse;
 }
 
-.skill-name {
-    font-weight: bold;
+.column1 textarea {
+  width: 100%;
+  box-sizing: border-box;
+  resize: none;
+  padding: 10px;
+  font-size: 14px;
+  font-family: inherit;
+  border: 1px solid #ccc;
+  border-radius: 4px;
 }
 
-.criteria-input {
-    width: 100%;
+.column2-th,
+.column2-td {
+  width: 25%;
+  text-align: center;
+  padding: 10px;
 }
 
-.p-d-flex {
-    justify-content: flex-end;
+.column3-th,
+.column3-td {
+  width: 15%;
+  text-align: center;
+  padding: 10px;
 }
 
-.disabled-row {
-    background-color: #f0f0f0;
-    color: #a0a0a0;
+.p-table th {
+  background-color: #f5f5f5;
+  color: #333;
+  font-weight: bold;
+  padding: 10px;
+  border-bottom: 1px solid #ddd;
 }
 
-.column1 {
-    width: 70%;
+.p-table td {
+  border-bottom: 1px solid #ddd;
+  padding: 10px;
 }
 
-.column2 {
-    width: 20%;
-    text-align: center;
+.p-button {
+  margin-top: 10px;
 }
 
-.column3 {
-    width: 10%;
-    text-align: center;
+.p-button-primary {
+  background-color: #007ad9;
+  border-color: #007ad9;
 }
 
-.row-for-add {
-    width: 100%;
-    text-align: center;
-    
+.p-button-primary:hover {
+  background-color: #005bb5;
+  border-color: #005bb5;
 }
 
-.pInputText {
-    width: 100%;
+.p-button-danger {
+  background-color: #dc3545;
+  border-color: #dc3545;
+}
+
+.p-button-danger:hover {
+  background-color: #b52a36;
+  border-color: #b52a36;
 }

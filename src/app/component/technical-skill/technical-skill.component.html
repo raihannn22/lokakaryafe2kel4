@@ -1,93 +1,145 @@
 <div class="card">
-    <div class="p-5">
-        <div class="text-center mb-2">
-            <h3 style="font-weight: bold; font-size: 2.25rem;">Keahlian Teknis</h3>
-        </div>
-        <p-table [value]="filteredTechnicalSkills" [paginator]="true" [rows]="5" [filters]="filters"
-            [globalFilterFields]="['technical_skill']" [loading]="loading"
-            styleClass="p-datatable-gridlines" [rowsPerPageOptions]="[5, 10, 20]">
-            <ng-template pTemplate="caption">
-                <div class="flex justify-content-between">
-                    <p-button label="Keahlian Teknis" icon="pi pi-plus" (click)="showAddDialog()"
-                        class="p-button-text"></p-button>
-                    <div class="flex justify-content-end">
-                        <input pInputText type="text" (input)="searchData()" placeholder="Cari ..."
-                            [(ngModel)]="searchKeyword" />
-                    </div>
-                </div>
-            </ng-template>
-
-            <ng-template pTemplate="header">
-                <tr>
-                    <th>
-                        <p>No</p>
-                    </th>
-                    <th pSortableColumn="technical_skill">
-                        Keahlian Teknis
-                        <p-columnFilter type="text" field="technical_skill" display="menu"></p-columnFilter>
-                    </th>
-                    <th>
-                        <p>Status</p>
-                        <!-- <p-columnFilter type="text" field="enabled" display="menu"></p-columnFilter> -->
-                    </th>
-                    <th>Aksi</th>
-                </tr>
-            </ng-template>
-
-            <ng-template pTemplate="body" let-technicalSkill let-rowIndex="rowIndex">
-                <tr>
-                    <td>{{ rowIndex + 1 }}</td>
-                    <td>{{ technicalSkill.technical_skill }}</td>
-                    <td>
-                        <p-tag [severity]="technicalSkill.enabled ? 'success' : 'danger'"
-                            [value]="technicalSkill.enabled ? 'Enabled' : 'Disabled'">
-                        </p-tag>
-                    </td>
-                    <td>
-                        <button pButton type="button" icon="pi pi-pencil" class="p-button-sm mr-2"
-                            (click)="editTechnicalSkill(technicalSkill)"></button>
-                        <button pButton type="button" icon="pi pi-trash" class="p-button-danger p-button-sm"
-                            (click)="deleteTechnicalSkill(technicalSkill.id)"></button>
-                    </td>
-
-                </tr>
-            </ng-template>
-        </p-table>
-
+  <div class="p-5">
+    <div class="text-center mb-2">
+      <h3 style="font-weight: bold; font-size: 2.25rem">Technical Skill</h3>
     </div>
+    <p-table
+      [value]="filteredTechnicalSkills"
+      [paginator]="true"
+      [rows]="5"
+      [filters]="filters"
+      [globalFilterFields]="['technical_skill']"
+      [loading]="loading"
+      styleClass="p-datatable-gridlines"
+      [rowsPerPageOptions]="[5, 10, 20]"
+    >
+      <ng-template pTemplate="caption">
+        <div class="flex justify-content-between">
+          <p-button
+            label="Technical Skill"
+            icon="pi pi-plus"
+            (click)="showAddDialog()"
+            class="p-button-text"
+          ></p-button>
+          <div class="flex justify-content-end">
+            <input
+              pInputText
+              type="text"
+              (input)="searchData()"
+              placeholder="Search ..."
+              [(ngModel)]="searchKeyword"
+            />
+          </div>
+        </div>
+      </ng-template>
+
+      <ng-template pTemplate="header">
+        <tr>
+          <th>
+            <p>No</p>
+          </th>
+          <th pSortableColumn="technical_skill">
+            Technical Skill
+            <p-columnFilter
+              type="text"
+              field="technical_skill"
+              display="menu"
+            ></p-columnFilter>
+          </th>
+          <th>
+            <p>Status</p>
+            <!-- <p-columnFilter type="text" field="enabled" display="menu"></p-columnFilter> -->
+          </th>
+          <th>Action</th>
+        </tr>
+      </ng-template>
+
+      <ng-template pTemplate="body" let-technicalSkill let-rowIndex="rowIndex">
+        <tr>
+          <td>{{ rowIndex + 1 }}</td>
+          <td>{{ technicalSkill.technical_skill }}</td>
+          <td>
+            <p-tag
+              [severity]="technicalSkill.enabled ? 'success' : 'danger'"
+              [value]="technicalSkill.enabled ? 'Enabled' : 'Disabled'"
+            >
+            </p-tag>
+          </td>
+          <td>
+            <button
+              pButton
+              type="button"
+              icon="pi pi-pencil"
+              class="p-button-sm mr-2"
+              (click)="editTechnicalSkill(technicalSkill)"
+            ></button>
+            <button
+              pButton
+              type="button"
+              icon="pi pi-trash"
+              class="p-button-danger p-button-sm"
+              (click)="deleteTechnicalSkill(technicalSkill.id)"
+            ></button>
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </div>
 </div>
 
-<!-- Modal Form for Add/Edit Techical Skill -->
-<p-dialog header="Keahlian Teknis" [(visible)]="technicalSkillDialog" [style]="{width: '50%', height: 'auto'}"
-    [contentStyle]="{overflow: 'auto'}" modal="true" closable="false" [baseZIndex]="10000">
-
-    <div class="p-fluid">
-        <!-- Input Group Name -->
-        <div class="field">
-            <label for="technicalSkill">Keahlian Teknis</label>
-            <input id="technicalSkill" [(ngModel)]="technicalSkill.technical_skill" pInputText />
-            <small class="p-error" *ngIf="isTechnicalSkillDuplicate && technicalSkillDialog">Keahlian Teknis sudah ada.</small>
-        </div>
-
-        <!-- Checkbox for Enabled -->
-        <div class="field" *ngIf="technicalSkill.id">
-            <label for="enabled">Status</label>
-            <p-dropdown [options]="enabledOptions" [(ngModel)]="technicalSkill.enabled" placeholder="Pilih Status"
-                id="enabled" required appendTo="body">
-            </p-dropdown>
-            <!-- <small class="p-error" *ngIf="!technicalSkill.enabled && technicalSkillDialog">Status wajib
-                dipilih.</small> -->
-        </div>
-
-
+<p-dialog
+  header="Technical Skill"
+  [(visible)]="technicalSkillDialog"
+  [style]="{ width: '50%', height: 'auto' }"
+  [contentStyle]="{ overflow: 'auto' }"
+  modal="true"
+  closable="false"
+  [baseZIndex]="10000"
+>
+  <div class="p-fluid">
+    <div class="field">
+      <label for="technicalSkill">Technical Skill</label>
+      <input
+        id="technicalSkill"
+        [(ngModel)]="technicalSkill.technical_skill"
+        pInputText
+      />
+      <small
+        class="p-error"
+        *ngIf="isTechnicalSkillDuplicate && technicalSkillDialog"
+        >Technical Skill already exists.</small
+      >
     </div>
+    <div class="field" *ngIf="technicalSkill.id">
+      <label for="enabled">Status</label>
+      <p-dropdown
+        [options]="enabledOptions"
+        [(ngModel)]="technicalSkill.enabled"
+        placeholder="Choose Status"
+        id="enabled"
+        required
+        appendTo="body"
+      >
+      </p-dropdown>
+    </div>
+  </div>
 
-    <p-footer>
-        <div class="flex justify-content-end">
-            <p-button label="Cancel" icon="pi pi-times" severity="secondary"
-                (click)="technicalSkillDialog = false"></p-button>
-            <button pButton label="Save" icon="pi pi-check" (click)="saveTechnicalSkill()"
-                [disabled]="!technicalSkill.technical_skill" class="mr-2"></button>
-        </div>
-    </p-footer>
+  <p-footer>
+    <div class="flex justify-content-end">
+      <p-button
+        label="Cancel"
+        icon="pi pi-times"
+        severity="secondary"
+        (click)="technicalSkillDialog = false"
+      ></p-button>
+      <button
+        pButton
+        label="Save"
+        icon="pi pi-check"
+        (click)="saveTechnicalSkill()"
+        [disabled]="!technicalSkill.technical_skill"
+        class="mr-2"
+      ></button>
+    </div>
+  </p-footer>
 </p-dialog>

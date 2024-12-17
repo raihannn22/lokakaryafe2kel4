@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class EmpAttitudeSkillService {
   private apiUrl = 'http://localhost:8081/emp-attitude-skill';
@@ -11,7 +11,9 @@ export class EmpAttitudeSkillService {
   constructor(private http: HttpClient) {}
 
   getAllGroupAttitudeWithDetails(): Observable<any> {
-    return this.http.get('http://localhost:8081/group-attitude-skill/with-details');
+    return this.http.get(
+      'http://localhost:8081/group-attitude-skill/with-details'
+    );
   }
 
   saveAllEmpAttitudeSkills(empAttitudeSkills: any[]): Observable<any> {
@@ -22,14 +24,12 @@ export class EmpAttitudeSkillService {
     return this.http.get<any[]>(`${this.apiUrl}/user/${userId}`);
   }
 
-  getEmpAttitudeSkillsByUserIdAndAssesmentYear(userId: string, assessmentYear: number): Observable<any> {
-    return this.http.get<any[]>(`${this.apiUrl}/user/${userId}/year/${assessmentYear}`);
+  getEmpAttitudeSkillsByUserIdAndAssesmentYear(
+    userId: string,
+    assessmentYear: number
+  ): Observable<any> {
+    return this.http.get<any[]>(
+      `${this.apiUrl}/user/${userId}/year/${assessmentYear}`
+    );
   }
-
-
-  // getEmpAttitudeSkillByUserId(userId: string): Observable<any[]> {
-  // return this.http.get<any[]>(`/api/emp-attitude-skill/user/${userId}`); 
-// }
-
-
 }
