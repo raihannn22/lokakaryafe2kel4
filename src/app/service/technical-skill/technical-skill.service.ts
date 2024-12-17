@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class TechnicalSkillService {
   private apiUrl = 'http://localhost:8081/technical-skill';
@@ -14,7 +14,6 @@ export class TechnicalSkillService {
     return this.http.get(`${this.apiUrl}/all`);
   }
 
-
   saveTechnicalSkill(technicalSkill: any): Observable<any> {
     return this.http.put(`${this.apiUrl}/save`, technicalSkill);
   }
@@ -22,7 +21,6 @@ export class TechnicalSkillService {
   updateTechnicalSkill(id: string, technicalSkill: any): Observable<any> {
     return this.http.patch(`${this.apiUrl}/update/${id}`, technicalSkill);
   }
-
 
   getTechnicalSkillById(id: string): Observable<any> {
     return this.http.get(`${this.apiUrl}/get/${id}`);

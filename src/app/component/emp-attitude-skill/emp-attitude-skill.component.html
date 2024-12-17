@@ -1,24 +1,27 @@
 <div class="card">
   <div class="p-5">
     <div class="text-center mb-2">
-      <h3 class="font-bold text-2xl">Sikap dan Keahlian Personal</h3>
+      <h3 class="font-bold text-2xl">
+        {{ userName || "Nama Tidak Ditemukan" }}'s Attitude & Skill Evaluation
+        Form
+      </h3>
     </div>
 
     <div class="flex justify-between mb-4">
       <div class="flex align-items-center">
-        <h4 class="mt-5 mr-3">Form Penilaian Sikap dan Keahlian Personal</h4>
+        <h3 class="mt-5 mr-3">Assessment Year :</h3>
         <p-dropdown
           id="assessmentYear"
           [options]="yearOptions"
           [(ngModel)]="assessmentYear"
-          placeholder="Pilih Tahun"
+          placeholder="Choose Assesment Year"
           (onChange)="onYearChange()"
         ></p-dropdown>
       </div>
       <div class="flex align-items-center">
         <button
           pButton
-          label="Simpan"
+          label="Save"
           icon="pi pi-save"
           (click)="saveAllEmpAttitudeSkills()"
           [disabled]="isSaving || !isFormComplete()"
@@ -34,7 +37,7 @@
             <th class="column1">
               {{ group.group_name }} ({{ group.percentage }}%)
             </th>
-            <th class="column2-th">Nilai</th>
+            <th class="column2-th">Score</th>
           </tr>
         </ng-template>
         <ng-template pTemplate="body" let-skill>
@@ -45,7 +48,7 @@
                 [options]="scoreOptions"
                 [(ngModel)]="skill.score"
                 [disabled]="skill.isDisabled"
-                placeholder="Pilih Nilai"
+                placeholder="Choose Score"
                 appendTo="body"
               ></p-dropdown>
             </td>

@@ -1,19 +1,18 @@
 <div class="card">
   <div class="p-5">
-    <!-- <h1>sisa total {{100 -totalPercentage}}</h1> -->
     @if (totalPercentage == 100) {
-    <p-message severity="success" text="percentage grup sudah 100%"></p-message>
+    <p-message severity="success" text="Total Percentage = 100%"></p-message>
     }@else {
     <p-message
       severity="error"
-      text="percentage belum 100% masih tersisa total {{
+      text="Percentage is not 100%, still remaining total {{
         100 - totalPercentage
       }}%"
     ></p-message>
     }
 
     <div class="text-center mb-2">
-      <h3 style="font-weight: bold; font-size: 2.25rem">Grup Pencapaian</h3>
+      <h3 style="font-weight: bold; font-size: 2.25rem">Achievement Group</h3>
     </div>
     <p-table
       [value]="filteredGroupAchievements"
@@ -28,7 +27,7 @@
       <ng-template pTemplate="caption">
         <div class="flex justify-content-between">
           <p-button
-            label="Grup Pencapaian"
+            label="Achievement Group"
             icon="pi pi-plus"
             (click)="showAddDialog()"
             class="p-button-text"
@@ -38,7 +37,7 @@
               pInputText
               type="text"
               (input)="searchData()"
-              placeholder="Cari ..."
+              placeholder="Search ..."
               [(ngModel)]="searchKeyword"
             />
           </div>
@@ -51,7 +50,7 @@
             <p>No</p>
           </th>
           <th pSortableColumn="group_name">
-            Nama Grup
+            Group Name
             <p-columnFilter
               type="text"
               field="group_name"
@@ -59,7 +58,7 @@
             ></p-columnFilter>
           </th>
           <th pSortableColumn="percentage">
-            Persentasi
+            Percentage
             <p-columnFilter
               type="text"
               field="percentage"
@@ -68,9 +67,8 @@
           </th>
           <th>
             <p>Status</p>
-            <!-- <p-columnFilter type="text" field="enabled" display="menu"></p-columnFilter> -->
           </th>
-          <th>Aksi</th>
+          <th>Action</th>
         </tr>
       </ng-template>
 
@@ -123,7 +121,7 @@
 >
   <div class="p-fluid">
     <div class="field">
-      <label for="groupName">Nama Grup</label>
+      <label for="groupName">Group Name</label>
       <input
         id="groupName"
         [(ngModel)]="groupAchievement.group_name"
@@ -132,7 +130,7 @@
       <small
         class="p-error"
         *ngIf="isGroupNameDuplicate && groupAchievementDialog"
-        >Nama Grup sudah digunakan.</small
+        >Group name already exists.</small
       >
     </div>
 
@@ -152,7 +150,7 @@
       <p-dropdown
         [options]="enabledOptions"
         [(ngModel)]="groupAchievement.enabled"
-        placeholder="Pilih Status"
+        placeholder="Choose Status"
         id="enabled"
         required
         appendTo="body"

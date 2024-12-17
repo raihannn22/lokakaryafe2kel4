@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class AttitudeSkillService {
   private apiUrl = 'http://localhost:8081/attitude-skill';
@@ -14,11 +14,9 @@ export class AttitudeSkillService {
     return this.http.get(`${this.apiUrl}/all`);
   }
 
-
   getAllGroupAttitudeSkills(): Observable<any> {
-  return this.http.get('http://localhost:8081/group-attitude-skill/all');
+    return this.http.get('http://localhost:8081/group-attitude-skill/all');
   }
-
 
   saveAttitudeSkill(attitudeSkill: any): Observable<any> {
     return this.http.put(`${this.apiUrl}/save`, attitudeSkill);
@@ -27,7 +25,6 @@ export class AttitudeSkillService {
   updateAttitudeSkill(id: string, attitudeSkill: any): Observable<any> {
     return this.http.patch(`${this.apiUrl}/update/${id}`, attitudeSkill);
   }
-
 
   getAttitudeSkillById(id: string): Observable<any> {
     return this.http.get(`${this.apiUrl}/get/${id}`);

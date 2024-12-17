@@ -1,104 +1,156 @@
 <div class="card">
-    <div class="p-5">
-        <div class="text-center mb-2">
-            <h3 style="font-weight: bold; font-size: 2.25rem;">Pencapaian</h3>
-        </div>
-        <p-table [value]="filteredAchievements" [paginator]="true" [rows]="5" [filters]="filters"
-            [globalFilterFields]="['group_name', 'achievement', 'enabled']" [loading]="loading"
-            styleClass="p-datatable-gridlines" [rowsPerPageOptions]="[5, 10, 20]">
-            <ng-template pTemplate="caption">
-                <div class="flex justify-content-between">
-                    <p-button label="Pencapaian" icon="pi pi-plus" (click)="showAddDialog()"
-                        class="p-button-text"></p-button>
-                    <div class="flex justify-content-end">
-                        <input pInputText type="text" (input)="searchData()" placeholder="Cari ..."
-                            [(ngModel)]="searchKeyword" />
-                    </div>
-                </div>
-            </ng-template>
-
-            <ng-template pTemplate="header">
-                <tr>
-                    <th>
-                        <p>No</p>
-                    </th>
-                    <th pSortableColumn="group_name">
-                        Grup Pencapaian
-                        <p-columnFilter type="text" field="group_name" display="menu"></p-columnFilter>
-                    </th>
-                    <th pSortableColumn="achievement">
-                        Pencapaian
-                        <p-columnFilter type="text" field="achievement" display="menu"></p-columnFilter>
-                    </th>
-                    <th>
-                        <p>Status</p>
-                        <!-- <p-columnFilter type="text" field="enabled" display="menu"></p-columnFilter> -->
-                    </th>
-                    <th>Aksi</th>
-                </tr>
-            </ng-template>
-
-            <ng-template pTemplate="body" let-achievement let-rowIndex="rowIndex">
-                <tr>
-                    <td>{{ rowIndex + 1 }}</td>
-                    <td>{{ achievement.group_name }}</td>
-                    <td>{{ achievement.achievement }}</td>
-                    <td>
-                        <p-tag [severity]="achievement.enabled ? 'success' : 'danger'"
-                            [value]="achievement.enabled ? 'Enabled' : 'Disabled'">
-                        </p-tag>
-                    </td>
-                    <td>
-                        <button pButton type="button" icon="pi pi-pencil" class="p-button-sm mr-2"
-                            (click)="editAchievement(achievement)"></button>
-                        <button pButton type="button" icon="pi pi-trash" class="p-button-danger p-button-sm"
-                            (click)="deleteAchievement(achievement.id)"></button>
-                    </td>
-
-                </tr>
-            </ng-template>
-        </p-table>
-
+  <div class="p-5">
+    <div class="text-center mb-2">
+      <h3 style="font-weight: bold; font-size: 2.25rem">Achievement List</h3>
     </div>
+    <p-table
+      [value]="filteredAchievements"
+      [paginator]="true"
+      [rows]="5"
+      [filters]="filters"
+      [globalFilterFields]="['group_name', 'achievement', 'enabled']"
+      [loading]="loading"
+      styleClass="p-datatable-gridlines"
+      [rowsPerPageOptions]="[5, 10, 20]"
+      rowGroupMode="subheader"
+      groupRowsBy="group_name"
+    >
+      <ng-template pTemplate="caption">
+        <div class="flex justify-content-between">
+          <p-button
+            label="Achievement"
+            icon="pi pi-plus"
+            (click)="showAddDialog()"
+            class="p-button-text"
+          ></p-button>
+          <div class="flex justify-content-end">
+            <input
+              pInputText
+              type="text"
+              (input)="searchData()"
+              placeholder="Search ..."
+              [(ngModel)]="searchKeyword"
+            />
+          </div>
+        </div>
+      </ng-template>
+
+      <ng-template pTemplate="header">
+        <tr>
+          <th>No</th>
+          <th>Achievement</th>
+          <th>Status</th>
+          <th>Action</th>
+        </tr>
+      </ng-template>
+
+      <ng-template pTemplate="groupheader" let-achievement>
+        <tr pRowGroupHeader>
+          <td colspan="4">
+            <span class="font-bold">{{ achievement.group_name }}</span>
+          </td>
+        </tr>
+      </ng-template>
+
+      <ng-template pTemplate="body" let-achievement let-rowIndex="rowIndex">
+        <tr>
+          <td>{{ rowIndex + 1 }}</td>
+          <td>{{ achievement.achievement }}</td>
+          <td>
+            <p-tag
+              [severity]="achievement.enabled ? 'success' : 'danger'"
+              [value]="achievement.enabled ? 'Enabled' : 'Disabled'"
+            >
+            </p-tag>
+          </td>
+          <td>
+            <button
+              pButton
+              type="button"
+              icon="pi pi-pencil"
+              class="p-button-sm mr-2"
+              (click)="editAchievement(achievement)"
+            ></button>
+            <button
+              pButton
+              type="button"
+              icon="pi pi-trash"
+              class="p-button-danger p-button-sm"
+              (click)="deleteAchievement(achievement.id)"
+            ></button>
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </div>
 </div>
 
-<!-- Modal Form for Add/Edit Achievement -->
-<p-dialog header="Pencapaian" [(visible)]="achievementDialog" [style]="{width: '50%', height: 'auto'}"
-    [contentStyle]="{overflow: 'auto'}" modal="true" closable="false" [baseZIndex]="10000">
-
-    <div class="p-fluid">
-
-        <div class="field">
-            <label for="group-achievement">Grup Pencapaian</label>
-            <p-dropdown id="group-achievement" [(ngModel)]="achievement.group_id" [options]="groupAchievements"
-                optionLabel="group_name" optionValue="id" placeholder="Pilih Grup Pencapaian" class=""></p-dropdown>
-        </div>
-        
-        <div class="field">
-            <label for="achievement">Pencapaian</label>
-            <input id="achievement" [(ngModel)]="achievement.achievement" pInputText class="custom-input" />
-            <small class="p-error" *ngIf="isAchievementDuplicate && achievementDialog">Pencapaian sudah
-                digunakan.</small>
-        </div>
-        
-        <div class="field" *ngIf="achievement.id">
-            <label for="enabled">Status</label>
-            <p-dropdown [options]="enabledOptions" [(ngModel)]="achievement.enabled" placeholder="Pilih Status"
-                id="enabled" required appendTo="body">
-            </p-dropdown>
-            <!-- <small class="p-error" *ngIf="!achievement.enabled && achievementDialog">Status wajib
-                dipilih.</small> -->
-        </div>
-
-
+<p-dialog
+  header="Achievement"
+  [(visible)]="achievementDialog"
+  [style]="{ width: '50%', height: 'auto' }"
+  [contentStyle]="{ overflow: 'auto' }"
+  modal="true"
+  closable="false"
+  [baseZIndex]="10000"
+>
+  <div class="p-fluid">
+    <div class="field">
+      <label for="group-achievement">Achievement Group</label>
+      <p-dropdown
+        id="group-achievement"
+        [(ngModel)]="achievement.group_id"
+        [options]="groupAchievements"
+        optionLabel="group_name"
+        optionValue="id"
+        placeholder="Choose Achievement Group"
+        class=""
+      ></p-dropdown>
     </div>
 
-    <p-footer>
-        <div class="flex justify-content-end">
-            <p-button label="Cancel" icon="pi pi-times" severity="secondary"
-                (click)="achievementDialog = false"></p-button>
-            <button pButton label="Save" icon="pi pi-check" (click)="saveAchievement()"
-                [disabled]="!achievement.group_id|| !achievement.achievement" class="mr-2"></button>
-        </div>
-    </p-footer>
+    <div class="field">
+      <label for="achievement">Achievement</label>
+      <input
+        id="achievement"
+        [(ngModel)]="achievement.achievement"
+        pInputText
+        class="custom-input"
+      />
+      <small class="p-error" *ngIf="isAchievementDuplicate && achievementDialog"
+        >Achievement already exists.</small
+      >
+    </div>
+
+    <div class="field" *ngIf="achievement.id">
+      <label for="enabled">Status</label>
+      <p-dropdown
+        [options]="enabledOptions"
+        [(ngModel)]="achievement.enabled"
+        placeholder="Choose Status"
+        id="enabled"
+        required
+        appendTo="body"
+      >
+      </p-dropdown>
+    </div>
+  </div>
+
+  <p-footer>
+    <div class="flex justify-content-end">
+      <p-button
+        label="Cancel"
+        icon="pi pi-times"
+        severity="secondary"
+        (click)="achievementDialog = false"
+      ></p-button>
+      <button
+        pButton
+        label="Save"
+        icon="pi pi-check"
+        (click)="saveAchievement()"
+        [disabled]="!achievement.group_id || !achievement.achievement"
+        class="mr-2"
+      ></button>
+    </div>
+  </p-footer>
 </p-dialog>

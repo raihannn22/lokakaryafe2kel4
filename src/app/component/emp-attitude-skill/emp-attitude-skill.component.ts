@@ -14,8 +14,8 @@ interface AttitudeSkill {
   attitude_skill: string;
   score: number | null;
   user_id: string;
-  isNew?: boolean; // Menambahkan properti isNew
-  isDisabled?: boolean; // Menambahkan properti isDisabled
+  isNew?: boolean;
+  isDisabled?: boolean;
 }
 
 interface EmpAttitudeSkill {
@@ -55,8 +55,8 @@ export class EmpAttitudeSkillComponent implements OnInit {
   attitudeSkills: GroupAttitudeSkills[] = [];
   isSaving: boolean = false;
   isExistingData: boolean = false;
-  assessmentYear: number = new Date().getFullYear(); // Default ke tahun sekarang
-  // yearOptions: { label: number; value: number }[] = [];
+  assessmentYear: number = new Date().getFullYear();
+  userName: string | null = '';
 
   scoreOptions = [
     { label: 'Sangat Baik', value: 100 },
@@ -78,22 +78,23 @@ export class EmpAttitudeSkillComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.userName = localStorage.getItem('full_name');
     this.groupAttitudeSkillService
       .getGroupAttitudeSkillsWithDetails()
       .subscribe((response) => {
         if (Array.isArray(response.content)) {
-          console.log('response', response.content);
+          // console.log('response', response.content);
           this.attitudeSkills = response.content;
 
           const userId = localStorage.getItem('id');
           if (userId) {
-            console.log('User  ID', userId);
-            this.onYearChange(); // Panggil fungsi filter berdasarkan tahun
+            // console.log('User  ID', userId);
+            this.onYearChange();
           } else {
-            console.error('User  ID is null or undefined');
+            // console.error('User  ID is null or undefined');
           }
         } else {
-          console.error('Response is not an array', response);
+          // console.error('Response is not an array', response);
         }
       });
   }
@@ -108,12 +109,10 @@ export class EmpAttitudeSkillComponent implements OnInit {
         )
         .subscribe({
           next: (attitudeSkillResponse: EmpAttitudeSkillResponse) => {
-            console.log(
-              'Filtered Data Emp Attitude Skill:',
-              attitudeSkillResponse
-            );
-
-            // Ambil tahun yang ada dari data emp attitude skill
+            // console.log(
+            //   'Filtered Data Emp Attitude Skill:',
+            //   attitudeSkillResponse
+            // );
             const yearsSet = new Set<number>();
             attitudeSkillResponse.content.forEach(
               (empSkill: EmpAttitudeSkill) => {
@@ -122,17 +121,13 @@ export class EmpAttitudeSkillComponent implements OnInit {
             );
             if (attitudeSkillResponse.content.length > 0) {
               this.isExistingData = true;
-
-              // Reset all scores first
               this.attitudeSkills.forEach((group: GroupAttitudeSkills) => {
                 group.attitude_skills.forEach((skill) => {
-                  skill.score = null; // Reset score
-                  skill.isNew = true; // Anggap semua baru
-                  skill.isDisabled = false; // Set dropdown tidak ter-disable
+                  skill.score = null;
+                  skill.isNew = true;
+                  skill.isDisabled = false;
                 });
               });
-
-              // Update scores based on existing data
               attitudeSkillResponse.content.forEach(
                 (empSkill: EmpAttitudeSkill) => {
                   this.attitudeSkills.forEach((group: GroupAttitudeSkills) => {
@@ -140,27 +135,26 @@ export class EmpAttitudeSkillComponent implements OnInit {
                       (s) => s.id === empSkill.attitude_skill_id
                     );
                     if (skill) {
-                      skill.score = empSkill.score; // Update score based on API data
-                      skill.isNew = false; // Tandai sebagai yang sudah ada
-                      skill.isDisabled = true; // Set dropdown ter-disable
+                      skill.score = empSkill.score;
+                      skill.isNew = false;
+                      skill.isDisabled = true;
                     }
                   });
                 }
               );
             } else {
               this.isExistingData = false;
-              // Reset scores if no data exists
               this.attitudeSkills.forEach((group: GroupAttitudeSkills) => {
                 group.attitude_skills.forEach((skill) => {
                   skill.score = null;
-                  skill.isNew = true; // Tandai sebagai baru
-                  skill.isDisabled = false; // Set dropdown tidak ter-disable
+                  skill.isNew = true;
+                  skill.isDisabled = false;
                 });
               });
             }
           },
           error: (err) => {
-            console.error('Error fetching emp attitude skills:', err);
+            // console.error('Error fetching emp attitude skills:', err);
           },
         });
     }
@@ -174,15 +168,15 @@ export class EmpAttitudeSkillComponent implements OnInit {
     const allDisabled = this.attitudeSkills.every((group) =>
       group.attitude_skills.every((skill) => skill.isDisabled)
     );
-    console.log(
-      'Scores:',
-      this.attitudeSkills.map((group) =>
-        group.attitude_skills.map((skill) => skill.score)
-      )
-    );
-    console.log('Is form complete:', allComplete);
-    console.log('Are all dropdowns disabled:', allDisabled);
-    return allComplete && !allDisabled; // Tombol simpan aktif jika semua dropdown terisi dan tidak semua ter-disable
+    // console.log(
+    //   'Scores:',
+    //   this.attitudeSkills.map((group) =>
+    //     group.attitude_skills.map((skill) => skill.score)
+    //   )
+    // );
+    // console.log('Is form complete:', allComplete);
+    // console.log('Are all dropdowns disabled:', allDisabled);
+    return allComplete && !allDisabled;
   }
 
   saveAllEmpAttitudeSkills() {
@@ -190,7 +184,7 @@ export class EmpAttitudeSkillComponent implements OnInit {
       const currentYear = new Date().getFullYear();
       const dataToSend = this.attitudeSkills.flatMap((group) =>
         group.attitude_skills
-          .filter((skill) => skill.score !== null) // Hanya sertakan keterampilan dengan skor
+          .filter((skill) => skill.score !== null)
           .map((skill) => ({
             user_id: localStorage.getItem('id'),
             attitude_skill_id: skill.id,
@@ -199,7 +193,7 @@ export class EmpAttitudeSkillComponent implements OnInit {
           }))
       );
 
-      console.log('Data yang akan dikirim:', dataToSend);
+      // console.log('Data yang akan dikirim:', dataToSend);
 
       this.empAttitudeSkillService
         .saveAllEmpAttitudeSkills(dataToSend)
@@ -207,30 +201,29 @@ export class EmpAttitudeSkillComponent implements OnInit {
           next: (response) => {
             this.isSaving = false;
             this.isExistingData = true;
-            // Disable dropdowns after saving
             this.attitudeSkills.forEach((group: GroupAttitudeSkills) => {
               group.attitude_skills.forEach((skill) => {
-                skill.isDisabled = true; // Set dropdown ter-disable
+                skill.isDisabled = true;
               });
             });
             Swal.fire({
               icon: 'success',
-              title: 'Sukses!',
-              text: 'Berhasil menyimpan Sikap dan Keahlian Personal!',
+              title: 'Success!',
+              text: 'Successfully saved your attitude and skills!',
             });
           },
           error: (error) => {
-            console.error('Error saving multiple attitude skills:', error);
+            // console.error('Error saving multiple attitude skills:', error);
             this.isSaving = false;
             Swal.fire({
               icon: 'error',
-              title: 'Gagal!',
-              text: 'Gagal menyimpan Sikap dan Keahlian Personal!',
+              title: 'Failed!',
+              text: 'Failed to save your attitude and skills!',
             });
           },
         });
     } else {
-      console.warn('No data to save');
+      // console.warn('No data to save');
     }
   }
 }

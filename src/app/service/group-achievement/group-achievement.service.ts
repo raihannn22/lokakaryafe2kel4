@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class GroupAchievementService {
   private apiUrl = 'http://localhost:8081/group-achievement';
@@ -14,7 +14,6 @@ export class GroupAchievementService {
     return this.http.get(`${this.apiUrl}/all`);
   }
 
-
   saveGroupAchievement(groupAchievement: any): Observable<any> {
     return this.http.put(`${this.apiUrl}/save`, groupAchievement);
   }
@@ -22,7 +21,6 @@ export class GroupAchievementService {
   updateGroupAchievement(id: string, groupAchievement: any): Observable<any> {
     return this.http.patch(`${this.apiUrl}/update/${id}`, groupAchievement);
   }
-
 
   getGroupAchievementById(id: string): Observable<any> {
     return this.http.get(`${this.apiUrl}/get/${id}`);
