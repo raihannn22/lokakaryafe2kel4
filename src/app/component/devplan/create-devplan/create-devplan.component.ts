@@ -19,7 +19,7 @@ export class CreateDevplanComponent {
   @Output() visibleChange = new EventEmitter<boolean>();  // Emit perubahan visibility
   @Output() devplanCreated = new EventEmitter<any>();  
 
-  devplans: any[] = [];
+  oldDevplans: any[] = [];
 
   constructor(
     private devplanService: DevplanService
@@ -29,12 +29,30 @@ export class CreateDevplanComponent {
     return !!this.newDevplan.PLAN 
   }
 
+  isValidForm2(): boolean {
+    const isNotEmpty = !!this.newDevplan.PLAN;
+
+    const isUnique = Array.isArray(this.oldDevplans) && !this.oldDevplans.some(
+      (devplan) => devplan.PLAN.toLowerCase().trim() === this.newDevplan.PLAN.toLowerCase().trim()
+    );
+  
+    return isNotEmpty && isUnique;
+  }
+
   enabledOptions = [
     { label: 'Enabled', value: 1 },
     { label: 'Disabled', value: 0 }
   ];
 
   ngOnInit() {
+    this.devplanService.getAllDevplans().subscribe({
+      next: (response) => {
+        this.oldDevplans = response.content
+      },
+      error: (error) => {
+        console.error('Error fetching divisions:', error);
+      }
+    });
   }
 
   newDevplan = {

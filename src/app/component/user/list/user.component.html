@@ -1,6 +1,17 @@
+@if (!isViewUserRoute()) {
+<div class="text-center mb-2">
+  <h3 style="font-weight: bold; font-size: 2.25rem;">Management Users</h3>
+</div>
+}@else {
+  <div class="text-center mb-2">
+    <h3 style="font-weight: bold; font-size: 2.25rem;">View Users</h3>
+  </div>
+}
+
+
 @if (userRoles?.includes('HR') && !isViewUserRoute()) {
 <p-button
-  label="Tambah Pengguna"
+  label="Add Pengguna"
   icon="pi pi-plus"
   (click)="openCreateDialog()"
   class="p-5 mt-5"
@@ -13,7 +24,7 @@
   <div class="p-5">
     @if (isViewUserRoute()) {
       <div class="year-selector">
-        <label for="year-dropdown" class="custom-label">Tahun:  </label>
+        <label for="year-dropdown" class="custom-label">Year:  </label>
         
         <p-dropdown
           id="year-dropdown"
@@ -77,28 +88,28 @@
 
           <th>
             <div class="flex align-items-center">
-            Nama Lengkap
+            Full Name
             <p-columnFilter type="text" field="full_name" display="menu" />
             </div>
           </th>
 
           <th>
             <div class="flex align-items-center">
-              Jabatan
+              Position
               <p-columnFilter type="text" field="position" display="menu" />
             </div>
           </th>
 
           <th>
             <div class="flex align-items-center">
-              Email
+              Email Address
               <p-columnFilter type="text" field="email_address" display="menu" />
             </div>
           </th>
 
           <th>
             <div class="flex align-items-center">
-              status karyawan
+              Employee Status
               <p-columnFilter field="employee_status" matchMode="equals" display="menu"  [showMatchModes]="false" [showOperator]="false" [showAddButton]="false">
                   <ng-template pTemplate="filter" let-value let-filter="filterCallback">
                     <p-dropdown
@@ -118,17 +129,17 @@
             </div>
           </th>
 
-          <th>Tanggal Bergabung</th>
+          <th>Date Joined</th>
 
-          <th>Status Akun</th>
+          <th>Account Status</th>
 
           <th>
             <div class="flex align-items-center">
-              Divisi
+              Division
               <p-columnFilter field="division_name" matchMode="in" display="menu" [showMatchModes]="false" [showOperator]="false" [showAddButton]="false">
                 <ng-template pTemplate="header">
                     <div class="px-3 pt-3 pb-0">
-                        <span class="font-bold">Agent Picker</span>
+                        <span class="font-bold">Division Picker</span>
                     </div>
                 </ng-template>
                 <ng-template pTemplate="filter" let-value let-filter="filterCallback">
@@ -151,47 +162,9 @@
           </th>
           }
 
-          <th class="aksi">Aksi</th>
+          <th class="aksi">Action</th>
 
         </tr>
-
-        <!-- <tr>
-          <th></th>
-
-          <th></th>
-
-          <th></th>
-
-          <th> </th>
-
-          <th></th>
-
-          <th></th>
-
-          <th></th>
-
-          <th>
-            <p-columnFilter field="division_name" matchMode="in" [showMenu]="false">
-              <ng-template pTemplate="filter" let-value let-filter="filterCallback">
-                  <p-multiSelect
-                      [ngModel]="value"
-                      [options]="divisionName"
-                      placeholder="Any"
-                      (onChange)="filter($event.value)">
-                          <ng-template let-option pTemplate="item">
-                                  <span>
-                                      {{ option }}
-                                  </span>
-
-                          </ng-template>
-                  </p-multiSelect>
-              </ng-template>
-            </p-columnFilter>
-          </th>
-
-          <th></th>
-
-      </tr> -->
       </ng-template>
 
       <ng-template pTemplate="body" let-user>
@@ -204,7 +177,7 @@
           <td>
             <p-tag
               [severity]="user.employee_status === 1 ? 'warning' : 'info'"
-              [value]="user.employee_status === 1 ? 'Kontrak' : 'Permanen'"
+              [value]="user.employee_status === 1 ? 'Contract' : 'Permanent'"
             >
             </p-tag>
           </td>

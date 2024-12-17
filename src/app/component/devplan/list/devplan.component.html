@@ -1,4 +1,9 @@
-<p-button label="Tambah DevPlan" icon="pi pi-plus" (click)="openCreateDialog()" class="p-5 mt-5" ></p-button>
+<div class="text-center mb-2">
+    <h3 style="font-weight: bold; font-size: 2.25rem;">Development Plan Management</h3>
+</div>
+
+
+<p-button label="Add DevPlan" icon="pi pi-plus" (click)="openCreateDialog()" class="p-5 mt-5" ></p-button>
 
     <!-- Tombol global untuk membuat pengguna baru -->
     
@@ -9,15 +14,15 @@
                   <p-inputIcon>
                       <i class="pi pi-search"></i>
                   </p-inputIcon>
-                  <input #searchInput pInputText type="text" (input)="dt.filterGlobal(searchInput.value, 'contains')" placeholder="Cari Devplan..." />
+                  <input #searchInput pInputText type="text" (input)="dt.filterGlobal(searchInput.value, 'contains')" placeholder="Search Devplan..." />
               </p-iconField>
           </ng-template>
           
         <ng-template pTemplate="header">
           <tr>
-              <th>Nama Devplan</th>
+              <th>Devplan Name</th>
               <th>Status</th>
-              <th>Aksi</th>
+              <th>Action</th>
           </tr>
       </ng-template>
   

@@ -38,6 +38,7 @@ export class UserComponent implements OnInit {
 
 
   users: any[] = [];
+  title: string = 'Management Users';
   usersWithScore: any[] = [];
   loading: boolean = true;
   displayCreateDialog = false;
@@ -191,19 +192,19 @@ export class UserComponent implements OnInit {
 
   confirmDelete(user: any) {
     Swal.fire({
-      title: 'Apakah Anda yakin?',
-      text: `Anda akan menghapus pengguna ${user.username}!`,
+      title: 'Are you sure?',
+      text: `You will delete user with username ${user.username}!`,
       icon: 'warning',
       showCancelButton: true,
-      confirmButtonText: 'Ya, hapus!',
-      cancelButtonText: 'Batal',
+      confirmButtonText: 'Yes, delete!',
+      cancelButtonText: 'Cancel',
       confirmButtonColor: '#d33',
       cancelButtonColor: '#3085d6',
     }).then((result) => {
       if (result.isConfirmed) {
         this.userService.deleteUser(user.id).subscribe({
           next: () => {
-            Swal.fire('Terhapus!', 'Pengguna berhasil dihapus.', 'success');
+            Swal.fire('Deleted!', 'User Already Deleted.', 'success');
             this.getAllUsers(); // Panggil metode untuk memperbarui tabel
           },
           error: (error) => {
