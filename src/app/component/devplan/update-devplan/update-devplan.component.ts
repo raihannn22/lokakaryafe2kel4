@@ -15,9 +15,19 @@ import { DropdownModule } from 'primeng/dropdown';
   styleUrl: './update-devplan.component.css'
 })
 export class UpdateDevplanComponent {
+  
+  oldDevplans: any[] = [];
 
   isValidForm(): boolean {
     return !!this.newDevplan.PLAN 
+  }
+
+  isUniqueDevplan(): boolean {
+    if (!this.newDevplan.PLAN) return false; // Validasi jika email kosong
+    return Array.isArray(this.oldDevplans) && !this.oldDevplans.some(
+      (devplan) => devplan.PLAN.toLowerCase().trim() === this.newDevplan.PLAN.toLowerCase().trim() &&
+       devplan.PLAN.toLowerCase().trim() !== this.devplan.PLAN.toLowerCase().trim()
+    );
   }
 
   
@@ -38,6 +48,14 @@ export class UpdateDevplanComponent {
   ];
 
   ngOnInit() {
+    this.devplanService.getAllDevplans().subscribe({
+      next: (response) => {
+        this.oldDevplans = response.content
+      },
+      error: (error) => {
+        console.error('Error fetching divisions:', error);
+      }
+    });
   }
 
   ngOnChanges() {

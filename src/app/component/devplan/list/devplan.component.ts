@@ -44,7 +44,7 @@ export class DevplanComponent {
   }
 
   getAllDevplans() {
-    this.devplanService.getAllDivisions().subscribe({
+    this.devplanService.getAllDevplans().subscribe({
       next: (response) => {
         this.devplans = response.content; // Data ada di 'content'
         // console.log('ini devp;am:',  this.devplans);

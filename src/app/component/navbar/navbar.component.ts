@@ -22,12 +22,12 @@ export class NavbarComponent {
 
   confirmDelete() {
     Swal.fire({
-      title: 'Apakah Anda yakin?',
-      text: `Anda akan yakin untuk Logout?`,
+      title: 'Are you sure?',
+      text: `Are you sure you want to logout?`,
       icon: 'warning',
       showCancelButton: true,
-      confirmButtonText: 'Ya',
-      cancelButtonText: 'Batal',
+      confirmButtonText: 'Yes',
+      cancelButtonText: 'Cancel',
       confirmButtonColor: '#d33',
       cancelButtonColor: '#3085d6',
     }).then((result) => {
@@ -54,7 +54,7 @@ export class NavbarComponent {
               icon: 'pi pi-user',
               items: [
                   {
-                  label: 'Profil',
+                  label: 'Profile',
                   icon: 'pi pi-id-card',
                   command: () => this.router.navigate(['/profile'])
                   },

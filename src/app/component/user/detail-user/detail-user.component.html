@@ -4,7 +4,7 @@
 <div class="card flex justify-content-center">
     <!-- Tombol untuk membuka dialog -->
     <!-- <p-button label="Tambah Pengguna" icon="pi pi-plus" (click)="visible = true" class="mb-3"></p-button> -->
-    <p-dialog header="Detail Pengguna" [modal]="true" (onHide)="closeDialog()" [(visible)]="visible" [style]="{ width: '40rem' }">
+    <p-dialog header="User Detail" [modal]="true" (onHide)="closeDialog()" [(visible)]="visible" [style]="{ width: '40rem' }">
         <div class="grid">
             <div class="col-6">
               <div class="p-2">
@@ -37,7 +37,12 @@
             <div class="col-6">
               <div class="p-2">
                 <label class="font-bold">Employee Status:</label>
-                <div class="mt-1">{{newUser.employee_status || '-'}}</div>
+                <div class="mt-1">
+                  <p-tag 
+                  [severity]="newUser.employee_status === 1 ? 'warning' : 'info'"
+                  [value]="newUser.employee_status === 1 ? 'Contract' : 'Permanent'"
+                  ></p-tag>
+                </div>
               </div>
             </div>
     
@@ -58,7 +63,7 @@
                 <div class="mt-1">
                   <p-tag 
                     [severity]="newUser.enabled ? 'success' : 'danger'"
-                    [value]="newUser.enabled ? 'Active' : 'Inactive'"
+                    [value]="newUser.enabled ? 'Enabled' : 'Disabled'"
                   ></p-tag>
                 </div>
               </div>
@@ -66,7 +71,7 @@
     
             <div class="col-6">
               <div class="p-2">
-                <label class="font-bold">Divisi:</label>
+                <label class="font-bold">Division:</label>
                 <div class="mt-1">{{newUser.division_name || '-'}}</div>
               </div>
             </div>
@@ -91,7 +96,7 @@
         </div>
   
       <div class="flex justify-content-end gap-2 mt-3">
-        <p-button label="Batal" icon="pi pi-times" severity="secondary" (click)="closeDialog()"></p-button>
+        <p-button label="Cancel" icon="pi pi-times" severity="secondary" (click)="closeDialog()"></p-button>
         <p-button label="Summary" icon="pi pi-file-arrow-up" severity="info" (click)="openSummaryDialog(user)"></p-button>
       </div>
     </p-dialog>

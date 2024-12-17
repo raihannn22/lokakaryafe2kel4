@@ -104,6 +104,7 @@ export class SummaryComponent implements OnInit{
         this.groupedData = this.groupAndSumData(this.combinedData);
         this.totalPercentage = this.groupedData.reduce((total, item) => total + item.percentage, 0);
         this.totalFinalScore = this.groupedData.reduce((total, item) => total + (item.score * (item.percentage)/100), 0);
+        console.log(this.groupedData);
     })
 
   
@@ -124,6 +125,7 @@ export class SummaryComponent implements OnInit{
     this.groupedAchievement.forEach((item) => {
       this.combinedData.push({
         group: item.group_name || 'Achievement', 
+        percentage: item.group_percentage,
         score: item.score,
         source: 'Achievement' 
       });
@@ -149,7 +151,6 @@ export class SummaryComponent implements OnInit{
     return acc;
   }, {} as Record<string, GroupedItem>);
 
-  // Mengubah objek yang sudah dikelompokkan menjadi array dan membagi score dengan jumlah item
   return Object.values(groupedData).map((item) => ({
     group: item.group,
     percentage: item.percentage,
@@ -159,6 +160,10 @@ export class SummaryComponent implements OnInit{
   }));
 
 }
+
+
+
+
 
 // normalizePercentages(data: any[]): any[] {
 //   // Hitung total percentage saat ini

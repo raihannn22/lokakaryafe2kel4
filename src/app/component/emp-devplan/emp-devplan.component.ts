@@ -8,11 +8,12 @@ import { InputTextModule } from 'primeng/inputtext';
 import { TagModule } from 'primeng/tag';
 import { ThisReceiver } from '@angular/compiler';
 import Swal from 'sweetalert2';
+import {  ToolbarModule } from 'primeng/toolbar';
 
 @Component({
   selector: 'app-emp-devplan',
   standalone: true,
-  imports: [CommonModule, FormsModule, TableModule, ButtonModule, InputTextModule, TagModule],
+  imports: [CommonModule, FormsModule, TableModule, ButtonModule, InputTextModule, TagModule, ToolbarModule],
   templateUrl: './emp-devplan.component.html',
   styleUrl: './emp-devplan.component.css'
 })

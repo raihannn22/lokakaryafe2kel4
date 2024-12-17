@@ -1,8 +1,8 @@
 <div class="text-center mb-2">
-    <h3 style="font-weight: bold; font-size: 2.25rem;">Divisi Management</h3>
+    <h3 style="font-weight: bold; font-size: 2.25rem;">Division Management</h3>
 </div>
 
-<p-button label="Tambah Divisi" icon="pi pi-plus" (click)="openCreateDialog()" class="p-5 mt-5" ></p-button>
+<p-button label="Add Division" icon="pi pi-plus" (click)="openCreateDialog()" class="p-5 mt-5" ></p-button>
 
     <!-- Tombol global untuk membuat pengguna baru -->
     
@@ -13,17 +13,17 @@
                   <p-inputIcon>
                       <i class="pi pi-search"></i>
                   </p-inputIcon>
-                  <input #searchInput pInputText type="text" (input)="dt.filterGlobal(searchInput.value, 'contains')" placeholder="Cari Divisi..." />
+                  <input #searchInput pInputText type="text" (input)="dt.filterGlobal(searchInput.value, 'contains')" placeholder="Search division..." />
               </p-iconField>
           </ng-template>
           
         <ng-template pTemplate="header">
           <tr>
             <th pSortableColumn="DIVISION_NAME">
-                Nama Divisi
+                Division Name
                 <p-sortIcon field="DIVISION_NAME"></p-sortIcon>
             </th>
-              <th>Aksi</th>
+              <th>Action</th>
           </tr>
       </ng-template>
   

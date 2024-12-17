@@ -5,6 +5,8 @@ import { TableModule } from 'primeng/table';
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
 import { EmpSuggestionService } from '../../service/emp-suggestion/emp-suggestion.service';
+import Swal from 'sweetalert2';
+import { InputTextareaModule } from 'primeng/inputtextarea';
 
 interface EmpSuggestion {
   suggestion: string;
@@ -20,6 +22,7 @@ interface EmpSuggestion {
     TableModule,
     ButtonModule,
     InputTextModule,
+    InputTextareaModule
   ],
   templateUrl: './emp-suggestion.component.html',
   styleUrls: ['./emp-suggestion.component.css'],
@@ -112,23 +115,38 @@ export class EmpSuggestionComponent implements OnInit {
 
   this.isSaving = true;
 
-  this.empSuggestionService.saveAllEmpSuggestions(dataToSave).subscribe({
-    next: () => {
-      alert('Saran berhasil disimpan!');
-      // Tandai semua data baru sebagai "existing"
-      this.empSuggestions.forEach((item) => {
-        if (dataToSave.find((savedItem) => savedItem.suggestion === item.suggestion)) {
-          item.isExisting = true;
-        }
+  Swal.fire({
+    html: 'Apakah Anda yakin ingin menyimpan data ini? <br> data yang di submit tidak dapat diubah',
+    title: 'Are you sure?',
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonColor: '#3085d6',
+    cancelButtonColor: '#d33',
+    confirmButtonText: 'Yes, change it!'
+  }).then((result) => {
+    if (result.isConfirmed) {
+      this.empSuggestionService.saveAllEmpSuggestions(dataToSave).subscribe({
+        next: () => {
+          this.empSuggestions.forEach((item) => {
+            if (dataToSave.find((savedItem) => savedItem.suggestion === item.suggestion)) {
+              item.isExisting = true;
+            }
+          });
+          this.isSaving = false;
+          window.location.reload();
+        },
+        error: (error) => {
+          console.error('Terjadi kesalahan saat menyimpan saran:', error);
+          alert('Gagal menyimpan saran. Silakan periksa konsol untuk detailnya.');
+          this.isSaving = false;
+        },
       });
+    }else{
       this.isSaving = false;
-    },
-    error: (error) => {
-      console.error('Terjadi kesalahan saat menyimpan saran:', error);
-      alert('Gagal menyimpan saran. Silakan periksa konsol untuk detailnya.');
-      this.isSaving = false;
-    },
+    }
   });
+
+  
 }
 
 

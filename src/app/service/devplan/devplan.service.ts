@@ -10,7 +10,7 @@ export class DevplanService {
 
   constructor(private http: HttpClient) { }
 
-  getAllDivisions(): Observable<any> {
+  getAllDevplans(): Observable<any> {
     return this.http.get<any>(`${this.apiUrl}/get/all`);
   }
 
