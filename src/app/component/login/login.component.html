@@ -11,12 +11,21 @@
                     id="username" 
                     aria-describedby="username-help" 
                     name="username"
-                    [(ngModel)]="email" />
+                    [(ngModel)]="email" 
+                    required
+                    #username="ngModel"/>
+                    <small *ngIf="username.invalid && username.touched" class="p-error">
+                        <span *ngIf="username.errors?.['required']">Email/Username is required.</span>
+                    </small>
                 </div>
                 <!-- </div> -->
                 <div class="input-group">
                     <label for="password">Password</label>
-                    <p-password [(ngModel)]="password" id="password"  name="password" [feedback]="false" [toggleMask]="true" />
+                    <p-password [(ngModel)]="password" id="password"  name="password" [feedback]="false" [toggleMask]="true" #passwordField="ngModel" required minlength="6"/>
+                    <small *ngIf="passwordField.invalid && passwordField.touched" class="p-error">
+                        <span *ngIf="passwordField.errors?.['required']">Password is required.</span>
+                        <span *ngIf="passwordField.errors?.['minlength']">Password must be at least 6 characters long.</span>
+                    </small>
                 </div>
                 <button type="submit" >Masuk</button>
                 <div *ngIf="errorMessage" class="error">{{ errorMessage }}</div>

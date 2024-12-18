@@ -70,8 +70,6 @@ export class AchievementComponent implements OnInit {
 
   constructor(
     private achievementService: AchievementService,
-    private groupAchievementService: GroupAchievementService,
-    private router: Router
   ) {}
 
   ngOnInit() {

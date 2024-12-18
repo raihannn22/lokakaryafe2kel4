@@ -281,12 +281,15 @@ export class GroupAchievementComponent implements OnInit {
           next: () => {
             this.getAllGroupAchievements();
             this.groupAchievementDialog = false;
-            window.location.reload();
             this.resetGroupAchievement();
             Swal.fire({
               icon: 'success',
               title: 'Success!',
               text: 'Successfully updated group achievement!',
+              showConfirmButton: false,
+              timer: 1500,
+            }).then(() => {
+                window.location.reload();
             });
           },
           error: (error) => {
@@ -304,12 +307,16 @@ export class GroupAchievementComponent implements OnInit {
           next: () => {
             this.getAllGroupAchievements();
             this.groupAchievementDialog = false;
-            window.location.reload();
             this.resetGroupAchievement();
             Swal.fire({
               icon: 'success',
               title: 'Success!',
               text: 'Successfully added group achievement!',
+              showConfirmButton: false,
+              timer: 1500,
+            }).then(() => {
+                window.location.reload();
+
             });
           },
           error: (error) => {
@@ -346,9 +353,9 @@ export class GroupAchievementComponent implements OnInit {
               title: 'Successfully deleted group achievement!',
               showConfirmButton: false,
               timer: 1500,
+            }).then(() => {
+                window.location.reload();
             });
-            this.getAllGroupAchievements();
-            window.location.reload();
           },
           error: (error) => {
             Swal.fire({

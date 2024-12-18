@@ -63,13 +63,13 @@
                     [feedback]="false" 
                     [toggleMask]="true" 
                     required
+                    minlength="6"
                     #PasswordField="ngModel"
                   ></p-password>
-                  @if (PasswordField.invalid && PasswordField.touched) {
-                    <small class="p-error">
-                      Current password is required.
-                    </small>
-                  }
+                  <small *ngIf="PasswordField.invalid && PasswordField.touched" class="p-error ml-2">
+                    <span *ngIf="PasswordField.errors?.['required']">Current password is required.</span>
+                    <span *ngIf="PasswordField.errors?.['minlength']">Current password must be at least 6 characters long.</span>
+                  </small>
                 </div>
 
                 <div class="input-group mr-auto">
@@ -81,13 +81,13 @@
                     [feedback]="false" 
                     [toggleMask]="true" 
                     required
+                    minlength="6"
                     #newPasswordField="ngModel"
                   ></p-password>
-                  @if (newPasswordField.invalid && newPasswordField.touched) {
-                    <small *ngIf="newPasswordField.invalid && newPasswordField.touched" class="p-error">
-                      New password is required.
-                    </small>
-                  }
+                  <small *ngIf="newPasswordField.invalid && newPasswordField.touched" class="p-error ml-2">
+                    <span *ngIf="newPasswordField.errors?.['required']">New password is required.</span>
+                    <span *ngIf="newPasswordField.errors?.['minlength']">New password must be at least 6 characters long.</span>
+                  </small>
                 </div>
   
                 <div class="input-group mr-auto">
@@ -102,11 +102,11 @@
                     #confirmPasswordField="ngModel"
                   ></p-password>
                   @if (confirmPasswordField.invalid && confirmPasswordField.touched) {
-                    <small class="p-error">
+                    <small class="p-error ml-2">
                       Confirm password is required.
                     </small>
                   }@else if(confirmPassword !== newPassword && confirmPasswordField.touched) {
-                    <small  class="p-error">
+                    <small  class="p-error ml-2">
                       Passwords do not match.
                     </small>
                   }
