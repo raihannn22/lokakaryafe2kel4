@@ -75,9 +75,9 @@
                 <ng-template pTemplate="body" let-customer let-rowIndex="rowIndex">
                     <tr class="hover:bg-gray-50">
                         <td class="py-3">{{customer.group}}</td>
-                        <td class="text-center">{{customer.score}}</td>
+                        <td class="text-center">{{customer.score | number: '1.2-2' }}</td>
                         <td class="text-center">{{customer.percentage}}%</td>
-                        <td class="text-center">{{customer.score * customer.percentage / 100}}</td>
+                        <td class="text-center">{{customer.score * customer.percentage / 100  | number: '1.2-2' }}</td>
                     </tr>
                 </ng-template>
 
@@ -85,7 +85,7 @@
                     <tr class="bg-gray-100 font-semibold">
                         <td colspan="2" class="text-right pr-4">Total:</td>
                         <td class="text-center">{{totalPercentage}}%</td>
-                        <td class="text-center">{{totalFinalScore}}</td>
+                        <td class="text-center">{{totalFinalScore  | number: '1.2-2' }}</td>
                     </tr>
                 </ng-template>
             </p-table>

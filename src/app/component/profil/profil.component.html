@@ -68,7 +68,7 @@
                   ></p-password>
                   <small *ngIf="PasswordField.invalid && PasswordField.touched" class="p-error ml-2">
                     <span *ngIf="PasswordField.errors?.['required']">Current password is required.</span>
-                    <span *ngIf="PasswordField.errors?.['minlength']">Current password must be at least 6 characters long.</span>
+                    <span *ngIf="PasswordField.errors?.['minlength']">Current password must be at least 6 characters.</span>
                   </small>
                 </div>
 
@@ -86,7 +86,7 @@
                   ></p-password>
                   <small *ngIf="newPasswordField.invalid && newPasswordField.touched" class="p-error ml-2">
                     <span *ngIf="newPasswordField.errors?.['required']">New password is required.</span>
-                    <span *ngIf="newPasswordField.errors?.['minlength']">New password must be at least 6 characters long.</span>
+                    <span *ngIf="newPasswordField.errors?.['minlength']">New password must be at least 6 characters.</span>
                   </small>
                 </div>
   
