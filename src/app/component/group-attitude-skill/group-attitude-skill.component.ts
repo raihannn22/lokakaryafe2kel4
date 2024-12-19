@@ -277,6 +277,10 @@ export class GroupAttitudeSkillComponent implements OnInit {
               icon: 'success',
               title: 'Success!',
               text: 'Successfully updated Group Attitude Skill!',
+              showConfirmButton: false,
+              timer: 1500,
+            }).then(() => {
+              window.location.reload();
             });
           },
           error: (error) => {
@@ -299,6 +303,10 @@ export class GroupAttitudeSkillComponent implements OnInit {
               icon: 'success',
               title: 'Success!',
               text: 'Successfully added Group Attitude Skill!',
+              showConfirmButton: false,
+              timer: 1500,
+            }).then(() => {
+              window.location.reload();
             });
           },
           error: (error) => {
@@ -335,9 +343,9 @@ export class GroupAttitudeSkillComponent implements OnInit {
               title: 'Successfully deleted group attitude skill!',
               showConfirmButton: false,
               timer: 1500,
+            }).then(() => {
+              window.location.reload();
             });
-            this.getAllGroupAttitudeSkills();
-            window.location.reload();
           },
           error: (error) => {
             Swal.fire({

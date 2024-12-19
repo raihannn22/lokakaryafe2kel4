@@ -1,21 +1,22 @@
 <div class="text-center mb-2">
     <h3 style="font-weight: bold; font-size: 2.25rem;">Development Plan Management</h3>
-</div>
-
-
-<p-button label="Add DevPlan" icon="pi pi-plus" (click)="openCreateDialog()" class="p-5 mt-5" ></p-button>
-
-    <!-- Tombol global untuk membuat pengguna baru -->
-    
+</div> 
     <div class="p-5">
     <p-table #dt [value]="devplans" [paginator]="true" [rows]="10" [loading]="loading" styleClass="p-datatable-gridlines" [globalFilterFields]="[ 'PLAN']">
           <ng-template pTemplate="caption">
-              <p-iconField iconPosition="left">
-                  <p-inputIcon>
-                      <i class="pi pi-search"></i>
-                  </p-inputIcon>
-                  <input #searchInput pInputText type="text" (input)="dt.filterGlobal(searchInput.value, 'contains')" placeholder="Search Devplan..." />
-              </p-iconField>
+            <div class="flex justify-content-between">
+                <p-button
+                  label="DevPlan"
+                  icon="pi pi-plus"
+                  (click)="openCreateDialog()"
+                  class="p-button-text"
+                ></p-button>
+                <div class="flex justify-content-end">
+                  <input
+                  #searchInput pInputText type="text" (input)="dt.filterGlobal(searchInput.value, 'contains')" placeholder="Search Devplan..."
+                  />
+                </div>
+              </div>
           </ng-template>
           
         <ng-template pTemplate="header">

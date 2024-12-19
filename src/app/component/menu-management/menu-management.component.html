@@ -26,12 +26,23 @@
                   <td class="font-medium">{{menu.MENU_NAME}}</td>
                   @for (item of roles; track $index) {
                       <td class="text-center">
+                        @if ( item.ROLENAME == "HR" && menu.MENU_NAME == "Role Menu - All" ) {
                           <p-checkbox
+                              [binary]="true"
+                              [(ngModel)]="roleMenuMap[item.ID][menu.ID]"
+                              (ngModelChange)="updateRoleMenu(item.ID, menu.ID, $event)"
+                              styleClass="checkbox-center"
+                              [disabled]="true">
+                          </p-checkbox>
+                        }@else {
+                          <p-checkbox
+                          
                               [binary]="true"
                               [(ngModel)]="roleMenuMap[item.ID][menu.ID]"
                               (ngModelChange)="updateRoleMenu(item.ID, menu.ID, $event)"
                               styleClass="checkbox-center">
                           </p-checkbox>
+                        }
                       </td>
                   }
               </tr>

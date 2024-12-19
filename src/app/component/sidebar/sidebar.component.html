@@ -33,15 +33,7 @@
                                 <span class="font-medium">MENU HR</span>
                                 <i class="pi pi-chevron-down"></i>
                             </div>
-                            <ul class="list-none p-0 m-0 overflow-hidden">
-                                <li>
-                                    <a [routerLink]="['/menu-management']" pRipple class="flex align-items-center cursor-pointer p-3 border-round text-700 hover:surface-100 transition-duration-150 transition-colors p-ripple ">
-                                        <i class="pi pi-objects-column mr-2"></i>
-                                        <span class="font-medium">Role Access Management</span>                                    </a>
-                                </li>
-
-                               
-                               
+                            <ul class="list-none p-0 m-0 overflow-hidden">                          
                                 <li *ngFor="let menu of getMenuByRole('hr')">
                                     <a [routerLink]="[menu.path]" pRipple 
                                        class="flex align-items-center cursor-pointer p-3 border-round text-700 hover:surface-100 transition-duration-150 transition-colors p-ripple">

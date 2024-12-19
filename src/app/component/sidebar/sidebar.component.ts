@@ -54,15 +54,14 @@ export class SidebarComponent implements OnInit{
       'group-attitude-skill#all': { name: 'Group Attitude', path: '/group-attitude-skill', icon: 'pi pi-sitemap' },
       'emp-dev-plan#read': { name: 'VIew Employee Development Plan', path: '/view-empdevplan', icon: 'pi pi-bullseye' },
       'emp-achievement#all': { name: 'Employee Achievement', path: '/emp-achievement-skill', icon: 'pi pi-list-check' },
+      'role-menu#all': { name: 'Menu Management', path: '/menu-management', icon: 'pi pi-objects-column' },
 
 
       'summary#read.self': { name: 'Summary View', path: '/user/summary-view', icon: 'pi pi-file-o' },
       'emp-suggestion#all': { name: 'Employee Suggestion', path: '/emp-suggestion', icon: 'pi pi-list-check' },
-
-
       'emp-technical-skill#all': { name: 'Employee Technical Skill', path: '/emp-technical-skill', icon: 'pi pi-list-check' },
       'emp-dev-plan#all': { name: 'Employee Development Plan', path: '/employee-development-plan', icon: 'pi pi-bullseye' },
-      'emp-attitude-skill#all': { name: 'Employee Attitude Skills', path: '/emp-attitude-skill', icon: 'pi pi-users' },
+      'emp-attitude-skill#all': { name: 'Employee Attitude Skills', path: '/emp-attitude-skill', icon: 'pi pi-list-check' },
 
       'user#read': { name: 'View User', path: '/view-user', icon: 'pi pi-users' },
       // Tambahkan mapping lainnya di sini
