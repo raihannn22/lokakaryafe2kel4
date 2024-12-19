@@ -56,13 +56,13 @@
                     {{customer.group}}
                 </td>
                 <td class="text-center p-3">
-                    {{customer.score}}
+                    {{customer.score | number: '1.2-2'}}
                 </td>
                 <td class="text-center p-3">
                     {{customer.percentage}}%
                 </td>
                 <td class="text-center p-3">
-                    {{(customer.score * customer.percentage / 100).toFixed(2)}}
+                    {{customer.score * customer.percentage / 100  | number: '1.2-2' }}
                 </td>
             </tr>
         </ng-template>

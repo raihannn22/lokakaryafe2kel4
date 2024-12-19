@@ -195,7 +195,7 @@
           <td>{{ user.division_name }}</td>
 
           @if (isViewUserRoute()) {
-            <td>{{ user.totalScore }}</td>
+            <td>{{ user.totalScore | number: '1.2-2' }}</td>
           }
 
           <td class="flex gap-2">
