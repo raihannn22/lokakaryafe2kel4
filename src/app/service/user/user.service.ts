@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class UserService {
   private apiUrl = 'http://localhost:8081/user';
@@ -14,6 +14,12 @@ export class UserService {
     return this.http.get(`${this.apiUrl}/get/all`);
   }
 
+  getUsersByDivisionId(divisionId: string): Observable<any> {
+    return this.http.get(`${this.apiUrl}/get/by-division-id`, {
+      params: { divisionId },
+    });
+  }
+
   getAllDivision(): Observable<any> {
     return this.http.get(`http://localhost:8081/division/get/all`);
   }
@@ -22,12 +28,9 @@ export class UserService {
     return this.http.get(`http://localhost:8081/appRole/get/all`);
   }
 
-
   saveUser(user: any): Observable<any> {
     return this.http.put(`${this.apiUrl}/save`, user);
   }
-
-
 
   getUserById(id: string): Observable<any> {
     return this.http.get(`${this.apiUrl}/get/${id}`);
@@ -44,7 +47,4 @@ export class UserService {
   resertPassword(id: string): Observable<any> {
     return this.http.patch(`${this.apiUrl}/reset-password/${id}`, {});
   }
-
-
-
 }

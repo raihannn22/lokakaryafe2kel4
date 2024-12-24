@@ -16,7 +16,7 @@
   text-align: left;
   overflow: hidden;
   white-space: nowrap;
-  text-overflow: ellipsis;
+  /* text-overflow: ellipsis; */
 }
 
 .column2-th {

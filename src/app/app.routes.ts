@@ -22,6 +22,7 @@ import { SummarySelfComponent } from './component/summary-self/summary-self.comp
 import { FullAssSumComponent } from './component/full-ass-sum/full-ass-sum.component';
 import { roleGuard } from './guard/role.guard';
 import { isLoggedInGuard } from './guard/is-logged-in.guard';
+import { EmployeeAssessmentComponent } from './emp-assessment/emp-assessment.component';
 
 export const routes: Routes = [
   {
@@ -127,6 +128,12 @@ export const routes: Routes = [
     canActivate: [authGuard, roleGuard],
     component: EmpDevplanComponent,
     data: { permission: 'emp-dev-plan#all' },
+  },
+  {
+    path: 'employee-assessment',
+    canActivate: [authGuard, roleGuard],
+    component: EmployeeAssessmentComponent,
+    data: { permission: 'emp-assessment#all' },
   },
   {
     path: 'view-user',

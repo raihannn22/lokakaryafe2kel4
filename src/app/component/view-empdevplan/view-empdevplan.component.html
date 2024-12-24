@@ -1,94 +1,101 @@
 <div class="text-center mb-2">
-    <h3 style="font-weight: bold; font-size: 2.25rem;">Employee Development Plan View</h3>
+  <h3 style="font-weight: bold; font-size: 2.25rem">
+    Employee Development Plan View
+  </h3>
 </div>
 
 <div class="container p-4">
-    
-    <!-- Header Section with Filters -->
-    <div class="card mb-4 p-4 shadow-sm border-round">
-        <div class="grid">
-            <div class="col-12 md:col-5">
-                <label class="block mb-2 font-medium">Select User</label>
-                <p-dropdown
-                    [options]="users"
-                    [(ngModel)]="selectedUser"
-                    optionLabel="username"
-                    [filter]="true"
-                    filterBy="username"
-                    [showClear]="true"
-                    placeholder="Select a User"
-                    styleClass="w-full">
-                        <ng-template pTemplate="selectedItem" let-selectedOption>
-                            <div class="flex align-items-center gap-2">
-                                <div>{{ selectedOption.username }}</div>
-                            </div>
-                        </ng-template>
-                        <ng-template let-users pTemplate="item">
-                            <div class="flex align-items-center gap-2">
-                                <div>{{ users.username }}</div>
-                            </div>
-                        </ng-template>
-                </p-dropdown>
+  <!-- Header Section with Filters -->
+  <div class="card mb-4 p-4 shadow-sm border-round">
+    <div class="grid">
+      <div class="col-12 md:col-5">
+        <label class="block mb-2 font-medium">Select User</label>
+        <p-dropdown
+          [options]="users"
+          [(ngModel)]="selectedUser"
+          optionLabel="username"
+          [filter]="true"
+          filterBy="username"
+          [showClear]="true"
+          placeholder="Select a User"
+          styleClass="w-full"
+        >
+          <ng-template pTemplate="selectedItem" let-selectedOption>
+            <div class="flex align-items-center gap-2">
+              <div>{{ selectedOption.username }}</div>
             </div>
+          </ng-template>
+          <ng-template let-users pTemplate="item">
+            <div class="flex align-items-center gap-2">
+              <div>{{ users.username }}</div>
+            </div>
+          </ng-template>
+        </p-dropdown>
+      </div>
 
-            <div class="col-12 md:col-5">
-                <label class="block mb-2 font-medium">Select Year</label>
-                <p-dropdown
-                    [options]="years"
-                    [(ngModel)]="selectedYear"
-                    placeholder="Select Year"
-                    [virtualScroll]="true"
-                    [virtualScrollItemSize]="38"
-                    styleClass="w-full">
-                </p-dropdown>
-            </div>
+      <div class="col-12 md:col-5">
+        <label class="block mb-2 font-medium">Select Year</label>
+        <p-dropdown
+          [options]="years"
+          [(ngModel)]="selectedYear"
+          placeholder="Select Year"
+          [virtualScroll]="true"
+          [virtualScrollItemSize]="38"
+          styleClass="w-full"
+        >
+        </p-dropdown>
+      </div>
 
-            <div class="col-12 md:col-2 flex align-items-end">
-                <button pButton
-                        pRipple
-                        type="button"
-                        label="Cari"
-                        icon="pi pi-search"
-                        class="p-button-primary w-full"
-                        (click)="submit()">
-                </button>
-            </div>
-        </div>
+      <div class="col-12 md:col-2 flex align-items-end">
+        <button
+          pButton
+          pRipple
+          type="button"
+          label="Cari"
+          icon="pi pi-search"
+          class="p-button-primary w-full"
+          (click)="submit()"
+        ></button>
+      </div>
     </div>
+  </div>
 
-    <!-- Table Section -->
-    <div class="card shadow-sm border-round">
-        <p-table
-            [value]="empdevplans"
-            sortField="DEV_PLAN_NAME"
-            sortMode="single"
-            [scrollable]="true"
-            scrollHeight="400px"
-            rowGroupMode="subheader"
-            groupRowsBy="DEV_PLAN_NAME"
-            [tableStyle]="{'min-width': '60rem'}"
-            styleClass="p-datatable-gridlines">
-                <ng-template pTemplate="header">
-                    <tr>
-                        <th style="width: 80px" class="text-primary-900 font-semibold">No</th>
-                        <th class="text-primary-900 font-semibold">Plan</th>
-                        <th class="text-primary-900 font-semibold">Year</th>
-                    </tr>
-                </ng-template>
-                <ng-template pTemplate="groupheader" let-empdevplans>
-                    <tr pRowGroupHeader>
-                        <td colspan="3" class="bg-primary-50">
-                            <span class="font-bold ml-2 text-primary-900">{{empdevplans.DEV_PLAN_NAME}}</span>
-                        </td>
-                    </tr>
-                </ng-template>
-                <ng-template pTemplate="body" let-empdevplans let-rowIndex="rowIndex">
-                    <tr>
-                        <td>{{rowIndex + 1}}</td>
-                        <td>{{empdevplans.DETAIL}}</td>
-                        <td>{{empdevplans.ASSESSMENT_YEAR}}</td>
-                    </tr>
-                </ng-template>
-        </p-table>
-    </div>
+  <!-- Table Section -->
+  <div class="card shadow-sm border-round">
+    <p-table
+      [value]="empdevplans"
+      sortField="DEV_PLAN_NAME"
+      sortMode="single"
+      [scrollable]="true"
+      scrollHeight="400px"
+      rowGroupMode="subheader"
+      groupRowsBy="DEV_PLAN_NAME"
+      [tableStyle]="{ 'min-width': '60rem' }"
+      styleClass="p-datatable-gridlines"
+    >
+      <ng-template pTemplate="header">
+        <tr>
+          <th style="width: 80px" class="text-primary-900 font-semibold">No</th>
+          <th class="text-primary-900 font-semibold">Plan</th>
+          <th class="text-primary-900 font-semibold">Year</th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="groupheader" let-empdevplans>
+        <tr pRowGroupHeader>
+          <td colspan="3" class="bg-primary-50">
+            <span class="font-bold ml-2 text-primary-900">{{
+              empdevplans.DEV_PLAN_NAME
+            }}</span>
+          </td>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-empdevplans let-rowIndex="rowIndex">
+        <tr>
+          <td>{{ rowIndex + 1 }}</td>
+          <td>{{ empdevplans.DETAIL }}</td>
+          <td>{{ empdevplans.ASSESSMENT_YEAR }}</td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </div>
 </div>
