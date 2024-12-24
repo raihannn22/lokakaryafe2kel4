@@ -1,4 +1,12 @@
+
+
 <div class="container p-4">
+  @if (!hasChangedPassword) {
+    <div class="warning-message">
+      <p class="mb-2">Demi keamanan akun Anda, mohon segera ganti password Anda.</p>
+      <p-button label="ganti password" [raised]="true" severity="warning" (click)=onChangePassword()/>
+    </div>
+  }
   <!-- Welcome Section -->
   <div class="welcome-section mb-4">
       <div class="card welcome-card p-4 text-white border-round">
@@ -22,9 +30,9 @@
                       <i class="pi pi-users text-2xl"></i>
                   </div>
               </div>
-
           </div>
       </div>
+
 
       <!-- Total Roles Card -->
       <!-- <div class="col-12 md:col-6 lg:col-3">

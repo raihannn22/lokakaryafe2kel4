@@ -99,7 +99,7 @@ export class AchievementComponent implements OnInit {
   }
 
   getAllGroupAchievements() {
-    this.achievementService.getAllGroupAchievements().subscribe({
+    this.achievementService.getAllGroupAchievementsEnabled().subscribe({
       next: (response) => {
         this.groupAchievements = response.content;
         this.loading = false;

@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { get } from 'http';
 
 @Injectable({
   providedIn: 'root',
@@ -35,5 +36,9 @@ export class GroupAttitudeSkillService {
 
   getGroupAttitudeSkillsWithDetails(): Observable<any> {
     return this.http.get<any>(`${this.apiUrl}/with-details`);
+  }
+
+  getGroupAttitudeSkillsEnabled(): Observable<any> {
+    return this.http.get(`${this.apiUrl}/get/all/enabled`); 
   }
 }

@@ -80,6 +80,8 @@ export class GroupAttitudeSkillComponent implements OnInit {
   totalPercentageAchieved: number = 0;
   totalPercentage: number = 0;
   userPercentage: number = 0;
+  enabled: number = 0;
+  groupAttitudeEnabled: any[] = [];
 
   constructor(
     private groupAttitudeSkillService: GroupAttitudeSkillService,
@@ -92,12 +94,14 @@ export class GroupAttitudeSkillComponent implements OnInit {
 
   getAllGroup() {
     forkJoin({
-      groupAchievement: this.groupAchievementService.getAllGroupAchievements(),
+      groupAchievement: this.groupAchievementService.getAllGroupAchievementsEnabled(),
       attitudeSkill: this.groupAttitudeSkillService.getAllGroupAttitudeSkills(),
-    }).subscribe(({ groupAchievement, attitudeSkill }) => {
+      groupAttitudeEnabled: this.groupAttitudeSkillService.getGroupAttitudeSkillsEnabled(),
+    }).subscribe(({ groupAchievement, attitudeSkill, groupAttitudeEnabled }) => {
       this.groupAchievements = groupAchievement.content;
       // console.log('Group Achievement:', this.groupAchievements);
       this.totalRecords = groupAchievement.totalRecords;
+      this.groupAttitudeEnabled = groupAttitudeEnabled.content;
       this.percentageAchieved = this.groupAchievements.map(
         (item) => item.percentage
       );
@@ -110,7 +114,7 @@ export class GroupAttitudeSkillComponent implements OnInit {
       this.totalRecords = attitudeSkill.totalRecords;
       this.filteredGroupAttitudeSkills = this.groupAttitudeSkills;
       this.loading = false;
-      this.percentageAttitude = this.groupAttitudeSkills.map(
+      this.percentageAttitude = this.groupAttitudeEnabled.map(
         (item) => item.percentage
       );
       this.totalPercentageAttitude = this.percentageAttitude.reduce(
@@ -183,14 +187,17 @@ export class GroupAttitudeSkillComponent implements OnInit {
     this.groupAttitudeSkill = { group_name: '', percentage: null, enabled: 1 };
     this.groupAttitudeSkillDialog = true;
     this.isGroupNameDuplicate = false;
+    this.enabled = 0;
   }
 
   editGroupAttitudeSkill(groupAttitudeSkill: any) {
     // console.log('Mengedit group AttitudeSkill', groupAttitudeSkill);
     this.groupAttitudeSkill = { ...groupAttitudeSkill };
     this.userPercentage = this.groupAttitudeSkill.percentage;
+    this.enabled = this.groupAttitudeSkill.enabled;
     this.groupAttitudeSkillDialog = true;
     this.isGroupNameDuplicate = false;
+    
   }
 
   validateGroupAttitudeSkill() {
@@ -230,7 +237,7 @@ export class GroupAttitudeSkillComponent implements OnInit {
   }
 
   saveGroupAttitudeSkill() {
-    if (this.groupAttitudeSkill.id) {
+    if (this.groupAttitudeSkill.id && this.enabled != 0) {
       const maxValue = 100 - this.totalPercentage + this.userPercentage;
       if (this.groupAttitudeSkill.percentage > maxValue) {
         Swal.fire({

@@ -1,0 +1,13 @@
+.warning-message {
+    background-color: #fff3cd;
+    border: 1px solid #ffeeba;
+    color: #856404;
+    padding: 1rem;
+    border-radius: 4px;
+    margin: 1rem 0;
+    text-align: center;
+  }
+
+  p {
+    margin: 0;
+  }

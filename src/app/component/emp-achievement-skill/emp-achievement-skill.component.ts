@@ -108,7 +108,7 @@ export class EmpAchievementSkillComponent implements OnInit {
 
   getAllAchievements() {
     this.loading = true;
-    this.empAchievementSkillService.getAllAchievements().subscribe({
+    this.empAchievementSkillService.getAllAchievementsEnabled().subscribe({
       next: (response) => {
         this.achievements = response.content;
         this.loading = false;

@@ -12,7 +12,6 @@
                     </span>
                 </div>
                 <div class="overflow-y-auto">
-                    @if (role?.includes('HR')) {
                     <ul class="list-none p-3 m-0">
                         <li>
                             <a [routerLink]="['/dashboard']"  pRipple class="flex align-items-center cursor-pointer p-3 border-round text-700 hover:surface-100 transition-duration-150 transition-colors p-ripple">
@@ -20,6 +19,7 @@
                                 <span class="font-medium">Dashboard</span>
                             </a>
                         </li>
+                        @if (role?.includes('HR')) {
                         <li>
                             <div
                                 pRipple
@@ -43,8 +43,8 @@
                                 </li>
                             </ul>
                         </li>
+                    }
                     </ul>
-                }
 
 
                     @if (role?.includes('USER')) {

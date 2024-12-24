@@ -77,6 +77,8 @@ export class GroupAchievementComponent implements OnInit {
   totalPercentageAchieved: number = 0;
   totalPercentage: number = 0;
   userPercentage: number = 0;
+  groupAchievementEnabled: any[] = [];
+  enabled: number = 0;
 
   constructor(
     private groupAchievementService: GroupAchievementService,
@@ -86,15 +88,16 @@ export class GroupAchievementComponent implements OnInit {
   ngOnInit() {
     forkJoin({
       groupAchievement: this.groupAchievementService.getAllGroupAchievements(),
-      attitudeSkill:
-        this.atitudeSkillService.getGroupAttitudeSkillsWithDetails(),
-    }).subscribe(({ groupAchievement, attitudeSkill }) => {
+      attitudeSkill: this.atitudeSkillService.getGroupAttitudeSkillsWithDetails(),
+      gAchievementEnabled: this.groupAchievementService.getAllGroupAchievementsEnabled(),
+    }).subscribe(({ groupAchievement, attitudeSkill , gAchievementEnabled}) => {
       this.groupAchievements = groupAchievement.content;
       // console.log('Group Achievement:', this.groupAchievements);
       this.totalRecords = groupAchievement.totalRecords;
+      this.groupAchievementEnabled = gAchievementEnabled.content;
       this.filteredGroupAchievements = this.groupAchievements;
       this.loading = false;
-      this.percentageAchieved = this.groupAchievements.map(
+      this.percentageAchieved = this.groupAchievementEnabled.map(
         (item) => item.percentage
       );
       this.totalPercentageAchieved = this.percentageAchieved.reduce(
@@ -196,6 +199,7 @@ export class GroupAchievementComponent implements OnInit {
   showAddDialog() {
     // console.log('Menampilkan dialog tambah');
     this.resetGroupAchievement();
+    this.enabled = 0;
     this.groupAchievementDialog = true;
     this.isGroupNameDuplicate = false;
   }
@@ -204,6 +208,7 @@ export class GroupAchievementComponent implements OnInit {
     // console.log('Mengedit group achievement', groupAchievement);
     this.groupAchievement = { ...groupAchievement };
     this.userPercentage = this.groupAchievement.percentage;
+    this.enabled = this.groupAchievement.enabled;
     // console.log(this.userPercentage, 'ini user percentagenya');
     // console.log(this.totalPercentage, 'total persentase');
     this.groupAchievementDialog = true;
@@ -240,10 +245,12 @@ export class GroupAchievementComponent implements OnInit {
   }
 
   saveGroupAchievement() {
+    console.log(this.groupAchievement.enabled);
     if (!this.validateGroupAchievement()) {
       return;
     }
-    if (this.groupAchievement.id) {
+    if (this.groupAchievement.id && this.enabled != 0) {
+      console.log("atas");
       const maxValue = 100 - this.totalPercentage + this.userPercentage;
       if (this.groupAchievement.percentage > maxValue) {
         Swal.fire({
@@ -258,6 +265,7 @@ export class GroupAchievementComponent implements OnInit {
         return;
       }
     } else {
+      console.log("bawah"); 
       const maxValue = 100 - this.totalPercentage;
       if (this.groupAchievement.percentage > maxValue) {
         Swal.fire({

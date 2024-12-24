@@ -88,6 +88,11 @@
                     <span *ngIf="newPasswordField.errors?.['required']">New password is required.</span>
                     <span *ngIf="newPasswordField.errors?.['minlength']">New password must be at least 6 characters.</span>
                   </small>
+                  @if (newPassword === currentPassword) {
+                    <small class="p-error ml-2">
+                      New password cannot be the same as the current password.
+                    </small>
+                  }
                 </div>
   
                 <div class="input-group mr-auto">
