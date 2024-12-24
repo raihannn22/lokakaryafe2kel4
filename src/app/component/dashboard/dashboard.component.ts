@@ -4,11 +4,12 @@ import { ButtonModule } from 'primeng/button';
 import { TagModule } from 'primeng/tag';
 import { jwtDecode } from 'jwt-decode';
 import { UserService } from '../../service/user/user.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [TableModule, ButtonModule, TagModule],
+  imports: [TableModule, ButtonModule, TagModule, ButtonModule],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.css'
 })
@@ -21,8 +22,10 @@ export class DashboardComponent implements OnInit {
   completedTasks: number = 0;
   token: string | null = '';
   userRoles: string = '';
+  hasChangedPassword: boolean = false;
+  userId: string = '';
 
-  constructor(private userService: UserService) {}
+  constructor(private userService: UserService, private router: Router) {}
 
   getGreeting(): string {
     const hour = new Date().getHours();
@@ -45,6 +48,15 @@ export class DashboardComponent implements OnInit {
     this.getRolesFromToken();
     this.nama = localStorage.getItem('full_name');
     this.getUserCount();
+    this.userId = localStorage.getItem('id') || '';
+    this.getPassword();
+  }
+
+  getPassword(){
+    this.userService.getUserById(this.userId).subscribe((response) => {
+      this.hasChangedPassword = response.content.has_change_password;
+      console.log(this.hasChangedPassword);  
+    })
   }
 
   getRolesFromToken(): void {
@@ -73,6 +85,10 @@ export class DashboardComponent implements OnInit {
       console.error('Error fetching user count:', error);
     }
     );
+  }
+
+  onChangePassword() {
+    this.router.navigate(['/profile']); 
   }
 
 

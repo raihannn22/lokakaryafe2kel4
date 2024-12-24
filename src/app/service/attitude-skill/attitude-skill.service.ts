@@ -33,4 +33,8 @@ export class AttitudeSkillService {
   deleteAttitudeSkill(id: string): Observable<any> {
     return this.http.delete(`${this.apiUrl}/delete/${id}`);
   }
+
+  getAllAttitudeSkillsEnabled(): Observable<any> {
+    return this.http.get(`http://localhost:8081/group-attitude-skill/get/all/enabled`);
+  }
 }

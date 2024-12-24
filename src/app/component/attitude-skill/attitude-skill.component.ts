@@ -102,7 +102,7 @@ export class AttitudeSkillComponent implements OnInit {
   }
 
   getAllGroupAttitudeSkills() {
-    this.attitudeSkillService.getAllGroupAttitudeSkills().subscribe({
+    this.attitudeSkillService.getAllAttitudeSkillsEnabled().subscribe({
       next: (response) => {
         this.groupAttitudeSkills = response.content;
         this.loading = false;
@@ -143,7 +143,7 @@ export class AttitudeSkillComponent implements OnInit {
   }
 
   editAttitudeSkill(attitudeSkill: any) {
-    // console.log('Mengedit attitudeSkill', attitudeSkill);
+    console.log('Mengedit attitudeSkill', this.groupAttitudeSkills);
     this.attitudeSkill = { ...attitudeSkill };
     this.attitudeSkillDialog = true;
   }

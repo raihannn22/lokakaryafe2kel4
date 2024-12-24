@@ -54,4 +54,8 @@ export class EmpAchievementSkillService {
   deleteEmpAchievementSkill(id: string): Observable<any> {
     return this.http.delete(`${this.apiUrl}/delete/${id}`);
   }
+
+  getAllAchievementsEnabled(): Observable<any> {
+    return this.http.get('http://localhost:8081/achievement/get/all/enabled');
+  }
 }

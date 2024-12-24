@@ -97,9 +97,9 @@ export const routes: Routes = [
   },
   {
     path: 'menu-management',
-    canActivate: [authGuard],
+    canActivate: [authGuard, roleGuard],
     component: MenuManagementComponent,
-    // data: {permission: 'menu#all'}
+    data: {permission: 'role-menu#all'}
   },
   {
     path: 'profile',
