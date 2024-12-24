@@ -50,11 +50,22 @@ export class EmpDevplanComponent implements OnInit {
   }
 
   loadPerihals() {
-    this.empDevplanService.getAllDevPlan().subscribe((data) => {
-      this.empdevplans = data.content.map((item: { ID: any; PLAN: any }) => ({
+// <<<<<<< banu
+//     this.empDevplanService.getAllDevPlan().subscribe((data) => {
+//       this.empdevplans = data.content.map((item: { ID: any; PLAN: any }) => ({
+//         id: item.ID,
+//         title: item.PLAN,
+//         keterangans: [{ value: '' }], // Gunakan objek untuk tiap keterangan
+// =======
+    this.empDevplanService.getAllDevPlan().subscribe(data => {
+      this.empdevplans = data.content.map((item: {
+        ENABLED: any; ID: any; PLAN: any; 
+}) => ({
         id: item.ID,
         title: item.PLAN,
-        keterangans: [{ value: '' }], // Gunakan objek untuk tiap keterangan
+        enabled: item.ENABLED,
+        keterangans: [{ value: '' }]  // Gunakan objek untuk tiap keterangan
+// >>>>>>> main
       }));
     });
   }

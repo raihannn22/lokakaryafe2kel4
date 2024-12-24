@@ -254,15 +254,15 @@
               class="p-button-danger p-button-sm"
               (click)="confirmDelete(user)"
             ></button>
-            } @if (userRoles?.includes('HR') || userRoles?.includes('SVP')||
-            userRoles?.includes('MGR')) {
-            <button
-              pButton
-              type="button"
-              icon="pi pi-info"
-              class="p-button-secondary p-button-sm"
-              (click)="openDetailDialog(user)"
-            ></button>
+          }
+          @if (userRoles?.includes('HR') || userRoles?.includes('SVP')|| userRoles?.includes('MGR') ) {
+              <button
+                pButton
+                type="button"
+                icon="pi pi-info"
+                class="p-button-secondary p-button-sm"
+                (click)="openDetailDialog(user)"
+              ></button>
             }
           </td>
         </tr>
