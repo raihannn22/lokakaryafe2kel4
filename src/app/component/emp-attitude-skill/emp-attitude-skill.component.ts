@@ -58,6 +58,8 @@ export class EmpAttitudeSkillComponent implements OnInit {
   assessmentYear: number = new Date().getFullYear();
   userName: string | null = '';
 
+  isScoreDropdownDisabled: boolean = false; // Menyimpan status disabled
+
   scoreOptions = [
     { label: 'Sangat Baik', value: 100 },
     { label: 'Baik', value: 80 },
@@ -101,6 +103,11 @@ export class EmpAttitudeSkillComponent implements OnInit {
 
   onYearChange(): void {
     const userId = localStorage.getItem('id');
+    const currentYear = new Date().getFullYear(); // Ambil tahun saat ini
+
+    // Disable dropdown jika tahun yang dipilih bukan tahun saat ini
+    this.isScoreDropdownDisabled = this.assessmentYear !== currentYear;
+
     if (userId) {
       this.empAttitudeSkillService
         .getEmpAttitudeSkillsByUserIdAndAssesmentYear(
@@ -109,16 +116,13 @@ export class EmpAttitudeSkillComponent implements OnInit {
         )
         .subscribe({
           next: (attitudeSkillResponse: EmpAttitudeSkillResponse) => {
-            // console.log(
-            //   'Filtered Data Emp Attitude Skill:',
-            //   attitudeSkillResponse
-            // );
             const yearsSet = new Set<number>();
             attitudeSkillResponse.content.forEach(
               (empSkill: EmpAttitudeSkill) => {
                 yearsSet.add(empSkill.assessment_year);
               }
             );
+
             if (attitudeSkillResponse.content.length > 0) {
               this.isExistingData = true;
               this.attitudeSkills.forEach((group: GroupAttitudeSkills) => {
@@ -128,6 +132,7 @@ export class EmpAttitudeSkillComponent implements OnInit {
                   skill.isDisabled = false;
                 });
               });
+
               attitudeSkillResponse.content.forEach(
                 (empSkill: EmpAttitudeSkill) => {
                   this.attitudeSkills.forEach((group: GroupAttitudeSkills) => {
@@ -154,7 +159,7 @@ export class EmpAttitudeSkillComponent implements OnInit {
             }
           },
           error: (err) => {
-            // console.error('Error fetching emp attitude skills:', err);
+            console.error('Error fetching emp attitude skills:', err);
           },
         });
     }

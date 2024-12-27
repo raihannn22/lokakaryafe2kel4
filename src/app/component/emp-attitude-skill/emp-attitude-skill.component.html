@@ -42,18 +42,18 @@
         </ng-template>
         <ng-template pTemplate="body" let-skill>
           @if (skill.enabled == 1) {
-            <tr>
-              <td class="column1">{{ skill.attitude_skill }}</td>
-              <td class="column2-td">
-                <p-dropdown
-                  [options]="scoreOptions"
-                  [(ngModel)]="skill.score"
-                  [disabled]="skill.isDisabled"
-                  placeholder="Choose Score"
-                  appendTo="body"
-                ></p-dropdown>
-              </td>
-            </tr>
+          <tr>
+            <td class="column1">{{ skill.attitude_skill }}</td>
+            <td class="column2-td">
+              <p-dropdown
+                [options]="scoreOptions"
+                [(ngModel)]="skill.score"
+                [disabled]="skill.isDisabled || isScoreDropdownDisabled"
+                placeholder="Choose Score"
+                appendTo="body"
+              ></p-dropdown>
+            </td>
+          </tr>
           }
         </ng-template>
       </p-table>
