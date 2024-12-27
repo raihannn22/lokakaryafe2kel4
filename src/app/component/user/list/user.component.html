@@ -1,4 +1,4 @@
-@if (!isViewUserRoute()) {
+<!-- @if (!isViewUserRoute()) {
 <div class="text-center mb-2">
   <h3 style="font-weight: bold; font-size: 2.25rem">Management Users</h3>
 </div>
@@ -16,7 +16,6 @@
 }
 
 <div class="card">
-  <!-- Tombol global untuk membuat pengguna baru -->
 
   <div class="p-5">
     @if (isViewUserRoute()) {
@@ -72,18 +71,7 @@
             (onClick)="clear(dt)"
           />
         </div>
-        <!-- <p-iconField iconPosition="left">
-          <p-inputIcon>
-            <i class="pi pi-search"></i>
-          </p-inputIcon>
-          <input
-            #searchInput
-            pInputText
-            type="text"
-            (input)="dt.filterGlobal(searchInput.value, 'contains')"
-            placeholder="Cari Pengguna..."
-          />
-        </p-iconField> -->
+
       </ng-template>
 
       <ng-template pTemplate="header">
@@ -279,7 +267,277 @@
   />
 </div>
 
-<!-- Komponen Dialog Create User -->
+<app-create-user
+  [(visible)]="displayCreateDialog"
+  (userCreated)="onUserCreated($event)"
+>
+</app-create-user>
+
+<app-update-user
+  [(visible)]="displayUpdateDialog"
+  [user]="selectedUser"
+  (userCreated)="onUserCreated($event)"
+>
+</app-update-user>
+
+<app-detail-user
+  [(visible)]="displayDetailDialog"
+  [user]="selectedUser"
+  [year]="selectedYear"
+>
+</app-detail-user> -->
+
+@if (!isViewUserRoute()) {
+<div class="text-center mb-2">
+  <h3 style="font-weight: bold; font-size: 2.25rem">Management Users</h3>
+</div>
+}@else {
+<div class="text-center mb-2">
+  <h3 style="font-weight: bold; font-size: 2.25rem">View Users</h3>
+</div>
+} @if (userRoles?.includes('HR') && !isViewUserRoute()) {
+<p-button
+  label="Add Users"
+  icon="pi pi-plus"
+  (click)="openCreateDialog()"
+  class="p-5 mt-5"
+></p-button>
+}
+
+<div class="card">
+  <div class="p-5">
+    @if (isViewUserRoute()) {
+    <div class="year-selector">
+      <label for="year-dropdown" class="custom-label">Year: </label>
+      <p-dropdown
+        id="year-dropdown"
+        [options]="years"
+        [(ngModel)]="selectedYear"
+        placeholder="Pilih Tahun"
+        (onChange)="onYearChange($event)"
+        [virtualScroll]="true"
+        [virtualScrollItemSize]="38"
+        styleClass="mb-3"
+      >
+      </p-dropdown>
+    </div>
+    }
+
+    <p-table
+      #dt
+      [value]="usersWithScore"
+      [paginator]="true"
+      [rows]="10"
+      [loading]="loading"
+      [rowsPerPageOptions]="[10, 25, 50]"
+      styleClass="p-datatable-gridlines"
+      [globalFilterFields]="[
+        'username',
+        'full_name',
+        'email_address',
+        'division_name'
+      ]"
+    >
+      <ng-template pTemplate="caption">
+        <div class="flex">
+          <span class="p-input-icon-left mr-auto">
+            <i class="pi pi-search"></i>
+            <input
+              #searchInput
+              pInputText
+              type="text"
+              [(ngModel)]="searchValue"
+              (input)="dt.filterGlobal(searchInput.value, 'contains')"
+              placeholder="Search keyword"
+            />
+          </span>
+          <p-button
+            label="Clear"
+            [outlined]="true"
+            icon="pi pi-filter-slash"
+            (onClick)="clear(dt)"
+          />
+        </div>
+      </ng-template>
+
+      <ng-template pTemplate="header">
+        <tr>
+          <th>
+            <div class="flex align-items-center">
+              Username
+              <p-columnFilter type="text" field="username" display="menu" />
+            </div>
+          </th>
+          <th>
+            <div class="flex align-items-center">
+              Full Name
+              <p-columnFilter type="text" field="full_name" display="menu" />
+            </div>
+          </th>
+          <th>
+            <div class="flex align-items-center">
+              Position
+              <p-columnFilter type="text" field="position" display="menu" />
+            </div>
+          </th>
+          <th>
+            <div class="flex align-items-center">
+              Email Address
+              <p-columnFilter
+                type="text"
+                field="email_address"
+                display="menu"
+              />
+            </div>
+          </th>
+          <th>
+            <div class="flex align-items-center">
+              Employee Status
+              <p-columnFilter
+                field="employee_status"
+                matchMode="equals"
+                display="menu"
+                [showMatchModes]="false"
+                [showOperator]="false"
+                [showAddButton]="false"
+              >
+                <ng-template
+                  pTemplate="filter"
+                  let-value
+                  let-filter="filterCallback"
+                >
+                  <p-dropdown
+                    [ngModel]="value"
+                    [options]="statuses"
+                    (onChange)="filter($event.value)"
+                    placeholder="Select One"
+                    [showClear]="true"
+                  >
+                    <ng-template let-option pTemplate="item">
+                      <p-tag
+                        [value]="option.label"
+                        [severity]="getSeverity(option.label)"
+                      />
+                    </ng-template>
+                  </p-dropdown>
+                </ng-template>
+              </p-columnFilter>
+            </div>
+          </th>
+          <th>Date Joined</th>
+          <th>Account Status</th>
+          <th>
+            <div class="flex align-items-center">
+              Division
+              <p-columnFilter
+                field="division_name"
+                matchMode="in"
+                display="menu"
+                [showMatchModes]="false"
+                [showOperator]="false"
+                [showAddButton]="false"
+              >
+                <ng-template pTemplate="header">
+                  <div class="px-3 pt-3 pb-0">
+                    <span class="font-bold">Division Picker</span>
+                  </div>
+                </ng-template>
+                <ng-template
+                  pTemplate="filter"
+                  let-value
+                  let-filter="filterCallback"
+                >
+                  <p-multiSelect
+                    [ngModel]="value"
+                    [options]="divisionName"
+                    placeholder="Any"
+                    (onChange)="filter($event.value)"
+                  >
+                    <ng-template let-option pTemplate="item">
+                      <div class="inline-block vertical-align-middle">
+                        <span class="ml-1 mt-1">{{ option }}</span>
+                      </div>
+                    </ng-template>
+                  </p-multiSelect>
+                </ng-template>
+              </p-columnFilter>
+            </div>
+          </th>
+          @if (isViewUserRoute()) {
+          <th pSortableColumn="totalScore" style="width: 20%">
+            Score <p-sortIcon field="totalScore" />
+          </th>
+          }
+          <th class="aksi">Action</th>
+        </tr>
+      </ng-template>
+
+      <ng-template pTemplate="body" let-user>
+        <tr>
+          <td>{{ user.username }}</td>
+          <td>{{ user.full_name }}</td>
+          <td>{{ user.position }}</td>
+          <td>{{ user.email_address }}</td>
+          <td>
+            <p-tag
+              [severity]="user.employee_status === 1 ? 'warning' : 'info'"
+              [value]="user.employee_status === 1 ? 'Contract' : 'Permanent'"
+            >
+            </p-tag>
+          </td>
+          <td>{{ user.join_date | date : "yyyy-MM-dd" }}</td>
+          <td>
+            <p-tag
+              [severity]="user.enabled === 1 ? 'success' : 'danger'"
+              [value]="user.enabled === 1 ? 'Enabled' : 'Disabled'"
+            >
+            </p-tag>
+          </td>
+          <td>{{ user.division_name }}</td>
+          @if (isViewUserRoute()) {
+          <td>{{ user.totalScore | number : "1.2-2" }}</td>
+          }
+          <td class="flex gap-2">
+            @if (userRoles?.includes('HR') && !isViewUserRoute()) {
+            <button
+              pButton
+              type="button"
+              icon="pi pi-pencil"
+              class="p-button-sm"
+              (click)="openUpdateDialog(user)"
+            ></button>
+            <button
+              pButton
+              type="button"
+              icon="pi pi-trash"
+              class="p-button-danger p-button-sm"
+              (click)="confirmDelete(user)"
+            ></button>
+            } @if (userRoles?.includes('HR') || userRoles?.includes('SVP') ||
+            userRoles?.includes('MGR')) {
+            <button
+              pButton
+              type="button"
+              icon="pi pi-info"
+              class="p-button-secondary p-button-sm"
+              (click)="openDetailDialog(user)"
+            ></button>
+            }
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </div>
+</div>
+<div>
+  <p-toast
+    [showTransformOptions]="'translateY(100%)'"
+    [showTransitionOptions]="'1000ms'"
+    [hideTransitionOptions]="'1000ms'"
+    [showTransformOptions]="'translateX(100%)'"
+  />
+</div>
+
 <app-create-user
   [(visible)]="displayCreateDialog"
   (userCreated)="onUserCreated($event)"
