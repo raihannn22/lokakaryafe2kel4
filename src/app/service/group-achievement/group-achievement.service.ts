@@ -35,4 +35,8 @@ export class GroupAchievementService {
   deleteGroupAchievement(id: string): Observable<any> {
     return this.http.delete(`${this.apiUrl}/delete/${id}`);
   }
+
+  getAllGroupAchievementsEnabled(): Observable<any> {
+    return this.http.get(`${this.apiUrl}/get/all/enabled`);
+  }
 }
