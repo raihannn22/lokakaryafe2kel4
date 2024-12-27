@@ -142,6 +142,28 @@ export class GroupAchievementComponent implements OnInit {
     });
   }
 
+  // getAllGroupAchievements(page: number = 0, size: number = 5) {
+  //   this.loading = true;
+  //   this.groupAchievementService.getAllGroupAchievements(page, size).subscribe({
+  //     next: (response) => {
+  //       this.groupAchievements = response.content;
+  //       this.totalRecords = response.totalRecords;
+  //       this.filteredGroupAchievements = this.groupAchievements;
+  //       this.loading = false;
+  //       this.percentageAchieved = this.groupAchievements.map(
+  //         (item) => item.percentage
+  //       );
+  //       this.totalPercentageAchieved = this.percentageAchieved.reduce(
+  //         (acc, item) => acc + item,
+  //         0
+  //       );
+  //     },
+  //     error: (error) => {
+  //       this.loading = false;
+  //     },
+  //   });
+  // }
+
   sumPercentage() {
     this.totalPercentage =
       this.totalPercentageAttitude + this.totalPercentageAchieved;
@@ -297,7 +319,7 @@ export class GroupAchievementComponent implements OnInit {
               showConfirmButton: false,
               timer: 1500,
             }).then(() => {
-                window.location.reload();
+              window.location.reload();
             });
           },
           error: (error) => {
@@ -323,8 +345,7 @@ export class GroupAchievementComponent implements OnInit {
               showConfirmButton: false,
               timer: 1500,
             }).then(() => {
-                window.location.reload();
-
+              window.location.reload();
             });
           },
           error: (error) => {
@@ -362,7 +383,7 @@ export class GroupAchievementComponent implements OnInit {
               showConfirmButton: false,
               timer: 1500,
             }).then(() => {
-                window.location.reload();
+              window.location.reload();
             });
           },
           error: (error) => {

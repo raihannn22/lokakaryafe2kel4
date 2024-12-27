@@ -22,7 +22,7 @@ import { SummarySelfComponent } from './component/summary-self/summary-self.comp
 import { FullAssSumComponent } from './component/full-ass-sum/full-ass-sum.component';
 import { roleGuard } from './guard/role.guard';
 import { isLoggedInGuard } from './guard/is-logged-in.guard';
-
+import { EmployeeAssessmentComponent } from './emp-assessment/emp-assessment.component';
 
 export const routes: Routes = [
   {
@@ -34,7 +34,6 @@ export const routes: Routes = [
     path: 'dashboard',
     canActivate: [authGuard],
     component: DashboardComponent,
-    
   },
   {
     path: 'login',
@@ -45,61 +44,61 @@ export const routes: Routes = [
     path: 'user-management',
     canActivate: [authGuard, roleGuard],
     component: UserComponent,
-    data: {permission: 'user#all'}
+    data: { permission: 'user#all' },
   },
   {
     path: 'achievement',
     canActivate: [authGuard, roleGuard],
     component: AchievementComponent,
-    data: {permission: 'achievement#all'}
+    data: { permission: 'achievement#all' },
   },
   {
     path: 'group-achievement',
     canActivate: [authGuard, roleGuard],
     component: GroupAchievementComponent,
-    data: {permission: 'group-achievement#all'}
+    data: { permission: 'group-achievement#all' },
   },
   {
     path: 'emp-achievement-skill',
     canActivate: [authGuard, roleGuard],
     component: EmpAchievementSkillComponent,
-    data: {permission: 'emp-achievement#all'}
+    data: { permission: 'emp-achievement#all' },
   },
   {
     path: 'attitude-skill',
     canActivate: [authGuard, roleGuard],
     component: AttitudeSkillComponent,
-    data: {permission: 'attitude-skill#all'}
+    data: { permission: 'attitude-skill#all' },
   },
   {
     path: 'group-attitude-skill',
     canActivate: [authGuard, roleGuard],
     component: GroupAttitudeSkillComponent,
-    data: {permission: 'group-attitude-skill#all'}
+    data: { permission: 'group-attitude-skill#all' },
   },
   {
     path: 'emp-attitude-skill',
     canActivate: [authGuard, roleGuard],
     component: EmpAttitudeSkillComponent,
-    data: {permission: 'emp-attitude-skill#all'}
+    data: { permission: 'emp-attitude-skill#all' },
   },
   {
     path: 'emp-suggestion',
     canActivate: [authGuard, roleGuard],
     component: EmpSuggestionComponent,
-    data: {permission: 'emp-suggestion#all'}
+    data: { permission: 'emp-suggestion#all' },
   },
   {
     path: 'division-management',
     canActivate: [authGuard, roleGuard],
     component: DivisiComponent,
-    data: {permission: 'division#all'}
+    data: { permission: 'division#all' },
   },
   {
     path: 'menu-management',
     canActivate: [authGuard, roleGuard],
     component: MenuManagementComponent,
-    data: {permission: 'role-menu#all'}
+    data: { permission: 'role-menu#all' }
   },
   {
     path: 'profile',
@@ -110,47 +109,52 @@ export const routes: Routes = [
     path: 'technical-skill',
     canActivate: [authGuard, roleGuard],
     component: TechnicalSkillComponent,
-    data: {permission: 'technical-skill#all'}
+    data: { permission: 'technical-skill#all' },
   },
   {
     path: 'emp-technical-skill',
     canActivate: [authGuard, roleGuard],
     component: EmpTechnicalSkillComponent,
-    data: {permission: 'emp-technical-skill#all'}
+    data: { permission: 'emp-technical-skill#all' },
   },
   {
     path: 'development-plan',
     canActivate: [authGuard, roleGuard],
     component: DevplanComponent,
-    data: {permission: 'dev-plan#all'}
+    data: { permission: 'dev-plan#all' },
   },
   {
     path: 'employee-development-plan',
     canActivate: [authGuard, roleGuard],
     component: EmpDevplanComponent,
-    data: {permission: 'emp-dev-plan#all'}
+    data: { permission: 'emp-dev-plan#all' },
+  },
+  {
+    path: 'employee-assessment',
+    canActivate: [authGuard, roleGuard],
+    component: EmployeeAssessmentComponent,
+    data: { permission: 'emp-assessment#all' },
   },
   {
     path: 'view-user',
     canActivate: [authGuard, roleGuard],
     component: UserComponent,
-    data: {permission: 'user#read'}
+    data: { permission: 'user#read' },
   },
   {
     path: 'view-empdevplan',
     canActivate: [authGuard, roleGuard],
     component: ViewEmpdevplanComponent,
-    data: {permission: 'emp-dev-plan#read'}
+    data: { permission: 'emp-dev-plan#read' },
   },
   {
     path: 'user/summary-view',
     canActivate: [authGuard, roleGuard],
     component: SummarySelfComponent,
-    data: {permission: 'summary#read.self'}
+    data: { permission: 'summary#read.self' },
   },
   {
     path: '**',
     redirectTo: 'dashboard',
-  }
-
+  },
 ];

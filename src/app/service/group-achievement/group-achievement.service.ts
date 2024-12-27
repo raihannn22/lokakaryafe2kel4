@@ -10,9 +10,15 @@ export class GroupAchievementService {
 
   constructor(private http: HttpClient) {}
 
+  // ENDPOINT LAMA :
   getAllGroupAchievements(): Observable<any> {
     return this.http.get(`${this.apiUrl}/all`);
   }
+
+  // ENPOINT BARU :
+  // getAllGroupAchievements(page: number, size: number): Observable<any> {
+  //   return this.http.get<any>(`${this.apiUrl}/all?page=${page}&size=${size}`);
+  // }
 
   saveGroupAchievement(groupAchievement: any): Observable<any> {
     return this.http.put(`${this.apiUrl}/save`, groupAchievement);

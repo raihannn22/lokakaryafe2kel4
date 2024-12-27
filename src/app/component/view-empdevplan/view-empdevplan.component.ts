@@ -33,7 +33,7 @@ interface users {
   styleUrl: './view-empdevplan.component.css',
 })
 export class ViewEmpdevplanComponent implements OnInit {
-    constructor(
+  constructor(
     private userService: UserService,
     private empDevplanService: EmpDevplanService
   ) {}

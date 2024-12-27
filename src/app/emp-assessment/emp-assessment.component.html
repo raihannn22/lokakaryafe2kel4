@@ -1,0 +1,31 @@
+<p-steps [(activeIndex)]="activeIndex" [model]="steps"></p-steps>
+
+<div class="actions">
+  <button
+    pButton
+    label="Previous"
+    (click)="prev()"
+    *ngIf="activeIndex > 0"
+    class="prev-button"
+  ></button>
+  <button
+    pButton
+    label="Next"
+    (click)="next()"
+    *ngIf="activeIndex < steps.length - 1"
+    class="next-button"
+  ></button>
+</div>
+
+<div *ngIf="activeIndex === 0">
+  <app-emp-attitude-skill></app-emp-attitude-skill>
+</div>
+<div *ngIf="activeIndex === 1">
+  <app-emp-technical-skill></app-emp-technical-skill>
+</div>
+<div *ngIf="activeIndex === 2">
+  <app-emp-devplan></app-emp-devplan>
+</div>
+<div *ngIf="activeIndex === 3">
+  <app-emp-suggestion></app-emp-suggestion>
+</div>
