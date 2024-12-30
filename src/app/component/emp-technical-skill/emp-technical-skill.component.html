@@ -16,16 +16,14 @@
           (onChange)="onYearChange()"
         ></p-dropdown>
       </div>
-      <div class="flex align-items-center">
-        <button
-          pButton
-          label="Save"
-          icon="pi pi-save"
-          (click)="saveAllEmpTechnicalSkills()"
-          [disabled]="isSaving || isExistingData || !isFormComplete()"
-          class="ml-3"
-        ></button>
-      </div>
+      <button
+        pButton
+        label="Save"
+        icon="pi pi-save"
+        (click)="saveAllEmpTechnicalSkills()"
+        [disabled]="isSaving || isExistingData || !isFormComplete"
+        class="ml-3"
+      ></button>
     </div>
 
     <div *ngFor="let groupedSkill of groupedTechnicalSkills">
@@ -77,6 +75,7 @@
         icon="pi pi-plus"
         severity="primary"
         (click)="addRow(groupedSkill)"
+        [disabled]="isAddRowDisabled"
       ></button>
     </div>
   </div>

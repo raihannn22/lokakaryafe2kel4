@@ -21,7 +21,9 @@
           label="Save"
           icon="pi pi-save"
           (click)="saveAllEmpSuggestions()"
-          [disabled]="isSaving || isExistingData || !isFormComplete()"
+          [disabled]="
+            isSaving || isExistingData || !isFormComplete || !hasNewData
+          "
           class="ml-3"
         ></button>
       </div>
@@ -41,6 +43,7 @@
               [(ngModel)]="suggestion.suggestion"
               placeholder=""
               [readonly]="suggestion.isExisting"
+              (ngModelChange)="checkFormCompleteness()"
             ></textarea>
           </td>
           <td>
@@ -63,6 +66,7 @@
         icon="pi pi-plus"
         severity="primary"
         (click)="addRow()"
+        [disabled]="isAddRowDisabled"
       ></button>
     </div>
   </div>

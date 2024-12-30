@@ -24,8 +24,7 @@ interface EmpSuggestion {
     ButtonModule,
     InputTextModule,
     DropdownModule,
-    InputTextareaModule
-
+    InputTextareaModule,
   ],
   templateUrl: './emp-suggestion.component.html',
   styleUrls: ['./emp-suggestion.component.css'],
@@ -35,6 +34,10 @@ export class EmpSuggestionComponent implements OnInit {
   isSaving = false;
   isExistingData = false;
   assessmentYear: number = new Date().getFullYear();
+
+  isAddRowDisabled: boolean = false; // Menyimpan status disabled untuk tombol tambah row
+  hasNewData: boolean = false; // Menyimpan status apakah ada data baru
+  isFormComplete: boolean = false; // Menyimpan status apakah form lengkap
 
   userName: string | null = '';
   yearOptions = [
@@ -91,6 +94,21 @@ export class EmpSuggestionComponent implements OnInit {
       suggestion: '',
       isExisting: false,
     });
+    this.hasNewData = true; // Set hasNewData menjadi true saat menambahkan baris baru
+    this.checkFormCompleteness(); // Periksa status form setelah menambahkan baris
+  }
+
+  checkFormCompleteness(): void {
+    this.isFormComplete = this.empSuggestions.some(
+      (suggestion) =>
+        suggestion.suggestion && suggestion.suggestion.trim() !== ''
+    );
+    this.hasNewData = this.empSuggestions.some(
+      (suggestion) =>
+        !suggestion.isExisting &&
+        suggestion.suggestion &&
+        suggestion.suggestion.trim() !== ''
+    );
   }
 
   removeRow(index: number): void {
@@ -100,12 +118,12 @@ export class EmpSuggestionComponent implements OnInit {
     }
   }
 
-  isFormComplete(): boolean {
-    return this.empSuggestions.every(
-      (suggestion) =>
-        suggestion.suggestion && suggestion.suggestion.trim() !== ''
-    );
-  }
+  // isFormComplete(): boolean {
+  //   return this.empSuggestions.every(
+  //     (suggestion) =>
+  //       suggestion.suggestion && suggestion.suggestion.trim() !== ''
+  //   );
+  // }
 
   saveAllEmpSuggestions(): void {
     const currentYear = new Date().getFullYear();
@@ -145,7 +163,7 @@ export class EmpSuggestionComponent implements OnInit {
               next: () => {
                 this.isSaving = false;
 
-// <<<<<<< banu
+                // <<<<<<< banu
                 this.onYearChange();
                 this.empSuggestions.forEach((item) => {
                   if (
@@ -179,7 +197,12 @@ export class EmpSuggestionComponent implements OnInit {
 
   onYearChange(): void {
     const userId = localStorage.getItem('id');
-    if (userId)
+    const currentYear = new Date().getFullYear(); // Ambil tahun saat ini
+
+    // Disable tombol tambah row jika tahun yang dipilih bukan tahun saat ini
+    this.isAddRowDisabled = this.assessmentYear !== currentYear;
+
+    if (userId) {
       this.empSuggestionService
         .getEmpSuggestionByUserIdAndAssesmentYear(userId, this.assessmentYear)
         .subscribe({
@@ -195,45 +218,46 @@ export class EmpSuggestionComponent implements OnInit {
             } else {
               this.empSuggestions = [{ suggestion: '', isExisting: false }];
             }
+            this.checkFormCompleteness(); // Periksa status form setelah mengambil data
           },
           error: (error) => {
             console.error('Error fetching suggestions:', error);
             this.empSuggestions = [{ suggestion: '', isExisting: false }];
           },
         });
+    }
   }
-// =======
-//   Swal.fire({
-//     html: 'Apakah Anda yakin ingin menyimpan data ini? <br> data yang di submit tidak dapat diubah',
-//     title: 'Are you sure?',
-//     icon: 'warning',
-//     showCancelButton: true,
-//     confirmButtonColor: '#3085d6',
-//     cancelButtonColor: '#d33',
-//     confirmButtonText: 'Yes, change it!'
-//   }).then((result) => {
-//     if (result.isConfirmed) {
-//       this.empSuggestionService.saveAllEmpSuggestions(dataToSave).subscribe({
-//         next: () => {
-//           this.empSuggestions.forEach((item) => {
-//             if (dataToSave.find((savedItem) => savedItem.suggestion === item.suggestion)) {
-//               item.isExisting = true;
-//             }
-//           });
-//           this.isSaving = false;
-//           window.location.reload();
-//         },
-//         error: (error) => {
-//           console.error('Terjadi kesalahan saat menyimpan saran:', error);
-//           alert('Gagal menyimpan saran. Silakan periksa konsol untuk detailnya.');
-//           this.isSaving = false;
-//         },
-//       });
-//     }else{
-//       this.isSaving = false;
-//     }
-//   });
+  // =======
+  //   Swal.fire({
+  //     html: 'Apakah Anda yakin ingin menyimpan data ini? <br> data yang di submit tidak dapat diubah',
+  //     title: 'Are you sure?',
+  //     icon: 'warning',
+  //     showCancelButton: true,
+  //     confirmButtonColor: '#3085d6',
+  //     cancelButtonColor: '#d33',
+  //     confirmButtonText: 'Yes, change it!'
+  //   }).then((result) => {
+  //     if (result.isConfirmed) {
+  //       this.empSuggestionService.saveAllEmpSuggestions(dataToSave).subscribe({
+  //         next: () => {
+  //           this.empSuggestions.forEach((item) => {
+  //             if (dataToSave.find((savedItem) => savedItem.suggestion === item.suggestion)) {
+  //               item.isExisting = true;
+  //             }
+  //           });
+  //           this.isSaving = false;
+  //           window.location.reload();
+  //         },
+  //         error: (error) => {
+  //           console.error('Terjadi kesalahan saat menyimpan saran:', error);
+  //           alert('Gagal menyimpan saran. Silakan periksa konsol untuk detailnya.');
+  //           this.isSaving = false;
+  //         },
+  //       });
+  //     }else{
+  //       this.isSaving = false;
+  //     }
+  //   });
 
-  
-// >>>>>>> main
+  // >>>>>>> main
 }
