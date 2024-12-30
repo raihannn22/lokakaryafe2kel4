@@ -12,67 +12,6 @@
       <span class="font-semibold text-xl text-blue-700">Tahun: {{ Year }}</span>
     </div>
   </p-toolbar>
-<!-- <<<<<<< banu
-
-  <div
-    *ngFor="let empdevplan of empdevplans; let j = index"
-    class="card mb-4 p-4 shadow-sm border-round"
-  >
-    <h3 class="text-xl font-semibold mb-3 text-secondary">
-      {{ empdevplan.title }}
-    </h3>
-
-    <!-- Container untuk keterangan -->
-    <div class="keterangan-container">
-      <div
-        *ngFor="let keterangan of empdevplan.keterangans; let i = index"
-        class="keterangan-row flex align-items-center gap-2 mb-2"
-      >
-        <div class="flex-grow-1">
-          <input
-            type="text"
-            pInputText
-            [(ngModel)]="keterangan.value"
-            [disabled]="keterangan.isExisting"
-            placeholder="Masukkan keterangan"
-            class="w-full p-2"
-            required
-            [ngClass]="{ 'p-invalid': !keterangan.value.trim() }"
-            (blur)="validateKeterangan(keterangan)"
-          />
-        </div>
-        <button
-          pButton
-          pRipple
-          type="button"
-          icon="pi pi-trash"
-          class="p-button-danger p-button-sm"
-          (click)="removeKeterangan(empdevplan, i)"
-          [disabled]="keterangan.isExisting"
-        ></button>
-      </div>
-
-      <!-- Tombol Tambah Keterangan -->
-
-      <div class="mt-3">
-        <button
-          pButton
-          pRipple
-          type="button"
-          label="Tambah Keterangan"
-          icon="pi pi-plus"
-          class="p-button-primary"
-          (click)="addKeterangan(empdevplan)"
-          [disabled]="
-            empdevplan.keterangans.length > 0 &&
-            empdevplan.keterangans[
-              empdevplan.keterangans.length - 1
-            ].value.trim() === ''
-          "
-        ></button>
-      </div>
-======= -->
-    
 
   <div *ngFor="let empdevplan of empdevplans; let j = index">
     @if (empdevplan.enabled == 1) {
@@ -133,20 +72,7 @@
 <!-- >>>>>>> main -->
     </div>
   </div>
-<!-- 
-  <!-- Tombol Save -->
-  <div class="flex justify-content-end mt-4">
-    <button
-      pButton
-      pRipple
-      type="button"
-      label="Simpan"
-      icon="pi pi-save"
-      class="p-button-primary"
-      (click)="saveToDatabase()"
-    ></button>
-  </div>
-</div> -->
+
 
 <style>
   .container {
