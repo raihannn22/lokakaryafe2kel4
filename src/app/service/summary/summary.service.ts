@@ -47,6 +47,9 @@ export class SummaryService {
   getTotalScore(year: number): Observable<any> {
     return this.http.get(`http://localhost:8081/assessmentSummary/total/${year}`);
   }
+   getUserAndSummary(year: number): Observable<any> {
+    return this.http.get(`http://localhost:8081/assessmentSummary/get/all/year/${year}`);
+  }
 
 
 

@@ -322,7 +322,8 @@
       </p-dropdown>
     </div>
     }
-
+    
+ \
     <p-table
       #dt
       [value]="usersWithScore"
@@ -464,8 +465,8 @@
             </div>
           </th>
           @if (isViewUserRoute()) {
-          <th pSortableColumn="totalScore" style="width: 20%">
-            Score <p-sortIcon field="totalScore" />
+          <th pSortableColumn="score" style="width: 20%">
+            Score <p-sortIcon field="score" />
           </th>
           }
           <th class="aksi">Action</th>
@@ -495,7 +496,7 @@
           </td>
           <td>{{ user.division_name }}</td>
           @if (isViewUserRoute()) {
-          <td>{{ user.totalScore | number : "1.2-2" }}</td>
+          <td>{{ user.score | number : "1.2-2" }}</td>
           }
           <td class="flex gap-2">
             @if (userRoles?.includes('HR') && !isViewUserRoute()) {

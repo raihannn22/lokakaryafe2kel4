@@ -69,16 +69,32 @@
                         <td colspan="4" class="text-center py-3">
                             <span class="font-bold text-blue-800">{{customer.source}}</span>
                         </td>
+                     
                     </tr>
+
+                    
+            
                 </ng-template>
 
                 <ng-template pTemplate="body" let-customer let-rowIndex="rowIndex">
-                    <tr class="hover:bg-gray-50">
-                        <td class="py-3">{{customer.group}}</td>
-                        <td class="text-center">{{customer.score | number: '1.2-2' }}</td>
-                        <td class="text-center">{{customer.percentage}}%</td>
-                        <td class="text-center">{{customer.score * customer.percentage / 100  | number: '1.2-2' }}</td>
+                    <tr class="bg-blue-50">
+                        <td class="py-3 font-bold text-black-800">{{customer.group}}</td>
+                        <td class="text-center font-bold text-black-800">{{customer.score | number: '1.2-2' }}</td>
+                        <td class="text-center font-bold text-black-800">{{customer.percentage}}%</td>
+                        <td class="text-center font-bold text-black-800">{{customer.score * customer.percentage / 100  | number: '1.2-2' }}</td>
                     </tr>
+                    @for (detail of customer.details; track detail.name) {
+                        <tr>
+                        <td class="mb-1 text-gray-700" >
+                            - {{ detail.name }}
+                        </td>
+                        <td class="mb-1 text-gray-700" >
+                            {{ detail.score }}
+                        </td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    }
                 </ng-template>
 
                 <ng-template pTemplate="footer" let-customer>

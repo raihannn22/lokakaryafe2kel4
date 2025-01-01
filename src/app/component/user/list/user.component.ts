@@ -73,6 +73,7 @@ export class UserComponent implements OnInit {
   ];
 
   selectedDivisionId: string = '';
+  UsersSummary: any[] = [];
 
   userName: string = '';
 
@@ -189,10 +190,15 @@ export class UserComponent implements OnInit {
     forkJoin({
       user: this.userService.getAllUsers(),
       total: this.summaryService.getTotalScore(this.selectedYear),
-    }).subscribe(({ user, total }) => {
+      userSummary: this.summaryService.getUserAndSummary(this.selectedYear),
+    }).subscribe(({ user, total , userSummary }) => {
       this.loading = false;
       this.scoreUsers = total;
       this.users = user.content;
+
+      this.UsersSummary = userSummary.content;
+    
+
 
       this.usersWithScore = this.users.map((user) => {
         // Temukan skor berdasarkan ID pengguna
@@ -202,7 +208,13 @@ export class UserComponent implements OnInit {
           totalScore: score ? score.totalScore : 0, // Tambahkan totalScore
         };
       });
+
+      if (this.router.url === '/view-user') {
+        this.usersWithScore = this.UsersSummary
+      }
     });
+
+
   }
 
   getAllDivision() {
@@ -211,6 +223,7 @@ export class UserComponent implements OnInit {
         this.divisi = response.content; // Data ada di 'content'
         // console.log('Total divisi:', this.divisi);
       },
+
       error: (error) => {
         console.error('Error fetching users:', error);
       },
