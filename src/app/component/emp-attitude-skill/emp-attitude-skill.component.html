@@ -47,6 +47,7 @@
               <p-dropdown
                 [options]="scoreOptions"
                 [(ngModel)]="skill.score"
+                [disabled]="isScoreDropdownDisabled"
                 placeholder="Choose Score"
                 appendTo="body"
               ></p-dropdown>

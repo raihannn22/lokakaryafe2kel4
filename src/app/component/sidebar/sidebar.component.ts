@@ -159,6 +159,11 @@ export class SidebarComponent implements OnInit {
         path: '/view-user',
         icon: 'pi pi-users',
       },
+      'summary#approve': {
+        name: 'Approve Summary',
+        path: '/summary-approve',
+        icon: 'pi pi-list-check',
+      },
       // Tambahkan mapping lainnya di sini
     };
 

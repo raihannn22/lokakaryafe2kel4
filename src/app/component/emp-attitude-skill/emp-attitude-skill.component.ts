@@ -8,6 +8,7 @@ import { TableModule } from 'primeng/table';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { DropdownModule } from 'primeng/dropdown';
 import Swal from 'sweetalert2';
+import { SummaryService } from '../../service/summary/summary.service';
 
 interface AttitudeSkill {
   id: string;
@@ -57,7 +58,7 @@ export class EmpAttitudeSkillComponent implements OnInit {
   isExistingData: boolean = false;
   assessmentYear: number = new Date().getFullYear();
   userName: string | null = '';
-
+  statusAssessment: number | null = 0;
   isScoreDropdownDisabled: boolean = false; // Menyimpan status disabled
 
   scoreOptions = [
@@ -76,7 +77,8 @@ export class EmpAttitudeSkillComponent implements OnInit {
 
   constructor(
     private groupAttitudeSkillService: GroupAttitudeSkillService,
-    private empAttitudeSkillService: EmpAttitudeSkillService
+    private empAttitudeSkillService: EmpAttitudeSkillService,
+    private summaryService: SummaryService
   ) {}
 
   ngOnInit(): void {
@@ -92,6 +94,7 @@ export class EmpAttitudeSkillComponent implements OnInit {
           if (userId) {
             // console.log('User  ID', userId);
             this.onYearChange();
+
           } else {
             // console.error('User  ID is null or undefined');
           }
@@ -106,7 +109,7 @@ export class EmpAttitudeSkillComponent implements OnInit {
     const currentYear = new Date().getFullYear(); // Ambil tahun saat ini
 
     // Disable dropdown jika tahun yang dipilih bukan tahun saat ini
-    this.isScoreDropdownDisabled = this.assessmentYear !== currentYear;
+    this.isScoreDropdownDisabled = this.statusAssessment == 1;
 
     if (userId) {
       this.empAttitudeSkillService
@@ -162,6 +165,19 @@ export class EmpAttitudeSkillComponent implements OnInit {
             console.error('Error fetching emp attitude skills:', err);
           },
         });
+
+      this.summaryService.getAssessmentStatus(userId, this.assessmentYear).subscribe(
+        {next: (response) => {
+          this.statusAssessment = response.content.status;
+          console.log('Status Assessment:', this.statusAssessment);
+          this.isScoreDropdownDisabled = this.statusAssessment == 1;
+        }, error: (error) => {
+          this.statusAssessment = 0;
+          console.log('Status Assessment:', this.statusAssessment);
+          console.error('Error fetching assessment status:', error);
+          this.isScoreDropdownDisabled = this.statusAssessment == 1;
+        }
+      });
     }
   }
   isFormComplete(): boolean {
