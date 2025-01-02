@@ -1,76 +1,121 @@
 <div class="text-center mb-2">
-    <h3 style="font-weight: bold; font-size: 2.25rem;">Division Management</h3>
+  <h3 style="font-weight: bold; font-size: 2.25rem">
+    Division Management
+    <p-button
+      label=""
+      icon="pi pi-plus"
+      (click)="openCreateDialog()"
+      class="p-button-text"
+    ></p-button>
+  </h3>
 </div>
 
 <!-- <p-button label="Add Division" icon="pi pi-plus" (click)="openCreateDialog()" class="p-5 mt-5" ></p-button> -->
 
-    <!-- Tombol global untuk membuat pengguna baru -->
-    
-    <div class="p-5">
-    <p-table #dt [value]="divisions" [paginator]="true" [rows]="10" [loading]="loading" styleClass="p-datatable-gridlines" [globalFilterFields]="[ 'DIVISION_NAME']" [sortMode]="'single'" >
-          <ng-template pTemplate="caption">
-            <div class="flex justify-content-between">
-                <p-button
-                  label="Division"
-                  icon="pi pi-plus"
-                  (click)="openCreateDialog()"
-                  class="p-button-text"
-                ></p-button>
-                <div class="flex justify-content-end">
-                    <input #searchInput pInputText type="text" (input)="dt.filterGlobal(searchInput.value, 'contains')" placeholder="Search division..." />
-                </div>
-              </div>
+<!-- Tombol global untuk membuat pengguna baru -->
 
+<div class="p-5">
+  <p-table
+    [value]="divisions"
+    lazy="true"
+    [paginator]="true"
+    [rows]="selectedPageSize"
+    [totalRecords]="totalRecords"
+    [loading]="loading"
+    styleClass="p-datatable-gridlines"
+    (onPage)="loadPage($event)"
+    [rowsPerPageOptions]="pageSizeOptions"
+  >
+    <ng-template pTemplate="caption">
+      <div class="flex justify-content-between">
+        <div class="flex items-center gap-2">
+          <p-dropdown
+            [options]="sortOptions"
+            [(ngModel)]="currentSortBy"
+            (onChange)="onSortChange($event)"
+            placeholder="Select a sort option"
+          ></p-dropdown>
+          <button
+            (click)="toggleSortingDirection()"
+            pButton
+            [icon]="
+              sortingDirection === 'asc' ? 'pi pi-caret-up' : 'pi pi-caret-down'
+            "
+            class="p-button-outlined"
+            aria-label="Toggle Sort Direction"
+          ></button>
+        </div>
+        <div class="flex justify-content-end">
+          <input
+            type="text"
+            [(ngModel)]="searchKeyword"
+            pInputText
+            placeholder="Search ..."
+            class="mr-2"
+          />
+          <p-button
+            label=""
+            icon="pi pi-search"
+            (click)="
+              getAllDivisions(currentSortBy, sortingDirection, searchKeyword)
+            "
+          ></p-button>
+        </div>
+      </div>
+    </ng-template>
 
-              <!-- <p-iconField iconPosition="left">
-                  <p-inputIcon>
-                      <i class="pi pi-search"></i>
-                  </p-inputIcon>
-                  <input #searchInput pInputText type="text" (input)="dt.filterGlobal(searchInput.value, 'contains')" placeholder="Search division..." />
-              </p-iconField> -->
-          </ng-template>
-          
-        <ng-template pTemplate="header">
-          <tr>
-            <th pSortableColumn="DIVISION_NAME">
-                Division Name
-                <p-sortIcon field="DIVISION_NAME"></p-sortIcon>
-            </th>
-              <th>Action</th>
-          </tr>
-      </ng-template>
-  
-      <ng-template pTemplate="body" let-divisions>
-          <tr>
-              <td>{{ divisions.DIVISION_NAME }}</td>
-              <td class="flex gap-2">
-                  <button pButton type="button" icon="pi pi-pencil" class="p-button-sm" (click)="openUpdateDialog(divisions)"></button>
-                  <button pButton type="button" icon="pi pi-trash" class="p-button-danger p-button-sm"
-                          (click)="confirmDelete(divisions)"></button>
-              </td>
-          </tr>
-      </ng-template>
-    </p-table>
-    </div>
+    <ng-template pTemplate="header">
+      <tr>
+        <th pSortableColumn="DIVISION_NAME">
+          Division Name
+          <p-sortIcon field="DIVISION_NAME"></p-sortIcon>
+        </th>
+        <th>Action</th>
+      </tr>
+    </ng-template>
 
+    <ng-template pTemplate="body" let-divisions>
+      <tr>
+        <td>{{ divisions.DIVISION_NAME }}</td>
+        <td class="flex gap-2">
+          <button
+            pButton
+            type="button"
+            icon="pi pi-pencil"
+            class="p-button-sm"
+            (click)="openUpdateDialog(divisions)"
+          ></button>
+          <button
+            pButton
+            type="button"
+            icon="pi pi-trash"
+            class="p-button-danger p-button-sm"
+            (click)="confirmDelete(divisions)"
+          ></button>
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+</div>
 
 <div>
-
-    <p-toast 
-    [showTransformOptions]="'translateY(100%)'" 
-    [showTransitionOptions]="'1000ms'" 
-    [hideTransitionOptions]="'1000ms'" 
-    [showTransformOptions]="'translateX(100%)'" />
-
+  <p-toast
+    [showTransformOptions]="'translateY(100%)'"
+    [showTransitionOptions]="'1000ms'"
+    [hideTransitionOptions]="'1000ms'"
+    [showTransformOptions]="'translateX(100%)'"
+  />
 </div>
 
 <app-create-division
-[(visible)]="displayCreateDialog"
-(divisionCreated)="ondivisionCreated($event)">
+  [(visible)]="displayCreateDialog"
+  (divisionCreated)="ondivisionCreated($event)"
+>
 </app-create-division>
 
 <app-update-division
-[(visible)]="displayUpdateDialog"
-[division]="selecteddivision"
-(divisionCreated)="ondivisionCreated($event)">
+  [(visible)]="displayUpdateDialog"
+  [division]="selecteddivision"
+  (divisionCreated)="ondivisionCreated($event)"
+>
 </app-update-division>

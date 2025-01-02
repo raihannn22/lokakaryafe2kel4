@@ -10,9 +10,21 @@ export class DevplanService {
 
   constructor(private http: HttpClient) {}
 
-  getAllDevplans(): Observable<any> {
-    return this.http.get<any>(`${this.apiUrl}/get/all`);
+  getAllDevplans(
+    page: number = 0,
+    size: number = 5,
+    sort: string = 'plan',
+    direction: string = 'asc',
+    searchKeyword: string = ''
+  ): Observable<any> {
+    return this.http.get<any>(
+      `${this.apiUrl}/get/paginated?page=${page}&size=${size}&sort=${sort}&direction=${direction}&searchKeyword=${searchKeyword}`
+    );
   }
+
+  // getAllDevplans(): Observable<any> {
+  //   return this.http.get<any>(`${this.apiUrl}/get/all`);
+  // }
 
   saveDevPlan(devPlan: any): Observable<any> {
     return this.http.put<any>(`${this.apiUrl}/save`, devPlan);

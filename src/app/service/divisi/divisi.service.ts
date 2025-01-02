@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class DivisiService {
   private apiUrl = 'http://localhost:8081';
@@ -13,9 +13,21 @@ export class DivisiService {
   createDivision(division: any): Observable<any> {
     return this.http.post(`${this.apiUrl}/division/save`, division);
   }
-  getAllDivisions(): Observable<any> {
-    return this.http.get(`${this.apiUrl}/division/get/all`);
+
+  getAllDivisions(
+    page: number = 0,
+    size: number = 5,
+    sort: string = 'divisionName',
+    direction: string = 'asc',
+    searchKeyword: string = ''
+  ): Observable<any> {
+    return this.http.get<any>(
+      `${this.apiUrl}/division/get/paginated?page=${page}&size=${size}&sort=${sort}&direction=${direction}&searchKeyword=${searchKeyword}`
+    );
   }
+  // getAllDivisions(): Observable<any> {
+  //   return this.http.get(`${this.apiUrl}/division/get/all`);
+  // }
 
   saveDivision(division: any): Observable<any> {
     return this.http.put(`${this.apiUrl}/division/save`, division);

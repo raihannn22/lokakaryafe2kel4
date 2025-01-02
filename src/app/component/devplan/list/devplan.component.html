@@ -1,34 +1,60 @@
 <div class="text-center mb-2">
   <h3 style="font-weight: bold; font-size: 2.25rem">
     Development Plan Management
+    <p-button
+      label=""
+      icon="pi pi-plus"
+      (click)="openCreateDialog()"
+      class="p-button-text"
+    ></p-button>
   </h3>
 </div>
 <div class="p-5">
   <p-table
-    #dt
     [value]="devplans"
+    [lazy]="true"
     [paginator]="true"
-    [rows]="10"
+    [rows]="selectedPageSize"
+    [totalRecords]="totalRecords"
     [loading]="loading"
     styleClass="p-datatable-gridlines"
-    [globalFilterFields]="['PLAN']"
+    (onPage)="loadPage($event)"
+    [rowsPerPageOptions]="pageSizeOptions"
   >
     <ng-template pTemplate="caption">
       <div class="flex justify-content-between">
-        <p-button
-          label="DevPlan"
-          icon="pi pi-plus"
-          (click)="openCreateDialog()"
-          class="p-button-text"
-        ></p-button>
+        <div class="flex items-center gap-2">
+          <p-dropdown
+            [options]="sortOptions"
+            [(ngModel)]="currentSortBy"
+            (onChange)="onSortChange($event)"
+            placeholder="Select a sort option"
+          ></p-dropdown>
+          <button
+            (click)="toggleSortingDirection()"
+            pButton
+            [icon]="
+              sortingDirection === 'asc' ? 'pi pi-caret-up' : 'pi pi-caret-down'
+            "
+            class="p-button-outlined"
+            aria-label="Toggle Sort Direction"
+          ></button>
+        </div>
         <div class="flex justify-content-end">
           <input
-            #searchInput
-            pInputText
             type="text"
-            (input)="dt.filterGlobal(searchInput.value, 'contains')"
-            placeholder="Search Devplan..."
+            [(ngModel)]="searchKeyword"
+            pInputText
+            placeholder="Search ..."
+            class="mr-2"
           />
+          <p-button
+            label=""
+            icon="pi pi-search"
+            (click)="
+              getAllDevplans(currentSortBy, sortingDirection, searchKeyword)
+            "
+          ></p-button>
         </div>
       </div>
     </ng-template>
