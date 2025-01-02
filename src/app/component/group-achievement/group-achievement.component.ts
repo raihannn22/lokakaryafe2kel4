@@ -17,7 +17,7 @@ import Swal from 'sweetalert2';
 import { GroupAttitudeSkillService } from '../../service/group-attitude-skill/group-attitude-skill.service';
 import { forkJoin } from 'rxjs';
 import { MessageModule } from 'primeng/message';
-import { FilterMetadata } from 'primeng/api';
+import { FilterMetadata, PrimeIcons } from 'primeng/api';
 
 @Component({
   selector: 'app-group-achievement',
@@ -80,89 +80,114 @@ export class GroupAchievementComponent implements OnInit {
   groupAchievementEnabled: any[] = [];
   enabled: number = 0;
 
+  pageSizeOptions: number[] = [5, 10, 20];
+  selectedPageSize: number = 5;
+  currentPage: number = 0;
+
+  sortingDirection: string = 'asc';
+  currentSortBy: string = 'groupName';
+
+  sortOptions = [
+    { label: 'Group Name', value: 'groupName' },
+    { label: 'Percentage', value: 'percentage' },
+  ];
+
   constructor(
     private groupAchievementService: GroupAchievementService,
     private atitudeSkillService: GroupAttitudeSkillService
   ) {}
 
   ngOnInit() {
-    forkJoin({
-      groupAchievement: this.groupAchievementService.getAllGroupAchievements(),
-      attitudeSkill: this.atitudeSkillService.getGroupAttitudeSkillsWithDetails(),
-      gAchievementEnabled: this.groupAchievementService.getAllGroupAchievementsEnabled(),
-    }).subscribe(({ groupAchievement, attitudeSkill , gAchievementEnabled}) => {
-      this.groupAchievements = groupAchievement.content;
-      // console.log('Group Achievement:', this.groupAchievements);
-      this.totalRecords = groupAchievement.totalRecords;
-      this.groupAchievementEnabled = gAchievementEnabled.content;
-      this.filteredGroupAchievements = this.groupAchievements;
-      this.loading = false;
-      this.percentageAchieved = this.groupAchievementEnabled.map(
-        (item) => item.percentage
-      );
-      this.totalPercentageAchieved = this.percentageAchieved.reduce(
-        (acc, item) => acc + item,
-        0
-      );
-
-      this.atitudeSkills = attitudeSkill.content;
-      this.percentageAttitude = this.atitudeSkills.map(
-        (item) => item.percentage
-      );
-      this.totalPercentageAttitude = this.percentageAttitude.reduce(
-        (acc, item) => acc + item,
-        0
-      );
-
-      this.sumPercentage();
-    });
+    this.loadAllData();
   }
-  getAllGroupAchievements() {
-    this.loading = true;
-    this.groupAchievementService.getAllGroupAchievements().subscribe({
-      next: (response) => {
-        this.groupAchievements = response.content;
-        // console.log('Group Achievement:', this.groupAchievements);
-        this.totalRecords = response.totalRecords;
+
+  loadAllData() {
+    forkJoin({
+      groupAchievement: this.groupAchievementService.getAllGroupAchievements(
+        this.currentPage,
+        this.selectedPageSize,
+        this.currentSortBy,
+        this.sortingDirection,
+        this.searchKeyword
+      ),
+      attitudeSkill:
+        this.atitudeSkillService.getGroupAttitudeSkillsWithDetails(),
+      gAchievementEnabled:
+        this.groupAchievementService.getAllGroupAchievementsEnabled(),
+    }).subscribe({
+      next: ({ groupAchievement, attitudeSkill, gAchievementEnabled }) => {
+        // Assign data for group achievements
+        this.groupAchievements = groupAchievement.content;
+        this.totalRecords = groupAchievement.total_data; // Ensure this matches the response from the backend
         this.filteredGroupAchievements = this.groupAchievements;
-        this.loading = false;
-        this.percentageAchieved = this.groupAchievements.map(
+
+        // Assign data for group achievement enabled
+        this.groupAchievementEnabled = gAchievementEnabled.content;
+        this.percentageAchieved = this.groupAchievementEnabled.map(
           (item) => item.percentage
         );
         this.totalPercentageAchieved = this.percentageAchieved.reduce(
           (acc, item) => acc + item,
           0
         );
-        // console.log(this.totalPercentageAchieved);
+
+        // Assign data for attitude skills
+        this.atitudeSkills = attitudeSkill.content;
+        this.percentageAttitude = this.atitudeSkills.map(
+          (item) => item.percentage
+        );
+        this.totalPercentageAttitude = this.percentageAttitude.reduce(
+          (acc, item) => acc + item,
+          0
+        );
+
+        this.sumPercentage();
+        this.loading = false;
       },
       error: (error) => {
-        // console.error('Error fetching achievements:', error);
         this.loading = false;
+        console.error('Error loading data:', error);
       },
     });
   }
 
-  // getAllGroupAchievements(page: number = 0, size: number = 5) {
-  //   this.loading = true;
-  //   this.groupAchievementService.getAllGroupAchievements(page, size).subscribe({
-  //     next: (response) => {
-  //       this.groupAchievements = response.content;
-  //       this.totalRecords = response.totalRecords;
-  //       this.filteredGroupAchievements = this.groupAchievements;
-  //       this.loading = false;
-  //       this.percentageAchieved = this.groupAchievements.map(
-  //         (item) => item.percentage
-  //       );
-  //       this.totalPercentageAchieved = this.percentageAchieved.reduce(
-  //         (acc, item) => acc + item,
-  //         0
-  //       );
-  //     },
-  //     error: (error) => {
-  //       this.loading = false;
-  //     },
-  //   });
-  // }
+  getAllGroupAchievements(
+    sort: string = this.currentSortBy,
+    direction: string = this.sortingDirection,
+    searchKeyword: string = this.searchKeyword
+  ) {
+    this.loading = true;
+    console.log(
+      'Loading group achievements with sorting:',
+      sort,
+      'and direction:',
+      direction
+    );
+
+    this.groupAchievementService
+      .getAllGroupAchievements(
+        this.currentPage,
+        this.selectedPageSize,
+        sort,
+        direction,
+        searchKeyword
+      )
+      .subscribe({
+        next: (response) => {
+          this.groupAchievements = response.content;
+          this.totalRecords = response.total_data; // Ensure this matches the response from the backend
+          this.filteredGroupAchievements = this.groupAchievements;
+          this.loading = false;
+
+          console.log('Data Group Achievements:', this.groupAchievements);
+          console.log('Total Records:', this.totalRecords);
+        },
+        error: (error) => {
+          this.loading = false;
+          console.error('Error fetching group achievements:', error);
+        },
+      });
+  }
 
   sumPercentage() {
     this.totalPercentage =
@@ -170,31 +195,35 @@ export class GroupAchievementComponent implements OnInit {
     // console.log('ttal', this.totalPercentage);
   }
 
+  // loadPage(event: any) {
+  //   this.first = event.first;
+  //   this.getAllGroupAchievements();
+  // }
+
   loadPage(event: any) {
-    this.first = event.first;
-    this.getAllGroupAchievements();
+    this.currentPage = event.first / event.rows; // Menghitung halaman berdasarkan offset
+    this.selectedPageSize = event.rows; // Ambil jumlah baris per halaman
+    console.log('Page Size Change Triggered');
+    console.log('Selected Page Size:', this.selectedPageSize);
+    this.getAllGroupAchievements(this.currentSortBy, this.sortingDirection); // Muat ulang data dengan ukuran halaman baru
   }
 
-  searchData() {
-    if (this.searchKeyword.trim() === '') {
-      this.filteredGroupAchievements = this.groupAchievements;
-    } else {
-      this.filteredGroupAchievements = this.groupAchievements.filter(
-        (groupAchievement) => {
-          return Object.keys(groupAchievement).some((key) => {
-            const value = groupAchievement[key];
-            if (typeof value === 'number') {
-              return value.toString().includes(this.searchKeyword);
-            } else if (typeof value === 'string') {
-              return value
-                .toLowerCase()
-                .includes(this.searchKeyword.toLowerCase());
-            }
-            return false;
-          });
-        }
-      );
-    }
+  onSortChange(event: any) {
+    this.currentSortBy = event.value; // Update current sort by
+    console.log('Sorting by:', this.currentSortBy); // Log for debugging
+
+    this.currentPage = 0; // Reset to the first page
+    console.log('Sorting direction:', this.sortingDirection); // Log for debugging
+
+    this.getAllGroupAchievements(this.currentSortBy, this.sortingDirection); // Call to load data with new sorting
+  }
+
+  toggleSortingDirection() {
+    // Toggle between 'asc' and 'desc'
+    this.sortingDirection = this.sortingDirection === 'asc' ? 'desc' : 'asc';
+    console.log('Sorting direction changed to:', this.sortingDirection); // Log the new direction
+    // Reload achievements with the current sort criteria and new sorting direction
+    this.getAllGroupAchievements(this.currentSortBy, this.sortingDirection);
   }
 
   validatePercentage() {
@@ -272,7 +301,7 @@ export class GroupAchievementComponent implements OnInit {
       return;
     }
     if (this.groupAchievement.id && this.enabled != 0) {
-      console.log("atas");
+      console.log('atas');
       const maxValue = 100 - this.totalPercentage + this.userPercentage;
       if (this.groupAchievement.percentage > maxValue) {
         Swal.fire({
@@ -287,7 +316,7 @@ export class GroupAchievementComponent implements OnInit {
         return;
       }
     } else {
-      console.log("bawah"); 
+      console.log('bawah');
       const maxValue = 100 - this.totalPercentage;
       if (this.groupAchievement.percentage > maxValue) {
         Swal.fire({

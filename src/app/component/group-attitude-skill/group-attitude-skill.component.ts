@@ -83,46 +83,79 @@ export class GroupAttitudeSkillComponent implements OnInit {
   enabled: number = 0;
   groupAttitudeEnabled: any[] = [];
 
+  pageSizeOptions: number[] = [5, 10, 20];
+  selectedPageSize: number = 5;
+  currentPage: number = 0;
+
+  sortingDirection: string = 'asc';
+  currentSortBy: string = 'groupName';
+
+  sortOptions = [
+    { label: 'Group Name', value: 'groupName' },
+    { label: 'Percentage', value: 'percentage' },
+  ];
+
   constructor(
     private groupAttitudeSkillService: GroupAttitudeSkillService,
     private groupAchievementService: GroupAchievementService
   ) {}
 
   ngOnInit() {
-    this.getAllGroup();
+    this.loadAllData();
   }
 
-  getAllGroup() {
+  loadAllData() {
+    this.loading = true; // Set loading to true while fetching data
+
     forkJoin({
-      groupAchievement: this.groupAchievementService.getAllGroupAchievementsEnabled(),
-      attitudeSkill: this.groupAttitudeSkillService.getAllGroupAttitudeSkills(),
-      groupAttitudeEnabled: this.groupAttitudeSkillService.getGroupAttitudeSkillsEnabled(),
-    }).subscribe(({ groupAchievement, attitudeSkill, groupAttitudeEnabled }) => {
-      this.groupAchievements = groupAchievement.content;
-      // console.log('Group Achievement:', this.groupAchievements);
-      this.totalRecords = groupAchievement.totalRecords;
-      this.groupAttitudeEnabled = groupAttitudeEnabled.content;
-      this.percentageAchieved = this.groupAchievements.map(
-        (item) => item.percentage
-      );
-      this.totalPercentageAchieved = this.percentageAchieved.reduce(
-        (acc, item) => acc + item,
-        0
-      );
+      groupAchievement:
+        this.groupAchievementService.getAllGroupAchievementsEnabled(),
+      attitudeSkill: this.groupAttitudeSkillService.getAllGroupAttitudeSkills(
+        this.currentPage,
+        this.selectedPageSize,
+        this.currentSortBy,
+        this.sortingDirection,
+        this.searchKeyword
+      ),
+      groupAttitudeEnabled:
+        this.groupAttitudeSkillService.getGroupAttitudeSkillsEnabled(),
+    }).subscribe({
+      next: ({ groupAchievement, attitudeSkill, groupAttitudeEnabled }) => {
+        // Assign data for group achievements
+        this.groupAchievements = groupAchievement.content;
+        this.totalRecords = groupAchievement.totalRecords; // Ensure this matches the response from the backend
+        this.filteredGroupAttitudeSkills = this.groupAttitudeSkills;
 
-      this.groupAttitudeSkills = attitudeSkill.content;
-      this.totalRecords = attitudeSkill.totalRecords;
-      this.filteredGroupAttitudeSkills = this.groupAttitudeSkills;
-      this.loading = false;
-      this.percentageAttitude = this.groupAttitudeEnabled.map(
-        (item) => item.percentage
-      );
-      this.totalPercentageAttitude = this.percentageAttitude.reduce(
-        (acc, item) => acc + item,
-        0
-      );
+        // Calculate total percentage achieved
+        this.percentageAchieved = this.groupAchievements.map(
+          (item) => item.percentage
+        );
+        this.totalPercentageAchieved = this.percentageAchieved.reduce(
+          (acc, item) => acc + item,
+          0
+        );
 
-      this.sumPercentage();
+        // Assign data for attitude skills
+        this.groupAttitudeSkills = attitudeSkill.content;
+        this.totalRecords = attitudeSkill.totalRecords; // Update total records for attitude skills
+        this.filteredGroupAttitudeSkills = this.groupAttitudeSkills;
+
+        // Calculate total percentage attitude
+        this.percentageAttitude = groupAttitudeEnabled.content.map(
+          (item: { percentage: number }) => item.percentage
+        );
+        this.totalPercentageAttitude = this.percentageAttitude.reduce(
+          (acc, item) => acc + item,
+          0
+        );
+
+        this.loading = false; // Set loading to false after data is fetched
+        this.sumPercentage(); // Call to sum percentages
+      },
+      error: (error) => {
+        this.loading = false; // Set loading to false on error
+        console.error('Error loading data:', error);
+      },
     });
   }
 
@@ -131,47 +164,67 @@ export class GroupAttitudeSkillComponent implements OnInit {
       this.totalPercentageAttitude + this.totalPercentageAchieved;
   }
 
-  getAllGroupAttitudeSkills() {
+  getAllGroupAttitudeSkills(
+    sort: string = this.currentSortBy,
+    direction: string = this.sortingDirection,
+    searchKeyword: string = this.searchKeyword
+  ) {
     this.loading = true;
-    this.groupAttitudeSkillService.getAllGroupAttitudeSkills().subscribe({
-      next: (response) => {
-        this.groupAttitudeSkills = response.content;
-        this.totalRecords = response.totalRecords;
-        this.filteredGroupAttitudeSkills = this.groupAttitudeSkills;
-        this.loading = false;
-      },
-      error: (error) => {
-        // console.error('Error fetching AttitudeSkills:', error);
-        this.loading = false;
-      },
-    });
+    console.log(
+      'Loading group attitude skills with sorting:',
+      sort,
+      'and direction:',
+      direction
+    );
+    this.groupAttitudeSkillService
+      .getAllGroupAttitudeSkills(
+        this.currentPage,
+        this.selectedPageSize,
+        sort,
+        direction,
+        searchKeyword
+      )
+      .subscribe({
+        next: (response) => {
+          this.groupAttitudeSkills = response.content;
+          this.totalRecords = response.totalRecords;
+          this.filteredGroupAttitudeSkills = this.groupAttitudeSkills;
+          this.loading = false;
+
+          console.log('Data Group Attitude Skills:', this.groupAttitudeSkills);
+          console.log('Total Records:', this.totalRecords);
+        },
+        error: (error) => {
+          console.error('Error fetching AttitudeSkills:', error);
+          this.loading = false;
+        },
+      });
   }
 
   loadPage(event: any) {
-    this.first = event.first;
-    this.getAllGroupAttitudeSkills();
+    this.currentPage = event.first / event.rows; // Menghitung halaman berdasarkan offset
+    this.selectedPageSize = event.rows; // Ambil jumlah baris per halaman
+    console.log('Page Size Change Triggered');
+    console.log('Selected Page Size:', this.selectedPageSize);
+    this.getAllGroupAttitudeSkills(this.currentSortBy, this.sortingDirection); // Muat ulang data dengan ukuran halaman baru
   }
 
-  searchData() {
-    if (this.searchKeyword.trim() === '') {
-      this.filteredGroupAttitudeSkills = this.groupAttitudeSkills;
-    } else {
-      this.filteredGroupAttitudeSkills = this.groupAttitudeSkills.filter(
-        (groupAttitudeSkill) => {
-          return Object.keys(groupAttitudeSkill).some((key) => {
-            const value = groupAttitudeSkill[key];
-            if (typeof value === 'number') {
-              return value.toString().includes(this.searchKeyword);
-            } else if (typeof value === 'string') {
-              return value
-                .toLowerCase()
-                .includes(this.searchKeyword.toLowerCase());
-            }
-            return false;
-          });
-        }
-      );
-    }
+  onSortChange(event: any) {
+    this.currentSortBy = event.value; // Update current sort by
+    console.log('Sorting by:', this.currentSortBy); // Log for debugging
+
+    this.currentPage = 0; // Reset to the first page
+    console.log('Sorting direction:', this.sortingDirection); // Log for debugging
+
+    this.getAllGroupAttitudeSkills(this.currentSortBy, this.sortingDirection); // Call to load data with new sorting
+  }
+
+  toggleSortingDirection() {
+    // Toggle between 'asc' and 'desc'
+    this.sortingDirection = this.sortingDirection === 'asc' ? 'desc' : 'asc';
+    console.log('Sorting direction changed to:', this.sortingDirection); // Log the new direction
+    // Reload achievements with the current sort criteria and new sorting direction
+    this.getAllGroupAttitudeSkills(this.currentSortBy, this.sortingDirection);
   }
 
   validatePercentage() {
@@ -197,7 +250,6 @@ export class GroupAttitudeSkillComponent implements OnInit {
     this.enabled = this.groupAttitudeSkill.enabled;
     this.groupAttitudeSkillDialog = true;
     this.isGroupNameDuplicate = false;
-    
   }
 
   validateGroupAttitudeSkill() {
