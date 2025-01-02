@@ -3,12 +3,12 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class DevplanService {
   private apiUrl = 'http://localhost:8081/devPlan';
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {}
 
   getAllDevplans(): Observable<any> {
     return this.http.get<any>(`${this.apiUrl}/get/all`);

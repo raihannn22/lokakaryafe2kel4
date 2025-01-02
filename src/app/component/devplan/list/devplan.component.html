@@ -1,69 +1,95 @@
 <div class="text-center mb-2">
-    <h3 style="font-weight: bold; font-size: 2.25rem;">Development Plan Management</h3>
-</div> 
-    <div class="p-5">
-    <p-table #dt [value]="devplans" [paginator]="true" [rows]="10" [loading]="loading" styleClass="p-datatable-gridlines" [globalFilterFields]="[ 'PLAN']">
-          <ng-template pTemplate="caption">
-            <div class="flex justify-content-between">
-                <p-button
-                  label="DevPlan"
-                  icon="pi pi-plus"
-                  (click)="openCreateDialog()"
-                  class="p-button-text"
-                ></p-button>
-                <div class="flex justify-content-end">
-                  <input
-                  #searchInput pInputText type="text" (input)="dt.filterGlobal(searchInput.value, 'contains')" placeholder="Search Devplan..."
-                  />
-                </div>
-              </div>
-          </ng-template>
-          
-        <ng-template pTemplate="header">
-          <tr>
-              <th>Devplan Name</th>
-              <th>Status</th>
-              <th>Action</th>
-          </tr>
-      </ng-template>
-  
-      <ng-template pTemplate="body" let-devplan>
-          <tr>
-              <td>{{ devplan.PLAN }}</td>
-              <td>                  
-                    <p-tag 
-                    [severity]="devplan.ENABLED == 1 ? 'success' : 'danger'"
-                    [value]="devplan.ENABLED == 1 ? 'Enabled' : 'Disabled'">
-                    </p-tag>
-              </td>
-              <td class="flex gap-2">
-                  <button pButton type="button" icon="pi pi-pencil" class="p-button-sm" (click)="openUpdateDialog(devplan)"></button>
-                  <button pButton type="button" icon="pi pi-trash" class="p-button-danger p-button-sm"
-                          (click)="confirmDelete(devplan)"></button>
-              </td>
-          </tr>
-      </ng-template>
-    </p-table>
-    </div>
+  <h3 style="font-weight: bold; font-size: 2.25rem">
+    Development Plan Management
+  </h3>
+</div>
+<div class="p-5">
+  <p-table
+    #dt
+    [value]="devplans"
+    [paginator]="true"
+    [rows]="10"
+    [loading]="loading"
+    styleClass="p-datatable-gridlines"
+    [globalFilterFields]="['PLAN']"
+  >
+    <ng-template pTemplate="caption">
+      <div class="flex justify-content-between">
+        <p-button
+          label="DevPlan"
+          icon="pi pi-plus"
+          (click)="openCreateDialog()"
+          class="p-button-text"
+        ></p-button>
+        <div class="flex justify-content-end">
+          <input
+            #searchInput
+            pInputText
+            type="text"
+            (input)="dt.filterGlobal(searchInput.value, 'contains')"
+            placeholder="Search Devplan..."
+          />
+        </div>
+      </div>
+    </ng-template>
 
+    <ng-template pTemplate="header">
+      <tr>
+        <th>Devplan Name</th>
+        <th>Status</th>
+        <th>Action</th>
+      </tr>
+    </ng-template>
+
+    <ng-template pTemplate="body" let-devplan>
+      <tr>
+        <td>{{ devplan.PLAN }}</td>
+        <td>
+          <p-tag
+            [severity]="devplan.ENABLED == 1 ? 'success' : 'danger'"
+            [value]="devplan.ENABLED == 1 ? 'Enabled' : 'Disabled'"
+          >
+          </p-tag>
+        </td>
+        <td class="flex gap-2">
+          <button
+            pButton
+            type="button"
+            icon="pi pi-pencil"
+            class="p-button-sm"
+            (click)="openUpdateDialog(devplan)"
+          ></button>
+          <button
+            pButton
+            type="button"
+            icon="pi pi-trash"
+            class="p-button-danger p-button-sm"
+            (click)="confirmDelete(devplan)"
+          ></button>
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+</div>
 
 <div>
-
-    <p-toast 
-    [showTransformOptions]="'translateY(100%)'" 
-    [showTransitionOptions]="'1000ms'" 
-    [hideTransitionOptions]="'1000ms'" 
-    [showTransformOptions]="'translateX(100%)'" />
-
+  <p-toast
+    [showTransformOptions]="'translateY(100%)'"
+    [showTransitionOptions]="'1000ms'"
+    [hideTransitionOptions]="'1000ms'"
+    [showTransformOptions]="'translateX(100%)'"
+  />
 </div>
 
 <app-create-devplan
-[(visible)]="displayCreateDialog"
-(devplanCreated)="ondevplanCreated($event)">
+  [(visible)]="displayCreateDialog"
+  (devplanCreated)="ondevplanCreated($event)"
+>
 </app-create-devplan>
 
 <app-update-devplan
-[(visible)]="displayUpdateDialog"
-[devplan]="selecteddevplan"
-(divisionCreated)="ondevplanCreated($event)">
+  [(visible)]="displayUpdateDialog"
+  [devplan]="selecteddevplan"
+  (divisionCreated)="ondevplanCreated($event)"
+>
 </app-update-devplan>

@@ -20,13 +20,25 @@ import { UpdateDevplanComponent } from '../update-devplan/update-devplan.compone
 @Component({
   selector: 'app-devplan',
   standalone: true,
-  imports: [CommonModule, ButtonModule, CalendarModule, FormsModule, TableModule, DialogModule, TagModule, ToastModule, 
-    IconFieldModule, InputIconModule, InputTextModule, CreateDevplanComponent, UpdateDevplanComponent],
+  imports: [
+    CommonModule,
+    ButtonModule,
+    CalendarModule,
+    FormsModule,
+    TableModule,
+    DialogModule,
+    TagModule,
+    ToastModule,
+    IconFieldModule,
+    InputIconModule,
+    InputTextModule,
+    CreateDevplanComponent,
+    UpdateDevplanComponent,
+  ],
   templateUrl: './devplan.component.html',
-  styleUrl: './devplan.component.css'
+  styleUrl: './devplan.component.css',
 })
 export class DevplanComponent {
-
   devplans: any[] = [];
   loading: boolean = true;
   displayCreateDialog = false;
@@ -57,7 +69,6 @@ export class DevplanComponent {
     });
   }
 
-  
   openCreateDialog() {
     this.displayCreateDialog = true;
   }
@@ -68,14 +79,17 @@ export class DevplanComponent {
     this.displayUpdateDialog = true;
   }
 
-  
   // Fungsi menangani event divisi yang dibuat
   ondevplanCreated(newdivision: any) {
     console.log('awqqq baru:', newdivision);
     // Logika untuk menyimpan division ke database (via API)
     this.getAllDevplans();
     this.displayCreateDialog = false;
-    this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Message Content' });
+    this.messageService.add({
+      severity: 'success',
+      summary: 'Success',
+      detail: 'Message Content',
+    });
     // Tambahkan division baru ke daftar divisions atau update data sesuai kebutuhan
   }
 
@@ -97,9 +111,13 @@ export class DevplanComponent {
             this.getAllDevplans(); // Panggil metode untuk memperbarui tabel
           },
           error: (error) => {
-            Swal.fire('Error', 'Terjadi kesalahan saat menghapus Divisi.', 'error');
+            Swal.fire(
+              'Error',
+              'Terjadi kesalahan saat menghapus Divisi.',
+              'error'
+            );
             console.error('Error deleting division:', error);
-          }
+          },
         });
       }
     });

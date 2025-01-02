@@ -10,8 +10,16 @@ export class TechnicalSkillService {
 
   constructor(private http: HttpClient) {}
 
-  getAllTechnicalSkills(): Observable<any> {
-    return this.http.get(`${this.apiUrl}/all`);
+  getAllTechnicalSkills(
+    page: number = 0,
+    size: number = 10,
+    sort: string = 'groupName',
+    direction: string = 'asc',
+    searchKeyword: string = ''
+  ): Observable<any> {
+    return this.http.get(
+      `${this.apiUrl}/paginated?page=${page}&size=${size}&sort=${sort}&direction=${direction}&searchKeyword=${searchKeyword}`
+    );
   }
 
   saveTechnicalSkill(technicalSkill: any): Observable<any> {

@@ -54,7 +54,11 @@ export class GroupAchievementComponent implements OnInit {
   filteredGroupAchievements: any[] = [];
   loading: boolean = true;
   groupAchievementDialog: boolean = false;
-  groupAchievement: any = { group_name: '', percentage: null, enabled: false };
+  groupAchievement: any = {
+    group_name: '',
+    percentage: null,
+    enabled: false,
+  };
 
   searchKeyword: string = '';
   filters: { [s: string]: FilterMetadata } = {};
@@ -194,11 +198,6 @@ export class GroupAchievementComponent implements OnInit {
       this.totalPercentageAttitude + this.totalPercentageAchieved;
     // console.log('ttal', this.totalPercentage);
   }
-
-  // loadPage(event: any) {
-  //   this.first = event.first;
-  //   this.getAllGroupAchievements();
-  // }
 
   loadPage(event: any) {
     this.currentPage = event.first / event.rows; // Menghitung halaman berdasarkan offset

@@ -123,34 +123,25 @@ export class GroupAttitudeSkillComponent implements OnInit {
       next: ({ groupAchievement, attitudeSkill, groupAttitudeEnabled }) => {
         // Assign data for group achievements
         this.groupAchievements = groupAchievement.content;
-        this.totalRecords = groupAchievement.totalRecords; // Ensure this matches the response from the backend
-        this.filteredGroupAttitudeSkills = this.groupAttitudeSkills;
-
-        // Calculate total percentage achieved
-        this.percentageAchieved = this.groupAchievements.map(
-          (item) => item.percentage
-        );
-        this.totalPercentageAchieved = this.percentageAchieved.reduce(
-          (acc, item) => acc + item,
-          0
-        );
+        // Anda bisa menyimpan totalRecords untuk group achievements jika diperlukan
+        // this.totalRecordsGroupAchievement = groupAchievement.totalRecords;
 
         // Assign data for attitude skills
         this.groupAttitudeSkills = attitudeSkill.content;
-        this.totalRecords = attitudeSkill.totalRecords; // Update total records for attitude skills
+        this.totalRecords = attitudeSkill.total_data; // Update total records for attitude skills
         this.filteredGroupAttitudeSkills = this.groupAttitudeSkills;
 
-        // Calculate total percentage attitude
-        this.percentageAttitude = groupAttitudeEnabled.content.map(
-          (item: { percentage: number }) => item.percentage
-        );
-        this.totalPercentageAttitude = this.percentageAttitude.reduce(
-          (acc, item) => acc + item,
-          0
+        console.log(
+          'Total Records for Group Attitude Skills:',
+          this.totalRecords
         );
 
+        // Jika total data untuk group attitude skills adalah 0, Anda mungkin ingin menangani ini
+        if (this.totalRecords === 0) {
+          console.warn('No records found for group attitude skills.');
+        }
+
         this.loading = false; // Set loading to false after data is fetched
-        this.sumPercentage(); // Call to sum percentages
       },
       error: (error) => {
         this.loading = false; // Set loading to false on error
@@ -159,23 +150,12 @@ export class GroupAttitudeSkillComponent implements OnInit {
     });
   }
 
-  sumPercentage() {
-    this.totalPercentage =
-      this.totalPercentageAttitude + this.totalPercentageAchieved;
-  }
-
   getAllGroupAttitudeSkills(
     sort: string = this.currentSortBy,
     direction: string = this.sortingDirection,
     searchKeyword: string = this.searchKeyword
   ) {
     this.loading = true;
-    console.log(
-      'Loading group attitude skills with sorting:',
-      sort,
-      'and direction:',
-      direction
-    );
     this.groupAttitudeSkillService
       .getAllGroupAttitudeSkills(
         this.currentPage,
@@ -186,19 +166,29 @@ export class GroupAttitudeSkillComponent implements OnInit {
       )
       .subscribe({
         next: (response) => {
+          // console.log('API Response for Group Attitude Skills:', response); // Log respons API
+
           this.groupAttitudeSkills = response.content;
-          this.totalRecords = response.totalRecords;
+          this.totalRecords = response.total_data; // Ensure this matches the response from the backend
           this.filteredGroupAttitudeSkills = this.groupAttitudeSkills;
           this.loading = false;
-
-          console.log('Data Group Attitude Skills:', this.groupAttitudeSkills);
-          console.log('Total Records:', this.totalRecords);
         },
         error: (error) => {
-          console.error('Error fetching AttitudeSkills:', error);
           this.loading = false;
+          console.error('Error fetching AttitudeSkills:', error);
         },
       });
+  }
+
+  // loadPage(event: any) {
+  //   this.currentPage = event.page; // Update current page
+  //   this.selectedPageSize = event.rows; // Update rows per page
+  //   this.getAllGroupAttitudeSkills(this.currentSortBy, this.sortingDirection); // Reload data with new page size
+  // }
+
+  sumPercentage() {
+    this.totalPercentage =
+      this.totalPercentageAttitude + this.totalPercentageAchieved;
   }
 
   loadPage(event: any) {
