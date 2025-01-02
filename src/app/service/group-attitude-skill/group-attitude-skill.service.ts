@@ -11,8 +11,16 @@ export class GroupAttitudeSkillService {
 
   constructor(private http: HttpClient) {}
 
-  getAllGroupAttitudeSkills(): Observable<any> {
-    return this.http.get(`${this.apiUrl}/all`);
+  getAllGroupAttitudeSkills(
+    page: number = 0,
+    size: number = 10,
+    sort: string = 'groupName',
+    direction: string = 'asc',
+    searchKeyword: string = ''
+  ): Observable<any> {
+    return this.http.get(
+      `${this.apiUrl}/paginated?page=${page}&size=${size}&sort=${sort}&direction=${direction}&searchKeyword=${searchKeyword}`
+    );
   }
 
   saveGroupAttitudeSkill(groupAttitudeSkill: any): Observable<any> {
@@ -39,6 +47,6 @@ export class GroupAttitudeSkillService {
   }
 
   getGroupAttitudeSkillsEnabled(): Observable<any> {
-    return this.http.get(`${this.apiUrl}/get/all/enabled`); 
+    return this.http.get(`${this.apiUrl}/get/all/enabled`);
   }
 }

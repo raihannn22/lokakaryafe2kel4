@@ -70,6 +70,15 @@ export class TechnicalSkillComponent implements OnInit {
   first: number = 0;
   totalRecords: number = 0;
 
+  pageSizeOptions: number[] = [5, 10, 20];
+  selectedPageSize: number = 5;
+  currentPage: number = 0;
+
+  sortingDirection: string = 'asc';
+  currentSortBy: string = 'technicalSkill';
+
+  sortOptions = [{ label: 'Technical Skill', value: 'technicalSkill' }];
+
   constructor(
     private technicalSkillService: TechnicalSkillService,
     private router: Router
@@ -79,47 +88,100 @@ export class TechnicalSkillComponent implements OnInit {
     this.getAllTechnicalSkills();
   }
 
-  getAllTechnicalSkills() {
+  getAllTechnicalSkills(
+    sort: string = this.currentSortBy,
+    direction: string = this.sortingDirection,
+    searchKeyword: string = this.searchKeyword
+  ) {
     this.loading = true;
-    this.technicalSkillService.getAllTechnicalSkills().subscribe({
-      next: (response) => {
-        this.technicalSkills = response.content;
-        this.totalRecords = response.totalRecords;
-        this.filteredTechnicalSkills = this.technicalSkills;
-        this.loading = false;
-      },
-      error: (error) => {
-        // console.error('Error fetching achievements:', error);
-        this.loading = false;
-      },
-    });
+    console.log(
+      'Loading technical skill with sorting:',
+      sort,
+      'and direction:',
+      direction
+    );
+    this.technicalSkillService
+      .getAllTechnicalSkills(
+        this.currentPage,
+        this.selectedPageSize,
+        sort,
+        direction,
+        searchKeyword
+      )
+      .subscribe({
+        next: (response) => {
+          this.technicalSkills = response.content;
+          this.totalRecords = response.total_data;
+          this.filteredTechnicalSkills = this.technicalSkills;
+          this.loading = false;
+
+          if (this.filteredTechnicalSkills.length === 0) {
+            Swal.fire({
+              icon: 'info',
+              title: 'No Data Found',
+              text: 'No matching data found for your search criteria.',
+              confirmButtonText: 'OK',
+            }).then((result) => {
+              if (result.isConfirmed) {
+                // Reset search keyword only
+                this.searchKeyword = '';
+                this.getAllTechnicalSkills(
+                  this.currentSortBy,
+                  this.sortingDirection,
+                  this.searchKeyword
+                );
+              }
+            });
+          }
+
+          // console.log('Data Technical Skills:', this.technicalSkills);
+          // console.log('Total Records:', this.totalRecords);
+        },
+        error: (error) => {
+          console.error('Error fetching technical Skills:', error);
+          this.loading = false;
+        },
+      });
+  }
+
+  resetFilters() {
+    this.searchKeyword = '';
+    this.currentSortBy = 'technicalSkill';
+    this.sortingDirection = 'asc';
+    this.currentPage = 0;
+    this.selectedPageSize = 5;
+
+    this.getAllTechnicalSkills(
+      this.currentSortBy,
+      this.sortingDirection,
+      this.searchKeyword
+    );
   }
 
   loadPage(event: any) {
-    this.first = event.first;
-    this.getAllTechnicalSkills();
+    this.currentPage = event.first / event.rows; // Menghitung halaman berdasarkan offset
+    this.selectedPageSize = event.rows; // Ambil jumlah baris per halaman
+    console.log('Page Size Change Triggered');
+    console.log('Selected Page Size:', this.selectedPageSize);
+    this.getAllTechnicalSkills(this.currentSortBy, this.sortingDirection);
   }
 
-  searchData() {
-    if (this.searchKeyword.trim() === '') {
-      this.filteredTechnicalSkills = this.technicalSkills;
-    } else {
-      this.filteredTechnicalSkills = this.technicalSkills.filter(
-        (technicalSkills) => {
-          return Object.keys(technicalSkills).some((key) => {
-            const value = technicalSkills[key];
-            if (typeof value === 'number') {
-              return value.toString().includes(this.searchKeyword);
-            } else if (typeof value === 'string') {
-              return value
-                .toLowerCase()
-                .includes(this.searchKeyword.toLowerCase());
-            }
-            return false;
-          });
-        }
-      );
-    }
+  onSortChange(event: any) {
+    this.currentSortBy = event.value; // Update current sort by
+    console.log('Sorting by:', this.currentSortBy); // Log for debugging
+
+    this.currentPage = 0; // Reset to the first page
+    console.log('Sorting direction:', this.sortingDirection); // Log for debugging
+
+    this.getAllTechnicalSkills(this.currentSortBy, this.sortingDirection); // Call to load data with new sorting
+  }
+
+  toggleSortingDirection() {
+    // Toggle between 'asc' and 'desc'
+    this.sortingDirection = this.sortingDirection === 'asc' ? 'desc' : 'asc';
+    console.log('Sorting direction changed to:', this.sortingDirection); // Log the new direction
+    // Reload achievements with the current sort criteria and new sorting direction
+    this.getAllTechnicalSkills(this.currentSortBy, this.sortingDirection);
   }
 
   showAddDialog() {

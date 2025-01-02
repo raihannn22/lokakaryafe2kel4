@@ -3,16 +3,28 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class DevplanService {
   private apiUrl = 'http://localhost:8081/devPlan';
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {}
 
-  getAllDevplans(): Observable<any> {
-    return this.http.get<any>(`${this.apiUrl}/get/all`);
+  getAllDevplans(
+    page: number = 0,
+    size: number = 5,
+    sort: string = 'plan',
+    direction: string = 'asc',
+    searchKeyword: string = ''
+  ): Observable<any> {
+    return this.http.get<any>(
+      `${this.apiUrl}/get/paginated?page=${page}&size=${size}&sort=${sort}&direction=${direction}&searchKeyword=${searchKeyword}`
+    );
   }
+
+  // getAllDevplans(): Observable<any> {
+  //   return this.http.get<any>(`${this.apiUrl}/get/all`);
+  // }
 
   saveDevPlan(devPlan: any): Observable<any> {
     return this.http.put<any>(`${this.apiUrl}/save`, devPlan);
