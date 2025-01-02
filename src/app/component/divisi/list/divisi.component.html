@@ -44,6 +44,12 @@
             class="p-button-outlined"
             aria-label="Toggle Sort Direction"
           ></button>
+          <p-button
+            label=""
+            icon="pi pi-refresh"
+            (click)="resetFilters()"
+            class="p-button-text"
+          ></p-button>
         </div>
         <div class="flex justify-content-end">
           <input
@@ -66,10 +72,7 @@
 
     <ng-template pTemplate="header">
       <tr>
-        <th pSortableColumn="DIVISION_NAME">
-          Division Name
-          <p-sortIcon field="DIVISION_NAME"></p-sortIcon>
-        </th>
+        <th>Division Name</th>
         <th>Action</th>
       </tr>
     </ng-template>

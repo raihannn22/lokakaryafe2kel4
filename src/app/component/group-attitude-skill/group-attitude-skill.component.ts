@@ -172,6 +172,26 @@ export class GroupAttitudeSkillComponent implements OnInit {
           this.totalRecords = response.total_data; // Ensure this matches the response from the backend
           this.filteredGroupAttitudeSkills = this.groupAttitudeSkills;
           this.loading = false;
+          if (this.filteredGroupAttitudeSkills.length === 0) {
+            Swal.fire({
+              icon: 'info',
+              title: 'No Data Found',
+              text: 'No matching data found for your search criteria.',
+              confirmButtonText: 'OK',
+            }).then((result) => {
+              if (result.isConfirmed) {
+                // Reset search keyword only
+                this.searchKeyword = '';
+                this.getAllGroupAttitudeSkills(
+                  this.currentSortBy,
+                  this.sortingDirection,
+                  this.searchKeyword
+                );
+              }
+            });
+          }
+
+          this.loading = false;
         },
         error: (error) => {
           this.loading = false;
@@ -180,11 +200,19 @@ export class GroupAttitudeSkillComponent implements OnInit {
       });
   }
 
-  // loadPage(event: any) {
-  //   this.currentPage = event.page; // Update current page
-  //   this.selectedPageSize = event.rows; // Update rows per page
-  //   this.getAllGroupAttitudeSkills(this.currentSortBy, this.sortingDirection); // Reload data with new page size
-  // }
+  resetFilters() {
+    this.searchKeyword = '';
+    this.currentSortBy = 'groupName';
+    this.sortingDirection = 'asc';
+    this.currentPage = 0;
+    this.selectedPageSize = 5;
+
+    this.getAllGroupAttitudeSkills(
+      this.currentSortBy,
+      this.sortingDirection,
+      this.searchKeyword
+    );
+  }
 
   sumPercentage() {
     this.totalPercentage =

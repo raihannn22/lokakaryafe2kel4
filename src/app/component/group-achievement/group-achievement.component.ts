@@ -183,14 +183,48 @@ export class GroupAchievementComponent implements OnInit {
           this.filteredGroupAchievements = this.groupAchievements;
           this.loading = false;
 
-          console.log('Data Group Achievements:', this.groupAchievements);
-          console.log('Total Records:', this.totalRecords);
+          if (this.filteredGroupAchievements.length === 0) {
+            Swal.fire({
+              icon: 'info',
+              title: 'No Data Found',
+              text: 'No matching data found for your search criteria.',
+              confirmButtonText: 'OK',
+            }).then((result) => {
+              if (result.isConfirmed) {
+                // Reset search keyword only
+                this.searchKeyword = '';
+                this.getAllGroupAchievements(
+                  this.currentSortBy,
+                  this.sortingDirection,
+                  this.searchKeyword
+                );
+              }
+            });
+          }
+
+          this.loading = false;
+          // console.log('Data Group Achievements:', this.groupAchievements);
+          // console.log('Total Records:', this.totalRecords);
         },
         error: (error) => {
           this.loading = false;
           console.error('Error fetching group achievements:', error);
         },
       });
+  }
+
+  resetFilters() {
+    this.searchKeyword = '';
+    this.currentSortBy = 'groupName';
+    this.sortingDirection = 'asc';
+    this.currentPage = 0;
+    this.selectedPageSize = 5;
+
+    this.getAllGroupAchievements(
+      this.currentSortBy,
+      this.sortingDirection,
+      this.searchKeyword
+    );
   }
 
   sumPercentage() {

@@ -43,6 +43,12 @@
               class="p-button-outlined"
               aria-label="Toggle Sort Direction"
             ></button>
+            <p-button
+              label=""
+              icon="pi pi-refresh"
+              (click)="resetFilters()"
+              class="p-button-text"
+            ></p-button>
           </div>
           <div class="flex justify-content-end">
             <input
@@ -69,22 +75,10 @@
 
       <ng-template pTemplate="header">
         <tr>
-          <th>
-            <p>No</p>
-          </th>
-          <th pSortableColumn="technical_skill">
-            Technical Skill
-            <p-columnFilter
-              type="text"
-              field="technical_skill"
-              display="menu"
-            ></p-columnFilter>
-          </th>
-          <th>
-            <p>Status</p>
-            <!-- <p-columnFilter type="text" field="enabled" display="menu"></p-columnFilter> -->
-          </th>
-          <th>Action</th>
+          <th><p>No</p></th>
+          <th><p>Technical Skill</p></th>
+          <th><p>Status</p></th>
+          <th><p>Action</p></th>
         </tr>
       </ng-template>
 

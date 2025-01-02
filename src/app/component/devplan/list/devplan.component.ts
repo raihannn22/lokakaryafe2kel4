@@ -95,12 +95,47 @@ export class DevplanComponent {
           this.devplans = response.content; // Data ada di 'content'
           this.totalRecords = response.total_data; // Total data dari respons
           this.loading = false;
+
+          if (this.devplans.length === 0) {
+            Swal.fire({
+              icon: 'info',
+              title: 'No Data Found',
+              text: 'No matching data found for your search criteria.',
+              confirmButtonText: 'OK',
+            }).then((result) => {
+              if (result.isConfirmed) {
+                // Reset search keyword only
+                this.searchKeyword = '';
+                this.getAllDevplans(
+                  this.currentSortBy,
+                  this.sortingDirection,
+                  this.searchKeyword
+                );
+              }
+            });
+          }
+
+          this.loading = false;
         },
         error: (error) => {
           console.error('Error fetching dev plans:', error);
           this.loading = false;
         },
       });
+  }
+
+  resetFilters() {
+    this.searchKeyword = '';
+    this.currentSortBy = 'plan';
+    this.sortingDirection = 'asc';
+    this.currentPage = 0;
+    this.selectedPageSize = 5;
+
+    this.getAllDevplans(
+      this.currentSortBy,
+      this.sortingDirection,
+      this.searchKeyword
+    );
   }
 
   loadPage(event: any) {

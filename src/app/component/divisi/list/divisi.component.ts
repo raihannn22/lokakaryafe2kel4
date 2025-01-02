@@ -92,12 +92,47 @@ export class DivisiComponent {
           this.divisions = response.content;
           this.totalRecords = response.total_data;
           this.loading = false;
+
+          if (this.divisions.length === 0) {
+            Swal.fire({
+              icon: 'info',
+              title: 'No Data Found',
+              text: 'No matching data found for your search criteria.',
+              confirmButtonText: 'OK',
+            }).then((result) => {
+              if (result.isConfirmed) {
+                // Reset search keyword only
+                this.searchKeyword = '';
+                this.getAllDivisions(
+                  this.currentSortBy,
+                  this.sortingDirection,
+                  this.searchKeyword
+                );
+              }
+            });
+          }
+
+          this.loading = false;
         },
         error: (error) => {
           console.error('Error fetching divisions:', error);
           this.loading = false;
         },
       });
+  }
+
+  resetFilters() {
+    this.searchKeyword = '';
+    this.currentSortBy = 'divisionName';
+    this.sortingDirection = 'asc';
+    this.currentPage = 0;
+    this.selectedPageSize = 5;
+
+    this.getAllDivisions(
+      this.currentSortBy,
+      this.sortingDirection,
+      this.searchKeyword
+    );
   }
 
   loadPage(event: any) {

@@ -28,7 +28,6 @@
       [lazy]="true"
       [paginator]="true"
       [rows]="selectedPageSize"
-      [filters]="filters"
       [totalRecords]="totalRecords"
       (onPage)="loadPage($event)"
       [loading]="loading"
@@ -55,13 +54,19 @@
               class="p-button-outlined"
               aria-label="Toggle Sort Direction"
             ></button>
+            <p-button
+              label=""
+              icon="pi pi-refresh"
+              (click)="resetFilters()"
+              class="p-button-text"
+            ></p-button>
           </div>
           <div class="flex justify-content-end">
             <input
               type="text"
               [(ngModel)]="searchKeyword"
               pInputText
-              placeholder="Search by Group Name"
+              placeholder="Search ..."
               class="mr-2"
             />
             <p-button
@@ -74,6 +79,7 @@
                   searchKeyword
                 )
               "
+              class="mr-2"
             ></p-button>
           </div>
         </div>
@@ -81,29 +87,11 @@
 
       <ng-template pTemplate="header">
         <tr>
-          <th>
-            <p>No</p>
-          </th>
-          <th pSortableColumn="group_name">
-            Group Name
-            <p-columnFilter
-              type="text"
-              field="group_name"
-              display="menu"
-            ></p-columnFilter>
-          </th>
-          <th pSortableColumn="percentage">
-            Percentage
-            <p-columnFilter
-              type="text"
-              field="percentage"
-              display="menu"
-            ></p-columnFilter>
-          </th>
-          <th>
-            <p>Status</p>
-          </th>
-          <th>Action</th>
+          <th><p>No</p></th>
+          <th><p>Group Name</p></th>
+          <th><p>Percentage</p></th>
+          <th><p>Status</p></th>
+          <th><p>Action</p></th>
         </tr>
       </ng-template>
 

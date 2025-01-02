@@ -115,14 +115,47 @@ export class TechnicalSkillComponent implements OnInit {
           this.filteredTechnicalSkills = this.technicalSkills;
           this.loading = false;
 
-          console.log('Data Technical Skills:', this.technicalSkills);
-          console.log('Total Records:', this.totalRecords);
+          if (this.filteredTechnicalSkills.length === 0) {
+            Swal.fire({
+              icon: 'info',
+              title: 'No Data Found',
+              text: 'No matching data found for your search criteria.',
+              confirmButtonText: 'OK',
+            }).then((result) => {
+              if (result.isConfirmed) {
+                // Reset search keyword only
+                this.searchKeyword = '';
+                this.getAllTechnicalSkills(
+                  this.currentSortBy,
+                  this.sortingDirection,
+                  this.searchKeyword
+                );
+              }
+            });
+          }
+
+          // console.log('Data Technical Skills:', this.technicalSkills);
+          // console.log('Total Records:', this.totalRecords);
         },
         error: (error) => {
           console.error('Error fetching technical Skills:', error);
           this.loading = false;
         },
       });
+  }
+
+  resetFilters() {
+    this.searchKeyword = '';
+    this.currentSortBy = 'technicalSkill';
+    this.sortingDirection = 'asc';
+    this.currentPage = 0;
+    this.selectedPageSize = 5;
+
+    this.getAllTechnicalSkills(
+      this.currentSortBy,
+      this.sortingDirection,
+      this.searchKeyword
+    );
   }
 
   loadPage(event: any) {
