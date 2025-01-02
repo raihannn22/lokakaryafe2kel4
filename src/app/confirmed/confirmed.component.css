@@ -1,0 +1,60 @@
+.attitude-skills-list {
+    margin-left: 10px;
+    margin-right: 10px;
+  }
+  
+  .skill-item {
+    margin-bottom: 15px;
+  }
+  .p-table {
+    table-layout: fixed;
+    width: 50%;
+  }
+  
+  .column1 {
+    width: 50%;
+    text-align: left;
+    overflow: hidden;
+    /* text-overflow: ellipsis; */
+  }
+  
+  .column2-th {
+    width: 20%;
+    text-align: right;
+  }
+  
+  .column2-td {
+    width: 20%;
+    text-align: right;
+  }
+  
+  .p-table td {
+    padding: 10px;
+  }
+  
+  .btn-simpan {
+    float: right;
+  }
+  
+  .justify-between {
+    justify-content: space-between;
+  }
+  
+  .align-items-center {
+    align-items: center;
+  }
+  
+  .line {
+    width: 50px; /* Panjang garis */
+    height: 2px; /* Ketebalan garis */
+    background-color: #000; /* Warna garis */
+    margin: 0 10px; /* Jarak garis dari teks */
+}
+
+:host ::ng-deep .p-dialog-mask{
+  z-index: 1000 !important;
+}
+
+.custom-swal-popup {
+  z-index: 1050 !important; /* Pastikan lebih tinggi dari modal/dialog lainnya */
+}

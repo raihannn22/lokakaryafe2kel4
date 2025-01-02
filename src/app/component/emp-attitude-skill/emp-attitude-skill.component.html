@@ -24,7 +24,6 @@
           label="Save"
           icon="pi pi-save"
           (click)="saveAllEmpAttitudeSkills()"
-          [disabled]="isSaving || !isFormComplete()"
           class="ml-3"
         ></button>
       </div>
@@ -48,7 +47,6 @@
               <p-dropdown
                 [options]="scoreOptions"
                 [(ngModel)]="skill.score"
-                [disabled]="skill.isDisabled || isScoreDropdownDisabled"
                 placeholder="Choose Score"
                 appendTo="body"
               ></p-dropdown>

@@ -10,12 +10,14 @@ import { FormsModule } from '@angular/forms';
 import { ButtonModule } from 'primeng/button';
 
 interface Item {
+  name: string;
   group: string;
   percentage: number;
   score: number;
   group_enabled: number;
   enabled : number;
   source: string;
+  
 }
 interface GroupedItem {
   group: string;
@@ -25,6 +27,8 @@ interface GroupedItem {
   group_enabled: number;
   enabled : number;
   source: string;
+  
+  details: { name: string; score: number }[]; 
 }
 @Component({
   selector: 'app-summary',
@@ -108,8 +112,9 @@ export class SummaryComponent implements OnInit{
         this.groupedData = this.groupAndSumData(this.combinedData);
         this.totalPercentage = this.groupedData.reduce((total, item) => total + item.percentage, 0);
         this.totalFinalScore = this.groupedData.reduce((total, item) => total + (item.score * (item.percentage)/100), 0);
-        console.log(this.groupedData);
-        console.log(this.groupedAchievement)
+        console.log(this.groupedData , 'ini grouped data');
+        console.log(this.groupedAchievement , 'ini grouped achievement');
+        console.log(this.attitudeSkill , 'ini attitude skill');
     })
 
   
@@ -118,6 +123,7 @@ export class SummaryComponent implements OnInit{
   mapData() {
     this.combinedData = [];
   
+    // Proses Attitude Skill
     this.attitudeSkill
       .filter((item) => item.group_enabled === 1 && item.enabled === 1) // Abaikan item yang disabled
       .forEach((item) => {
@@ -128,9 +134,11 @@ export class SummaryComponent implements OnInit{
           enabled: item.enabled,
           group_enabled: item.group_enabled,
           source: 'Attitude',
+          name: item.attitude_skill_name, // Gunakan nama attitude skill
         });
       });
   
+    // Proses Achievement
     this.groupedAchievement
       .filter((item) => item.group_enabled === 1 && item.enabled === 1) // Abaikan item yang disabled
       .forEach((item) => {
@@ -141,15 +149,14 @@ export class SummaryComponent implements OnInit{
           enabled: item.enabled,
           group_enabled: item.group_enabled,
           source: 'Achievement',
+          name: item.achievement, // Gunakan nama achievement
         });
       });
   }
   
 
   groupAndSumData(data: Item[]): GroupedItem[] {
-    // Menggunakan reduce untuk mengelompokkan data dan menghitung total score per group
     const groupedData = data.reduce((acc, item) => {
-      // Abaikan item jika group_enabled atau enabled adalah 0 (disabled)
       if (item.group_enabled === 0 || item.enabled === 0) {
         return acc;
       }
@@ -162,27 +169,36 @@ export class SummaryComponent implements OnInit{
           count: 0,
           enabled: item.enabled,
           group_enabled: item.group_enabled,
-          source: item.source, // Tambahkan source di awal
+          source: item.source,
+          details: [], // Tambahkan array untuk menyimpan detail
         };
       }
   
       acc[item.group].score += item.score; // Tambahkan skor
       acc[item.group].count += 1; // Hitung jumlah item
   
+      // Tambahkan detail item ke dalam array
+      acc[item.group].details.push({
+        name: item.name, // Nama dari attitude_skill_name atau achievement
+        score: item.score, // Skor item
+      });
+  
       return acc;
     }, {} as Record<string, GroupedItem>);
   
-    // Mengubah hasil akhir ke dalam format yang diinginkan
     return Object.values(groupedData).map((item) => ({
       group: item.group,
       percentage: item.percentage,
-      score: item.score / item.count, // Membagi total score dengan jumlah item
+      score: item.score / item.count, // Skor rata-rata
       count: item.count,
       enabled: item.enabled,
-      group_enabled: item.group_enabled, // Menambahkan count agar tetap ada di hasil akhir
-      source: item.source, // Tambahkan source
+      group_enabled: item.group_enabled,
+      source: item.source,
+      details: item.details, // Tambahkan details ke hasil akhir
     }));
   }
+  
+  
   
 
 

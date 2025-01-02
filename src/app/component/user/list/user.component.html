@@ -322,6 +322,7 @@
       </p-dropdown>
     </div>
     }
+    
 
     <p-table
       #dt
@@ -464,8 +465,42 @@
             </div>
           </th>
           @if (isViewUserRoute()) {
-          <th pSortableColumn="totalScore" style="width: 20%">
-            Score <p-sortIcon field="totalScore" />
+          <th pSortableColumn="score" style="width: 20%">
+            Score <p-sortIcon field="score" />
+          </th>
+          <th>
+            <div class="flex align-items-center">
+              Summary
+              <p-columnFilter
+                field="status"
+                matchMode="equals"
+                display="menu"
+                [showMatchModes]="false"
+                [showOperator]="false"
+                [showAddButton]="false"
+              >
+                <ng-template
+                  pTemplate="filter"
+                  let-value
+                  let-filter="filterCallback"
+                >
+                  <p-dropdown
+                    [ngModel]="value"
+                    [options]="confirmed"
+                    (onChange)="filter($event.value)"
+                    placeholder="Select One"
+                    [showClear]="true"
+                  >
+                    <ng-template let-option pTemplate="item">
+                      <p-tag
+                        [value]="option.label"
+                        [severity]="getSeveritySummary(option.label)"
+                      />
+                    </ng-template>
+                  </p-dropdown>
+                </ng-template>
+              </p-columnFilter>
+            </div>
           </th>
           }
           <th class="aksi">Action</th>
@@ -495,7 +530,14 @@
           </td>
           <td>{{ user.division_name }}</td>
           @if (isViewUserRoute()) {
-          <td>{{ user.totalScore | number : "1.2-2" }}</td>
+          <td>{{ user.score | number : "1.2-2" }}</td>
+          <td>
+            <p-tag
+              [severity]="user.status === 0 ? 'danger' : 'success'"
+              [value]="user.status === 1 ? 'Confirmed' : 'Unconfirmed'"
+            >
+            </p-tag>
+          </td>
           }
           <td class="flex gap-2">
             @if (userRoles?.includes('HR') && !isViewUserRoute()) {
@@ -522,6 +564,15 @@
               class="p-button-secondary p-button-sm"
               (click)="openDetailDialog(user)"
             ></button>
+            @if ( isViewUserRoute()) {
+               <button
+               pButton
+               type="button"
+               icon="pi pi-arrow-up"
+               class="p-button-primary p-button-sm"
+               (click)="openConfirmedDialog(user)"
+             ></button>
+            }
             }
           </td>
         </tr>
@@ -557,3 +608,10 @@
   [year]="selectedYear"
 >
 </app-detail-user>
+
+<app-confirmed
+  [(visible)]="displayConfirmedDialog"
+  [user]="selectedUser"
+  [year]="selectedYear"
+>
+</app-confirmed>

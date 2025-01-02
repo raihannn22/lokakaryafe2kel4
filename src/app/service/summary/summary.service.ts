@@ -47,7 +47,17 @@ export class SummaryService {
   getTotalScore(year: number): Observable<any> {
     return this.http.get(`http://localhost:8081/assessmentSummary/total/${year}`);
   }
+   getUserAndSummary(year: number): Observable<any> {
+    return this.http.get(`http://localhost:8081/assessmentSummary/get/all/year/${year}`);
+  }
 
+  setAssessmentStatus1(userId: string, year: number): Observable<any> {
+    return this.http.patch(`http://localhost:8081/assessmentSummary/update/${userId}/assessment/${year}/set/1`, {});
+  }
+
+  setAssessmentStatus0(userId: string, year: number): Observable<any> {
+    return this.http.patch(`http://localhost:8081/assessmentSummary/update/${userId}/assessment/${year}/set/0`, {});
+  }
 
 
 }
