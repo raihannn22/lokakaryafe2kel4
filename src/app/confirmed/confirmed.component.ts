@@ -10,7 +10,9 @@ import { GroupAttitudeSkillService } from '../service/group-attitude-skill/group
 import { EmpAttitudeSkillService } from '../service/emp-attitude-skill/emp-attitude-skill.service';
 import Swal from 'sweetalert2';
 import { SummaryService } from '../service/summary/summary.service';
-
+import { EmpAchievementSkillService } from '../service/emp-achievement-skill/emp-achievement-skill.service';
+import { ToggleButtonModule } from 'primeng/togglebutton';
+import { forkJoin } from 'rxjs';
 interface AttitudeSkill {
   id: string;
   attitude_skill: string;
@@ -47,7 +49,8 @@ interface GroupAttitudeSkills {
       ButtonModule,
       TableModule,
       InputNumberModule,
-      DropdownModule,],
+      DropdownModule,
+    ToggleButtonModule],
   templateUrl: './confirmed.component.html',
   styleUrl: './confirmed.component.css'
 })
@@ -56,6 +59,7 @@ export class ConfirmedComponent implements OnInit{
    @Output() visibleChange = new EventEmitter<boolean>(); // Emit perubahan visibility
    @Input() user: any = {};
    @Input() year: number = 0;
+checked: any;
   
   closeDialog() {
     this.visibleChange.emit(false);
@@ -69,6 +73,7 @@ export class ConfirmedComponent implements OnInit{
     users: any[] = [];
     statusAssessment: number | null = 0;
     isScoreDropdownDisabled: boolean = false; //Menyimpan status disabled
+    empAchiements: any[] = [];
   
     scoreOptions = [
       { label: 'Sangat Baik', value: 100 },
@@ -81,6 +86,7 @@ export class ConfirmedComponent implements OnInit{
     constructor(
       private groupAttitudeSkillService: GroupAttitudeSkillService,
       private empAttitudeSkillService: EmpAttitudeSkillService,
+      private empAchievementSkillService: EmpAchievementSkillService,
       private summaryService: SummaryService
     ) {}
   
@@ -180,11 +186,23 @@ export class ConfirmedComponent implements OnInit{
         }
       });
 
-      this.empAttitudeSkillService
+      this.empAchievementSkillService.getAllEmpAchievementSkillsByYearAndUserId(this.year, this.user.user_id).subscribe({
+        next: (response) => {
+          this.empAchiements = response.content;
+          this.empAchiements.forEach(achievement => {
+            achievement.enabled = true; // Tambahkan properti enabled dengan default true
+          });
+          console.log('ini dia emp ach ', this.empAchiements);
+        }, error: (error) => {
+          console.error('Error fetching emp attitude skills:', error);
+        }
+      })
       }
     }
   
     saveAllEmpAttitudeSkills() {
+      const dataAchToSend = this.empAchiements.map(({ enabled, ...rest }) => rest);
+      
         // const currentYear = new Date().getFullYear();
         const dataToSend = this.attitudeSkills.flatMap((group) =>
           group.attitude_skills
@@ -199,50 +217,115 @@ export class ConfirmedComponent implements OnInit{
 
         console.log("ini data yanf dikirikm" , dataToSend);
   
-        // console.log('Data yang akan dikirim:', dataToSend);
-        
-  
-        this.empAttitudeSkillService
-          .saveAllEmpAttitudeSkills(dataToSend)
-          .subscribe({
-            next: (response) => {
-              this.isSaving = false;
-              this.isExistingData = true;
-              this.attitudeSkills.forEach((group: GroupAttitudeSkills) => {
-                group.attitude_skills.forEach((skill) => {
-                  skill.isDisabled = true;
+          // Simpan attitude skills terlebih dahulu
+        this.empAttitudeSkillService.saveAllEmpAttitudeSkills(dataToSend).subscribe({
+          next: () => {
+            this.isExistingData = true;
+            this.attitudeSkills.forEach((group: GroupAttitudeSkills) => {
+              group.attitude_skills.forEach((skill) => {
+                skill.isDisabled = true;
+              });
+            });
+
+      // Update semua achievement skills secara paralel
+            const achievementUpdates = dataAchToSend.map((achievement) =>
+              this.empAchievementSkillService.updateEmpAchievementSkill(achievement.id, achievement)
+            );
+
+            forkJoin(achievementUpdates).subscribe({
+              next: () => {
+                // Setelah semua achievement selesai, update assessment status
+                this.summaryService.setAssessmentStatus1(this.user.user_id, this.year).subscribe({
+                  next: () => {
+                    this.isSaving = false;
+                    this.closeDialog();
+
+                    Swal.fire({
+                      icon: 'success',
+                      title: 'Success!',
+                      text: 'Successfully saved your attitude and skills!',
+                    });
+                  },
+                  error: (error) => {
+                    console.error('Error updating assessment status:', error);
+                    this.isSaving = false;
+                    this.closeDialog();
+
+                    Swal.fire({
+                      icon: 'error',
+                      title: 'Failed!',
+                      text: 'Failed to update assessment status!',
+                    });
+                  },
                 });
-              });
-              this.summaryService
-          .setAssessmentStatus1(this.user.user_id, this.year)
-          .subscribe({
-            next: (response) => {
-              console.log('Response:', response);
-            },
-            error: (error) => {
-              console.error('Error setting assessment status:', error);
-            },
-          })
-              this.closeDialog();
-              Swal.fire({
-                icon: 'success',
-                title: 'Success!',
-                text: 'Successfully saved your attitude and skills!',
-              });
+              },
+              error: (error) => {
+                console.error('Error updating achievements:', error);
+                this.isSaving = false;
+                this.closeDialog();
+
+                Swal.fire({
+                  icon: 'error',
+                  title: 'Failed!',
+                  text: 'Failed to update achievements!',
+                });
+              },
+            });
+          },
+          error: (error) => {
+            console.error('Error saving attitude skills:', error);
+            this.isSaving = false;
+            this.closeDialog();
+
+            Swal.fire({
+              icon: 'error',
+              title: 'Failed!',
+              text: 'Failed to save attitude skills!',
+            });
+          },
+        });
+
+        // this.summaryService
+        // .setAssessmentStatus1(this.user.user_id, this.year)
+        // .subscribe({
+        // });
+
+        // this.empAttitudeSkillService
+        //   .saveAllEmpAttitudeSkills(dataToSend)
+        //   .subscribe({
+        //     next: (response) => {
+        //       this.isSaving = false;
+        //       this.isExistingData = true;
+        //       this.attitudeSkills.forEach((group: GroupAttitudeSkills) => {
+        //         group.attitude_skills.forEach((skill) => {
+        //           skill.isDisabled = true;
+        //         });
+        //       });
+        //       dataAchToSend.forEach((achievement) => {
+        //         this.empAchievementSkillService
+        //           .updateEmpAchievementSkill(achievement.id, achievement)
+        //           .subscribe({
+        //           }); 
+        //       });
+        //       this.closeDialog();
+        //       Swal.fire({
+        //         icon: 'success',
+        //         title: 'Success!',
+        //         text: 'Successfully saved your attitude and skills!',
+        //       });
+        //     },
+        //     error: (error) => {
+        //       // console.error('Error saving multiple attitude skills:', error);
+        //       this.isSaving = false;
+        //       this.closeDialog();
               
-            },
-            error: (error) => {
-              // console.error('Error saving multiple attitude skills:', error);
-              this.isSaving = false;
-              this.closeDialog();
-              
-              Swal.fire({
-                icon: 'error',
-                title: 'Failed!',
-                text: 'Failed to save your attitude and skills!',
-              });
-            },
-          });
+        //       Swal.fire({
+        //         icon: 'error',
+        //         title: 'Failed!',
+        //         text: 'Failed to save your attitude and skills!',
+        //       });
+        //     },
+        //   });
     }
 
     onResetAssessment() {

@@ -58,4 +58,8 @@ export class EmpAchievementSkillService {
   getAllAchievementsEnabled(): Observable<any> {
     return this.http.get('http://localhost:8081/achievement/get/all/enabled');
   }
+
+  getAllEmpAchievementSkillsByYearAndUserId(year: number , id: string): Observable<any> {
+    return this.http.get(`${this.apiUrl}/get/user/${id}/year/${year}`);
+  }
 }
