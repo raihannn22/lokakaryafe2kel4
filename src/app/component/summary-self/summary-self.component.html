@@ -21,64 +21,64 @@
 
     <!-- Data Table -->
     <p-table 
-        [value]="groupedData" 
-        sortField="source" 
-        sortMode="single" 
-        [scrollable]="true"
-        rowGroupMode="subheader" 
-        groupRowsBy="source"
-        styleClass="p-datatable-gridlines p-datatable-sm"
-        [tableStyle]="{'min-width': '60rem'}"
-        >
-        <!-- Table Header -->
-        <ng-template pTemplate="header">
-            <tr>
-                <th class="text-left font-semibold p-3">Aspect</th>
-                <th class="text-center font-semibold p-3 w-[150px]">Score</th>
-                <th class="text-center font-semibold p-3 w-[150px]">Weight</th>
-                <th class="text-center font-semibold p-3 w-[150px]">Final Score</th>            
-            </tr>
-        </ng-template>
+                [value]="groupedData" 
+                sortField="source" 
+                sortMode="single" 
+                [scrollable]="true" 
+                rowGroupMode="subheader" 
+                groupRowsBy="source" 
+                styleClass="p-datatable-gridlines p-datatable-sm"
+                [tableStyle]="{'min-width': '100%'}">
+                
+                <ng-template pTemplate="header">
+                    <tr class="bg-gray-100">
+                        <th class="w-4/12">Aspect</th>
+                        <th class="w-2/12 text-center">Score</th>
+                        <th class="w-2/12 text-center">Weight</th>
+                        <th class="w-4/12 text-center">Final Score</th>            
+                    </tr>
+                </ng-template>
 
-        <!-- Group Header -->
-        <ng-template pTemplate="groupheader" let-customer>
-            <tr pRowGroupHeader class="bg-primary-50">
-                <td colspan="4" class="text-center p-3">
-                    <span class="font-bold text-primary-700">{{customer.source}}</span>
-                </td>
-            </tr>
-        </ng-template>
+                <ng-template pTemplate="groupheader" let-customer>
+                    <tr pRowGroupHeader class="bg-blue-50">
+                        <td colspan="4" class="text-center py-3">
+                            <span class="font-bold text-blue-800">{{customer.source}}</span>
+                        </td>
+                     
+                    </tr>
 
-        <!-- Table Body -->
-        <ng-template pTemplate="body" let-customer let-rowIndex="rowIndex">
-            <tr class="hover:bg-gray-50">
-                <td class="p-3">
-                    {{customer.group}}
-                </td>
-                <td class="text-center p-3">
-                    {{customer.score | number: '1.2-2'}}
-                </td>
-                <td class="text-center p-3">
-                    {{customer.percentage}}%
-                </td>
-                <td class="text-center p-3">
-                    {{customer.score * customer.percentage / 100  | number: '1.2-2' }}
-                </td>
-            </tr>
-        </ng-template>
+                    
+            
+                </ng-template>
 
-        <!-- Table Footer -->
-        <ng-template pTemplate="footer">
-            <tr class="font-semibold bg-gray-50">
-                <td class="text-center" colspan="2">total</td>
-                <td class="text-center ">
-                    {{totalPercentage}}%
-                </td>
-                <td class="text-center ">
-                    {{totalFinalScore}}
-                </td>
-            </tr>
-        </ng-template>
-    </p-table>
+                <ng-template pTemplate="body" let-customer let-rowIndex="rowIndex">
+                    <tr class="bg-blue-50">
+                        <td class="py-3 font-bold text-black-800">{{customer.group}}</td>
+                        <td class="text-center font-bold text-black-800">{{customer.score | number: '1.2-2' }}</td>
+                        <td class="text-center font-bold text-black-800">{{customer.percentage}}%</td>
+                        <td class="text-center font-bold text-black-800">{{customer.score * customer.percentage / 100  | number: '1.2-2' }}</td>
+                    </tr>
+                    @for (detail of customer.details; track detail.name) {
+                        <tr>
+                        <td class="mb-1 text-gray-700" >
+                            - {{ detail.name }}
+                        </td>
+                        <td class="mb-1 text-gray-700" >
+                            {{ detail.score }}
+                        </td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    }
+                </ng-template>
+
+                <ng-template pTemplate="footer" let-customer>
+                    <tr class="bg-gray-100 font-semibold">
+                        <td colspan="2" class="text-right pr-4">Total:</td>
+                        <td class="text-center">{{totalPercentage}}%</td>
+                        <td class="text-center">{{totalFinalScore  | number: '1.2-2' }}</td>
+                    </tr>
+                </ng-template>
+            </p-table>
 </div>
 

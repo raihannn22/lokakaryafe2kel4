@@ -6,6 +6,11 @@
     <!-- <p-button label="Tambah Pengguna" icon="pi pi-plus" (click)="visible = true" class="mb-3"></p-button> -->
     <p-dialog header="User Detail" [modal]="true" (onHide)="closeDialog()" [(visible)]="visible" [style]="{ width: '60rem' }">
         <div class="p-5">
+          <div class="flex justify-content-center text-align-center align-items-center">
+            <div class="line"></div>
+            <h3 class="mx-3">Achievement</h3>
+            <div class="line"></div>
+          </div>
         
             <div class="flex justify-content-center text-align-center align-items-center">
               <div class="line"></div>
@@ -33,6 +38,7 @@
                         [(ngModel)]="skill.score"
                         placeholder="Choose Score"
                         appendTo="body"
+                        [disabled]="isScoreDropdownDisabled"
                       ></p-dropdown>
                     </td>
                   </tr>
@@ -42,11 +48,11 @@
             </div>
             <div class="grid mt-3">
               <div class="col">
-                <p-button icon="pi pi-refresh" (click)="onResetAssessment()" label="unconfirmed" severity="danger"  pTooltip="reset password"></p-button>
+                <p-button icon="pi pi-refresh" (click)="onResetAssessment()" label="pending" severity="danger"  pTooltip="reset password" [disabled]="!isScoreDropdownDisabled"></p-button>
               </div>
               <div class="col flex-none">
                 <p-button label="Cancel" icon="pi pi-times" severity="secondary" (click)="closeDialog()" class="mr-2"></p-button>
-                <p-button label="Confirmed" icon="pi pi-check" (click)="saveAllEmpAttitudeSkills()"></p-button>
+                <p-button label="Confirmed" icon="pi pi-check" (click)="saveAllEmpAttitudeSkills()" [disabled]="isScoreDropdownDisabled"></p-button>
               </div>
             </div>
           </div>
