@@ -32,4 +32,5 @@ export class EmpAttitudeSkillService {
       `${this.apiUrl}/user/${userId}/year/${assessmentYear}`
     );
   }
+  
 }

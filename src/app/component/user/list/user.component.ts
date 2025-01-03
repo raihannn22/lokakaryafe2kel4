@@ -67,7 +67,7 @@ export class UserComponent implements OnInit {
   statuses!: any[];
   divisi!: any[];
   divisionName: string[] = [];
-  selectedYear: number = 2024;
+  selectedYear: number = new Date().getFullYear();
   scoreUsers: any[] = [];
   years: number[] = [
     2023, 2024, 2025, 2026, 2027, 2028, 2029, 2030, 2031, 2032, 2033, 2034,

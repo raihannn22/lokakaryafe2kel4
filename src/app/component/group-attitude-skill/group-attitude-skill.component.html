@@ -1,15 +1,16 @@
 <div class="card">
   <div class="p-5">
     @if (totalPercentage == 100) {
-    <p-message severity="success" text="Total Percentage = 100%"></p-message>
-    }@else {
-    <p-message
-      severity="error"
-      text="Percentage is not 100%, still remaining total {{
-        100 - totalPercentage
-      }}%"
-    ></p-message>
-    }
+      <p-message severity="success" text="Total Percentage = 100%"></p-message>
+      }@else {
+      <p-message
+        severity="error"
+        text="Percentage is not 100%, still remaining total {{
+          100 - totalPercentage
+        }}%"
+      ></p-message>
+      }
+  
     <div class="text-center mb-2">
       <h3 style="font-weight: bold; font-size: 2.25rem">
         Attitude & Skill Group

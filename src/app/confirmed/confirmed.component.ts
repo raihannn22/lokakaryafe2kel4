@@ -67,7 +67,8 @@ export class ConfirmedComponent implements OnInit{
     assessmentYear: number = new Date().getFullYear();
     userName: string | null = '';
     users: any[] = [];
-    isScoreDropdownDisabled: boolean = false; // Menyimpan status disabled
+    statusAssessment: number | null = 0;
+    isScoreDropdownDisabled: boolean = false; //Menyimpan status disabled
   
     scoreOptions = [
       { label: 'Sangat Baik', value: 100 },
@@ -103,6 +104,7 @@ export class ConfirmedComponent implements OnInit{
             // console.error('Response is not an array', response);
           }
         });
+        
     }
   
     onYearChange(): void {
@@ -164,6 +166,21 @@ export class ConfirmedComponent implements OnInit{
               console.error('Error fetching emp attitude skills:', err);
             },
           });
+          
+      this.summaryService.getAssessmentStatus(this.user.user_id, this.year).subscribe(
+        {next: (response) => {
+          this.statusAssessment = response.content.status;
+          console.log('Status Assessment:', this.statusAssessment);
+          this.isScoreDropdownDisabled = this.statusAssessment == 1;
+        }, error: (error) => {
+          this.statusAssessment = 0;
+          console.log('Status Assessment:', this.statusAssessment);
+          console.error('Error fetching assessment status:', error);
+          this.isScoreDropdownDisabled = this.statusAssessment == 1;
+        }
+      });
+
+      this.empAttitudeSkillService
       }
     }
   

@@ -8,17 +8,24 @@ import { EmpSuggestionComponent } from '../emp-suggestion/emp-suggestion.compone
 import { DropdownModule } from 'primeng/dropdown';
 import { FormsModule } from '@angular/forms';
 interface Item {
+  name: string;
   group: string;
   percentage: number;
   score: number;
+  group_enabled: number;
+  enabled : number;
   source: string;
+  
 }
 interface GroupedItem {
   group: string;
   percentage: number;
   score: number;
   count: number;
+  group_enabled: number;
+  enabled : number;
   source: string;
+  details: { name: string; score: number }[]; 
 }
 @Component({
   selector: 'app-summary-self',
@@ -107,61 +114,82 @@ export class SummarySelfComponent {
   }
 
   mapData() {
-    // Gabungkan data dari attitudeSkill dan achievement
     this.combinedData = [];
-
-    // Mapping untuk attitude skills
-    this.attitudeSkill.forEach((item) => {
-      this.combinedData.push({
-        group: item.group_attitude_skill_name || 'Attitude', // Grup dari attitude
-        percentage: item.group_attitude_skill_percentage,
-        score: item.score,
-        source: 'Attitude' // Sumber data
+  
+    // Proses Attitude Skill
+    this.attitudeSkill
+      .filter((item) => item.group_enabled === 1 && item.enabled === 1) // Abaikan item yang disabled
+      .forEach((item) => {
+        this.combinedData.push({
+          group: item.group_attitude_skill_name || 'Attitude',
+          percentage: item.group_attitude_skill_percentage,
+          score: item.score,
+          enabled: item.enabled,
+          group_enabled: item.group_enabled,
+          source: 'Attitude',
+          name: item.attitude_skill_name, // Gunakan nama attitude skill
+        });
       });
-    });
-
-    // Mapping untuk achievements
-    this.groupedAchievement.forEach((item) => {
-      this.combinedData.push({
-        group: item.group_name || 'Achievement', // Grup dari achievement
-        percentage: item.group_percentage,
-        score: item.score,
-        source: 'Achievement' // Sumber data
+  
+    // Proses Achievement
+    this.groupedAchievement
+      .filter((item) => item.group_enabled === 1 && item.enabled === 1) // Abaikan item yang disabled
+      .forEach((item) => {
+        this.combinedData.push({
+          group: item.group_name || 'Achievement',
+          percentage: item.group_percentage,
+          score: item.score,
+          enabled: item.enabled,
+          group_enabled: item.group_enabled,
+          source: 'Achievement',
+          name: item.achievement, // Gunakan nama achievement
+        });
       });
-    });
-
-    console.log('Data gabungan:', this.combinedData);
   }
+  
 
   groupAndSumData(data: Item[]): GroupedItem[] {
-   // Menggunakan reduce untuk mengelompokkan data dan menghitung total score per group
-   const groupedData = data.reduce((acc, item) => {
-    if (!acc[item.group]) {
-      acc[item.group] = {
-        group: item.group,
-        percentage: item.percentage,
-        score: 0,
-        count: 0,
-        source: item.source, // Tambahkan source di awal
-      };
-    }
-
-    acc[item.group].score += item.score; // Tambahkan skor
-    acc[item.group].count += 1;         // Hitung jumlah item
-
-    return acc;
-  }, {} as Record<string, GroupedItem>);
-
-  // Mengubah objek yang sudah dikelompokkan menjadi array dan membagi score dengan jumlah item
-  return Object.values(groupedData).map((item) => ({
-    group: item.group,
-    percentage: item.percentage,
-    score: item.score / item.count, // Membagi total score dengan jumlah item
-    count: item.count,              // Menambahkan count agar tetap ada di hasil akhir
-    source: item.source,            // Tambahkan source
-  }));
-
-}
+    const groupedData = data.reduce((acc, item) => {
+      if (item.group_enabled === 0 || item.enabled === 0) {
+        return acc;
+      }
+  
+      if (!acc[item.group]) {
+        acc[item.group] = {
+          group: item.group,
+          percentage: item.percentage,
+          score: 0,
+          count: 0,
+          enabled: item.enabled,
+          group_enabled: item.group_enabled,
+          source: item.source,
+          details: [], // Tambahkan array untuk menyimpan detail
+        };
+      }
+  
+      acc[item.group].score += item.score; // Tambahkan skor
+      acc[item.group].count += 1; // Hitung jumlah item
+  
+      // Tambahkan detail item ke dalam array
+      acc[item.group].details.push({
+        name: item.name, // Nama dari attitude_skill_name atau achievement
+        score: item.score, // Skor item
+      });
+  
+      return acc;
+    }, {} as Record<string, GroupedItem>);
+  
+    return Object.values(groupedData).map((item) => ({
+      group: item.group,
+      percentage: item.percentage,
+      score: item.score / item.count, // Skor rata-rata
+      count: item.count,
+      enabled: item.enabled,
+      group_enabled: item.group_enabled,
+      source: item.source,
+      details: item.details, // Tambahkan details ke hasil akhir
+    }));
+  }
 
 }
 
