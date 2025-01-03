@@ -10,9 +10,21 @@ export class AttitudeSkillService {
 
   constructor(private http: HttpClient) {}
 
-  getAllAttitudeSkills(): Observable<any> {
-    return this.http.get(`${this.apiUrl}/all`);
+  getAllAttitudeSkills(
+    page: number = 0,
+    size: number = 10,
+    sort: string = 'groupAttitudeSkill.id',
+    direction: string = 'asc',
+    searchKeyword: string = ''
+  ): Observable<any> {
+    return this.http.get(
+      `${this.apiUrl}/paginated?page=${page}&size=${size}&sort=${sort}&direction=${direction}&searchKeyword=${searchKeyword}`
+    );
   }
+
+  // getAllAttitudeSkills(): Observable<any> {
+  //   return this.http.get(`${this.apiUrl}/all`);
+  // }
 
   getAllGroupAttitudeSkills(): Observable<any> {
     return this.http.get('http://localhost:8081/group-attitude-skill/all');
@@ -35,6 +47,8 @@ export class AttitudeSkillService {
   }
 
   getAllAttitudeSkillsEnabled(): Observable<any> {
-    return this.http.get(`http://localhost:8081/group-attitude-skill/get/all/enabled`);
+    return this.http.get(
+      `http://localhost:8081/group-attitude-skill/get/all/enabled`
+    );
   }
 }

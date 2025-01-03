@@ -68,34 +68,116 @@ export class AchievementComponent implements OnInit {
   first: number = 0;
   totalRecords: number = 0;
 
-  constructor(
-    private achievementService: AchievementService,
-  ) {}
+  pageSizeOptions: number[] = [5, 10, 20];
+  selectedPageSize: number = 5;
+  currentPage: number = 0;
+
+  sortingDirection: string = 'asc';
+  currentSortBy: string = 'groupAchievement.id';
+
+  sortOptions = [
+    { label: 'Group Name', value: 'groupAchievement.id' },
+    { label: 'Achievement', value: 'achievement' },
+  ];
+
+  constructor(private achievementService: AchievementService) {}
 
   ngOnInit() {
     this.getAllAchievements();
     this.getAllGroupAchievements();
   }
 
-  getAllAchievements() {
+  getAllAchievements(
+    sort: string = this.currentSortBy,
+    direction: string = this.sortingDirection,
+    searchKeyword: string = this.searchKeyword
+  ) {
     this.loading = true;
-    this.achievementService.getAllAchievements().subscribe({
-      next: (response) => {
-        this.achievements = response.content;
-        this.totalRecords = response.totalRecords;
-        this.filteredAchievements = this.achievements;
-        this.loading = false;
-      },
-      error: (error) => {
-        // console.error('Error fetching achievements:', error);
-        this.loading = false;
-      },
-    });
+    console.log(
+      'Loading achievement skill with sorting:',
+      sort,
+      'and direction:',
+      direction
+    );
+    this.achievementService
+      .getAllAchievements(
+        this.currentPage,
+        this.selectedPageSize,
+        sort,
+        direction,
+        searchKeyword
+      )
+      .subscribe({
+        next: (response) => {
+          this.achievements = response.content;
+          this.totalRecords = response.total_data;
+          this.filteredAchievements = this.achievements;
+          this.loading = false;
+
+          if (this.filteredAchievements.length === 0) {
+            Swal.fire({
+              icon: 'info',
+              title: 'No Data Found',
+              text: 'No matching data found for your search criteria.',
+              confirmButtonText: 'OK',
+            }).then((result) => {
+              if (result.isConfirmed) {
+                // Reset search keyword only
+                this.searchKeyword = '';
+                this.getAllAchievements(
+                  this.currentSortBy,
+                  this.sortingDirection,
+                  this.searchKeyword
+                );
+              }
+            });
+          }
+        },
+        error: (error) => {
+          // console.error('Error fetching achievements:', error);
+          this.loading = false;
+        },
+      });
+  }
+
+  resetFilters() {
+    this.searchKeyword = '';
+    this.currentSortBy = 'groupAchievement.id';
+    this.sortingDirection = 'asc';
+    this.currentPage = 0;
+    this.selectedPageSize = 5;
+
+    this.getAllAchievements(
+      this.currentSortBy,
+      this.sortingDirection,
+      this.searchKeyword
+    );
   }
 
   loadPage(event: any) {
-    this.first = event.first;
-    this.getAllAchievements();
+    this.currentPage = event.first / event.rows; // Menghitung halaman berdasarkan offset
+    this.selectedPageSize = event.rows; // Ambil jumlah baris per halaman
+    console.log('Page Size Change Triggered');
+    console.log('Selected Page Size:', this.selectedPageSize);
+    this.getAllAchievements(this.currentSortBy, this.sortingDirection);
+  }
+
+  onSortChange(event: any) {
+    this.currentSortBy = event.value; // Update current sort by
+    console.log('Sorting by:', this.currentSortBy); // Log for debugging
+
+    this.currentPage = 0; // Reset to the first page
+    console.log('Sorting direction:', this.sortingDirection); // Log for debugging
+
+    this.getAllAchievements(this.currentSortBy, this.sortingDirection); // Call to load data with new sorting
+  }
+
+  toggleSortingDirection() {
+    // Toggle between 'asc' and 'desc'
+    this.sortingDirection = this.sortingDirection === 'asc' ? 'desc' : 'asc';
+    console.log('Sorting direction changed to:', this.sortingDirection); // Log the new direction
+    // Reload achievements with the current sort criteria and new sorting direction
+    this.getAllAchievements(this.currentSortBy, this.sortingDirection);
   }
 
   getAllGroupAchievements() {
