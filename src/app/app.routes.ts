@@ -152,6 +152,11 @@ export const routes: Routes = [
     canActivate: [authGuard, roleGuard],
     component: SummarySelfComponent,
     data: { permission: 'summary#read.self' },
+  },{
+    path: 'summary-approve',
+    canActivate: [authGuard, roleGuard],
+    component: UserComponent,
+    data: { permission: 'summary#approve' },
   },
   {
     path: '**',

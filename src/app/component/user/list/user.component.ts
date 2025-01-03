@@ -103,6 +103,9 @@ export class UserComponent implements OnInit {
   isViewUserRoute(): boolean {
     return this.router.url === '/view-user'; // Memeriksa jika URL adalah /login
   }
+  isSummaryApproveRoute(): boolean {
+    return this.router.url === '/summary-approve'; // Memeriksa jika URL adalah /login
+  }
 
   ngOnInit() {
     this.getAllUsers();
@@ -219,7 +222,7 @@ export class UserComponent implements OnInit {
       this.users = user.content;
 
       this.UsersSummary = userSummary.content;
-    
+
 
 
       this.usersWithScore = this.users.map((user) => {
@@ -230,8 +233,9 @@ export class UserComponent implements OnInit {
           totalScore: score ? score.totalScore : 0, // Tambahkan totalScore
         };
       });
+      console.log('Users with Score:', this.usersWithScore);
 
-      if (this.router.url === '/view-user') {
+      if (this.router.url === '/summary-approve') {
         this.usersWithScore = this.UsersSummary
       }
     });
