@@ -1,81 +1,127 @@
 <div class="card">
   <div class="p-5">
     <div class="text-center mb-2">
-      <h3 style="font-weight: bold; font-size: 2.25rem">Attitude & Skill</h3>
+      <h3 style="font-weight: bold; font-size: 2.25rem">
+        Attitude & Skill List
+        <p-button
+          label=""
+          icon="pi pi-plus"
+          (click)="showAddDialog()"
+          class="p-button-text"
+        ></p-button>
+      </h3>
     </div>
-        <p-table 
-        [value]="filteredAttitudeSkill" 
-        sortField="group_name" 
-        sortMode="single"
-        rowGroupMode="subheader" 
-        groupRowsBy="group_name"
-        [paginator]="true" 
-        [rows]="5" 
-        [filters]="filters"
-        [globalFilterFields]="['group_name', 'attitude_skill', 'enabled']" 
-        [loading]="loading"
-        styleClass="p-datatable-gridlines" 
-        [rowsPerPageOptions]="[5, 10, 20]"
-        >
-            <ng-template pTemplate="caption">
-                <div class="flex justify-content-between">
-                    <p-button label="Attitude & Skill" icon="pi pi-plus" (click)="showAddDialog()"
-                        class="p-button-text"></p-button>
-                    <div class="flex justify-content-end">
-                        <input pInputText type="text" (input)="searchData()" placeholder="Cari ..."
-                            [(ngModel)]="searchKeyword" />
-                    </div>
-                </div>
-            </ng-template>
-            <ng-template pTemplate="header">
-                <tr>
-                    <th>
-                        <p>No</p>
-                    </th>
-                    <!-- <th pSortableColumn="group_name">
-                        Grup Sikap dan Keahlian
-                        <p-columnFilter type="text" field="group_name" display="menu"></p-columnFilter>
-                    </th> -->
-                    <th pSortableColumn="attitude_skill">
-                        Sikap dan Keahlian
-                        <p-columnFilter type="text" field="attitude_skill" display="menu"></p-columnFilter>
-                    </th>
-                    <th>
-                        <p>Status</p>
-                        <!-- <p-columnFilter type="text" field="enabled" display="menu"></p-columnFilter> -->
-                    </th>
-                    <th>Aksi</th>
-                </tr>
-            </ng-template>
-            <ng-template pTemplate="groupheader" let-att>
-                <tr pRowGroupHeader>
-                    <td colspan="5">
-                    
-                        <span class="font-bold ml-2">{{att.group_name}}</span>
-                    </td>
-                </tr>
-            </ng-template>
-            <ng-template pTemplate="body" let-attitudeSkill let-rowIndex="rowIndex">
-                <tr>
-                    <td>{{ rowIndex + 1 }}</td>
-                    <!-- <td>{{ attitudeSkill.group_name }}</td> -->
-                    <td>{{ attitudeSkill.attitude_skill }}</td>
-                    <td>
-                        <p-tag [severity]="attitudeSkill.enabled ? 'success' : 'danger'"
-                            [value]="attitudeSkill.enabled ? 'Enabled' : 'Disabled'">
-                        </p-tag>
-                    </td>
-                    <td>
-                        <button pButton type="button" icon="pi pi-pencil" class="p-button-sm mr-2 "
-                            (click)="editAttitudeSkill(attitudeSkill)"></button>
-                        <button pButton type="button" icon="pi pi-trash" class="p-button-danger p-button-sm"
-                            (click)="deleteAttitudeSkill(attitudeSkill.id)"></button>
-                    </td>
-                </tr>
-            </ng-template>
-        </p-table>
-    </div>
+    <p-table
+      [value]="filteredAttitudeSkill"
+      [lazy]="true"
+      [paginator]="true"
+      [rows]="selectedPageSize"
+      [filters]="filters"
+      [totalRecords]="totalRecords"
+      (onPage)="loadPage($event)"
+      [loading]="loading"
+      styleClass="p-datatable-gridlines"
+      [rowsPerPageOptions]="pageSizeOptions"
+      rowGroupMode="subheader"
+      groupRowsBy="group_name"
+    >
+      <ng-template pTemplate="caption">
+        <div class="flex justify-content-between">
+          <div class="flex items-center gap-2">
+            <p-dropdown
+              [options]="sortOptions"
+              [(ngModel)]="currentSortBy"
+              (onChange)="onSortChange($event)"
+              placeholder="Select a sort option"
+            ></p-dropdown>
+            <button
+              (click)="toggleSortingDirection()"
+              pButton
+              [icon]="
+                sortingDirection === 'asc'
+                  ? 'pi pi-caret-up'
+                  : 'pi pi-caret-down'
+              "
+              class="p-button-outlined"
+              aria-label="Toggle Sort Direction"
+            ></button>
+            <p-button
+              label=""
+              icon="pi pi-refresh"
+              (click)="resetFilters()"
+              class="p-button-text"
+            ></p-button>
+          </div>
+          <div class="flex justify-content-end">
+            <input
+              type="text"
+              [(ngModel)]="searchKeyword"
+              pInputText
+              placeholder="Search Attitude & Skill"
+              class="mr-2"
+            />
+            <p-button
+              label=""
+              icon="pi pi-search"
+              (click)="
+                getAllAttitudeSkills(
+                  currentSortBy,
+                  sortingDirection,
+                  searchKeyword
+                )
+              "
+            ></p-button>
+          </div>
+        </div>
+      </ng-template>
+      <ng-template pTemplate="header">
+        <tr>
+          <th>No</th>
+          <th>Attitude & Skill</th>
+          <th>Status</th>
+          <th>Action</th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="groupheader" let-att>
+        <tr pRowGroupHeader>
+          <td colspan="5">
+            <span class="font-bold ml-2">{{ att.group_name }}</span>
+          </td>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-attitudeSkill let-rowIndex="rowIndex">
+        <tr>
+          <td>{{ rowIndex + 1 }}</td>
+          <!-- <td>{{ attitudeSkill.group_name }}</td> -->
+          <td>{{ attitudeSkill.attitude_skill }}</td>
+          <td>
+            <p-tag
+              [severity]="attitudeSkill.enabled ? 'success' : 'danger'"
+              [value]="attitudeSkill.enabled ? 'Enabled' : 'Disabled'"
+            >
+            </p-tag>
+          </td>
+          <td>
+            <button
+              pButton
+              type="button"
+              icon="pi pi-pencil"
+              class="p-button-sm mr-2"
+              (click)="editAttitudeSkill(attitudeSkill)"
+            ></button>
+            <button
+              pButton
+              type="button"
+              icon="pi pi-trash"
+              class="p-button-danger p-button-sm"
+              (click)="deleteAttitudeSkill(attitudeSkill.id)"
+            ></button>
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
   </div>
+</div>
 
 <p-dialog
   header="Attitude & Skill"
