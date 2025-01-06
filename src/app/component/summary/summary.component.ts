@@ -52,6 +52,7 @@ export class SummaryComponent implements OnInit {
   @Output() visibleChange = new EventEmitter<boolean>(); // Emit perubahan visibility
   @Input() user: any = {};
   @Input() year: number = new Date().getFullYear();
+
   attitudeSkill: any[] = [];
   achievement: any[] = [];
   groupedAchievement: any[] = [];
@@ -224,43 +225,90 @@ export class SummaryComponent implements OnInit {
   printPDF() {
     const pdf = new jsPDF();
 
+    const fullName = this.user.full_name || 'Unknown';
+    const year = this.selectedYear || 'Unknown Year';
+    const fileName = `Assessment Summary - ${fullName} - ${year}.pdf`;
+
+    const title = `${fullName}'s Assessment Summary - ${year}`;
+
     // Menambahkan judul
     pdf.setFontSize(18);
-    pdf.text('Assessment Summary', 14, 22);
+    pdf.text(title, 14, 22);
 
-    // Menambahkan tahun
-    pdf.setFontSize(12);
-    pdf.text(`Year: ${this.selectedYear}`, 14, 30);
-
-    // Menyiapkan data untuk tabel
+    // Define headers for the single table
     const headers = ['Aspect', 'Score', 'Weight', 'Final Score'];
-    const data = this.groupedData.map((item) => [
-      item.group,
-      item.score.toFixed(2), // Mengonversi angka menjadi string dengan 2 desimal
-      item.percentage.toFixed(2) + '%', // Mengonversi angka menjadi string dengan 2 desimal dan menambahkan %
-      ((item.score * item.percentage) / 100).toFixed(2), // Mengonversi angka menjadi string dengan 2 desimal
+
+    // Prepare data for the table
+    const tableData: string[][] = []; // Declare tableData with type
+
+    // Loop through groupedData to populate tableData
+    this.groupedData.forEach((group) => {
+      // Add group achievement data
+      tableData.push([
+        group.group, // Aspect: Group Name
+        group.score.toFixed(2), // Score: Group Score
+        group.percentage + '%', // Weight: Group Weight
+        ((group.score * group.percentage) / 100).toFixed(2), // Final Score: Group Final Score
+      ]);
+
+      // Add attitude skills under the respective group
+      group.details.forEach((detail: { name: string; score: number }) => {
+        tableData.push([
+          detail.name, // Aspect: Skill Name
+          detail.score.toFixed(2), // Score: Skill Score
+          '', // Weight: Empty
+          '', // Final Score: Empty
+        ]);
+      });
+    });
+
+    // Add total row at the end of the table
+    const totalWeight = this.groupedData.reduce(
+      (total, item) => total + item.percentage,
+      0
+    );
+    tableData.push([
+      'Total:', // Aspect: Total
+      '', // Score: Empty
+      totalWeight + '%', // Weight: Total Weight
+      this.totalFinalScore.toFixed(2), // Final Score: Total Final Score
     ]);
 
-    // Menggunakan autoTable untuk menambahkan tabel
+    // Generate the table with row colors
     autoTable(pdf, {
       head: [headers],
-      body: data,
-      startY: 40, // Posisi Y untuk tabel
-      theme: 'grid', // Tema tabel
+      body: tableData,
+      startY: 40,
+      theme: 'grid',
       styles: {
         fontSize: 10,
         cellPadding: 3,
       },
       headStyles: {
-        fillColor: [22, 160, 133], // Warna latar belakang header
-        textColor: [255, 255, 255], // Warna teks header
+        fillColor: [192, 192, 192], // Gray for header
+        textColor: [0, 0, 0], // Black text for header
         fontSize: 12,
+        fontStyle: 'bold', // Bold for header
+      },
+      didParseCell: (data) => {
+        // Set background color for total row
+
+        if (data.row.index === tableData.length - 1) {
+          data.cell.styles.fillColor = [192, 192, 192]; // Gray for total row
+          data.cell.styles.fontStyle = 'bold'; // Bold for total row
+        } else {
+          // Normal style for other rows
+          data.cell.styles.fillColor = [255, 255, 255]; // White for other rows
+          data.cell.styles.fontStyle = 'normal'; // Normal for other rows
+        }
       },
       margin: { top: 30 },
     });
 
-    // Menyimpan PDF dengan nama file unik
-    const timestamp = new Date().toISOString().replace(/[-:.]/g, ''); // Menghasilkan timestamp unik
-    pdf.save(`assessment_summary_${timestamp}.pdf`); // Nama file PDF
+    // Menyiapkan posisi untuk bagian saran
+    let startY = (pdf as any).lastAutoTable.finalY + 20;
+
+    // Menyimpan PDF dengan nama file
+    pdf.save(fileName);
   }
 }
