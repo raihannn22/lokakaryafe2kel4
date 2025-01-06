@@ -1,24 +1,26 @@
-
 @if (isSummaryApproveRoute()) {
-  <div class="text-center mb-2">
-    <h3 style="font-weight: bold; font-size: 2.25rem">Approval Summary: {{selectedYear}}</h3>
-  </div>
-}
-@if (!isViewUserRoute() && !isSummaryApproveRoute()) {
 <div class="text-center mb-2">
-  <h3 style="font-weight: bold; font-size: 2.25rem">Management Users</h3>
+  <h3 style="font-weight: bold; font-size: 2.25rem">
+    Approval Summary: {{ selectedYear }}
+  </h3>
+</div>
+} @if (!isViewUserRoute() && !isSummaryApproveRoute()) {
+<div class="text-center mb-2">
+  <h3 style="font-weight: bold; font-size: 2.25rem">
+    Management Users @if (userRoles?.includes('HR') && !isViewUserRoute()) {
+    <p-button
+      label=""
+      icon="pi pi-plus"
+      (click)="openCreateDialog()"
+      class="p-5 mt-5"
+    ></p-button>
+    }
+  </h3>
 </div>
 }@if (isViewUserRoute()) {
 <div class="text-center mb-2">
   <h3 style="font-weight: bold; font-size: 2.25rem">View Users</h3>
 </div>
-} @if (userRoles?.includes('HR') && !isViewUserRoute()) {
-<p-button
-  label="Add Users"
-  icon="pi pi-plus"
-  (click)="openCreateDialog()"
-  class="p-5 mt-5"
-></p-button>
 }
 
 <div class="card">
@@ -40,41 +42,67 @@
     </div>
     }
 
-
     <p-table
       #dt
       [value]="usersWithScore"
+      [lazy]="true"
       [paginator]="true"
-      [rows]="10"
+      [rows]="selectedPageSize"
+      [totalRecords]="totalRecords"
+      (onPage)="loadPage($event)"
       [loading]="loading"
-      [rowsPerPageOptions]="[10, 25, 50]"
+      [rowsPerPageOptions]="pageSizeOptions"
       styleClass="p-datatable-gridlines"
-      [globalFilterFields]="[
+    >
+      <!-- [globalFilterFields]="[
         'username',
         'full_name',
         'email_address',
         'division_name'
-      ]"
-    >
+      ]" -->
       <ng-template pTemplate="caption">
-        <div class="flex">
-          <span class="p-input-icon-left mr-auto">
-            <i class="pi pi-search"></i>
+        <div class="flex justify-content-between">
+          <div class="flex items-center gap-2">
+            <p-dropdown
+              [options]="sortOptions"
+              [(ngModel)]="currentSortBy"
+              (onChange)="onSortChange($event)"
+              placeholder="Select a sort option"
+            ></p-dropdown>
+            <button
+              (click)="toggleSortingDirection()"
+              pButton
+              [icon]="
+                sortingDirection === 'asc'
+                  ? 'pi pi-caret-up'
+                  : 'pi pi-caret-down'
+              "
+              class="p-button-outlined"
+              aria-label="Toggle Sort Direction"
+            ></button>
+            <p-button
+              label=""
+              icon="pi pi-refresh"
+              (click)="resetFilters()"
+              class="p-button-text"
+            ></p-button>
+          </div>
+          <div class="flex justify-content-end">
             <input
-              #searchInput
-              pInputText
               type="text"
-              [(ngModel)]="searchValue"
-              (input)="dt.filterGlobal(searchInput.value, 'contains')"
-              placeholder="Search keyword"
+              [(ngModel)]="searchKeyword"
+              pInputText
+              placeholder="Search ..."
+              class="mr-2"
             />
-          </span>
-          <p-button
-            label="Clear"
-            [outlined]="true"
-            icon="pi pi-filter-slash"
-            (onClick)="clear(dt)"
-          />
+            <p-button
+              label=""
+              icon="pi pi-search"
+              (click)="
+                getAllUsers(currentSortBy, sortingDirection, searchKeyword)
+              "
+            ></p-button>
+          </div>
         </div>
       </ng-template>
 
@@ -185,10 +213,9 @@
           <th pSortableColumn="score" style="width: 20%">
             Score <p-sortIcon field="score" />
           </th>
-          }
-          @if (isSummaryApproveRoute()) {
+          } @if (isSummaryApproveRoute()) {
           <th pSortableColumn="score" style="width: 20%">
-              Score <p-sortIcon field="score" />
+            Score <p-sortIcon field="score" />
           </th>
           <th>
             <div class="flex align-items-center">
@@ -254,20 +281,19 @@
           @if (isViewUserRoute()) {
           <td>{{ user.totalScore | number : "1.2-2" }}</td>
 
+          } @if (isSummaryApproveRoute()) {
+          <td>{{ user.score | number : "1.2-2" }}</td>
+          <td>
+            <p-tag
+              [severity]="user.status === 0 ? 'danger' : 'success'"
+              [value]="user.status === 1 ? 'Confirmed' : 'Unconfirmed'"
+            >
+            </p-tag>
+          </td>
           }
-
-            @if (isSummaryApproveRoute()) {
-              <td>{{ user.score | number : "1.2-2" }}</td>
-              <td>
-                <p-tag
-                  [severity]="user.status === 0 ? 'danger' : 'success'"
-                  [value]="user.status === 1 ? 'Confirmed' : 'Unconfirmed'"
-                >
-                </p-tag>
-              </td>
-              }
           <td class="flex gap-2">
-            @if (userRoles?.includes('HR') && !isViewUserRoute() && !isSummaryApproveRoute()) {
+            @if (userRoles?.includes('HR') && !isViewUserRoute() &&
+            !isSummaryApproveRoute()) {
             <button
               pButton
               type="button"
@@ -292,15 +318,14 @@
               (click)="openDetailDialog(user)"
             ></button>
             @if ( isSummaryApproveRoute()) {
-               <button
-               pButton
-               type="button"
-               icon="pi pi-arrow-up"
-               class="p-button-primary p-button-sm"
-               (click)="openConfirmedDialog(user)"
-             ></button>
-            }
-            }
+            <button
+              pButton
+              type="button"
+              icon="pi pi-arrow-up"
+              class="p-button-primary p-button-sm"
+              (click)="openConfirmedDialog(user)"
+            ></button>
+            } }
           </td>
         </tr>
       </ng-template>

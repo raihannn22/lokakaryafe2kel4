@@ -8,6 +8,10 @@ import { forkJoin } from 'rxjs';
 import { DropdownModule } from 'primeng/dropdown';
 import { FormsModule } from '@angular/forms';
 import { ButtonModule } from 'primeng/button';
+import html2canvas from 'html2canvas';
+import jsPDF from 'jspdf';
+import Swal from 'sweetalert2';
+import autoTable from 'jspdf-autotable';
 
 interface Item {
   name: string;
@@ -15,9 +19,8 @@ interface Item {
   percentage: number;
   score: number;
   group_enabled: number;
-  enabled : number;
+  enabled: number;
   source: string;
-  
 }
 interface GroupedItem {
   group: string;
@@ -25,34 +28,41 @@ interface GroupedItem {
   score: number;
   count: number;
   group_enabled: number;
-  enabled : number;
+  enabled: number;
   source: string;
-  
-  details: { name: string; score: number }[]; 
+
+  details: { name: string; score: number }[];
 }
 @Component({
   selector: 'app-summary',
   standalone: true,
-  imports: [DialogModule, TableModule, CommonModule, DropdownModule, FormsModule, ButtonModule],
+  imports: [
+    DialogModule,
+    TableModule,
+    CommonModule,
+    DropdownModule,
+    FormsModule,
+    ButtonModule,
+  ],
   templateUrl: './summary.component.html',
-  styleUrl: './summary.component.css'
+  styleUrl: './summary.component.css',
 })
-export class SummaryComponent implements OnInit{
+export class SummaryComponent implements OnInit {
   @Input() visible: boolean = false; // Menyambungkan dengan property di komponen induk
   @Output() visibleChange = new EventEmitter<boolean>(); // Emit perubahan visibility
   @Input() user: any = {};
-  @Input() year: number = new Date().getFullYear()
+  @Input() year: number = new Date().getFullYear();
   attitudeSkill: any[] = [];
   achievement: any[] = [];
   groupedAchievement: any[] = [];
-  combinedData: any[] = []; 
+  combinedData: any[] = [];
   groupedData: any[] = [];
   normalizedData: any = [];
   suggestion: any = [];
 
   totalPercentage: number = 0;
   totalFinalScore: number = 0;
-  yearsTitle: number= 0;
+  yearsTitle: number = 0;
 
   selectedYear: number = 0;
   years: number[] = [
@@ -61,19 +71,15 @@ export class SummaryComponent implements OnInit{
     2047, 2048, 2049, 2050,
   ];
 
-  onYearChange(event: any) {
-  }
+  onYearChange(event: any) {}
 
   submit() {
     this.getAllEmpAchievement();
-    this.yearsTitle = this.selectedYear
+    this.yearsTitle = this.selectedYear;
   }
-  constructor(private summaryService: SummaryService) {
-  }
+  constructor(private summaryService: SummaryService) {}
 
-  ngOnInit() {
-    
-  }
+  ngOnInit() {}
 
   ngOnChanges() {
     this.getAllEmpAchievement();
@@ -87,42 +93,60 @@ export class SummaryComponent implements OnInit{
 
   getAllEmpAchievement() {
     forkJoin({
-      suggestion:  this.summaryService.getAllSuggestionByYear(this.user.id, this.selectedYear),
-      empAtt :  this.summaryService.getEmpAttitudeSkillByIdandYear(this.user.id, this.selectedYear),
-      emppAchievement:  this.summaryService.getEmpAchievementByIdandYear(this.user.id, this.selectedYear),
-      groupAchievement: this.summaryService.getAllAchievements()
-    }).subscribe(({emppAchievement, groupAchievement, empAtt, suggestion}) => {
-      this.achievement = emppAchievement.content;
-      this.groupedAchievement = groupAchievement.content;
-      this.attitudeSkill = empAtt.content;
-      this.suggestion = suggestion.content; 
-      
-        this.groupedAchievement = this.groupedAchievement.map(group => {
-          const matchingAchievements = this.achievement.filter(ach => ach.achievement_id === group.id);
-          const score = matchingAchievements.length > 0 
-            ? matchingAchievements.reduce((sum, ach) => sum + ach.score, 0) 
-            : 0;
-      
+      suggestion: this.summaryService.getAllSuggestionByYear(
+        this.user.id,
+        this.selectedYear
+      ),
+      empAtt: this.summaryService.getEmpAttitudeSkillByIdandYear(
+        this.user.id,
+        this.selectedYear
+      ),
+      emppAchievement: this.summaryService.getEmpAchievementByIdandYear(
+        this.user.id,
+        this.selectedYear
+      ),
+      groupAchievement: this.summaryService.getAllAchievements(),
+    }).subscribe(
+      ({ emppAchievement, groupAchievement, empAtt, suggestion }) => {
+        this.achievement = emppAchievement.content;
+        this.groupedAchievement = groupAchievement.content;
+        this.attitudeSkill = empAtt.content;
+        this.suggestion = suggestion.content;
+
+        this.groupedAchievement = this.groupedAchievement.map((group) => {
+          const matchingAchievements = this.achievement.filter(
+            (ach) => ach.achievement_id === group.id
+          );
+          const score =
+            matchingAchievements.length > 0
+              ? matchingAchievements.reduce((sum, ach) => sum + ach.score, 0)
+              : 0;
+
           return {
             ...group,
-            score
+            score,
           };
         });
         this.mapData();
         this.groupedData = this.groupAndSumData(this.combinedData);
-        this.totalPercentage = this.groupedData.reduce((total, item) => total + item.percentage, 0);
-        this.totalFinalScore = this.groupedData.reduce((total, item) => total + (item.score * (item.percentage)/100), 0);
-        console.log(this.groupedData , 'ini grouped data');
-        console.log(this.groupedAchievement , 'ini grouped achievement');
-        console.log(this.attitudeSkill , 'ini attitude skill');
-    })
-
-  
+        this.totalPercentage = this.groupedData.reduce(
+          (total, item) => total + item.percentage,
+          0
+        );
+        this.totalFinalScore = this.groupedData.reduce(
+          (total, item) => total + (item.score * item.percentage) / 100,
+          0
+        );
+        console.log(this.groupedData, 'ini grouped data');
+        console.log(this.groupedAchievement, 'ini grouped achievement');
+        console.log(this.attitudeSkill, 'ini attitude skill');
+      }
+    );
   }
 
   mapData() {
     this.combinedData = [];
-  
+
     // Proses Attitude Skill
     this.attitudeSkill
       .filter((item) => item.group_enabled === 1 && item.enabled === 1) // Abaikan item yang disabled
@@ -137,7 +161,7 @@ export class SummaryComponent implements OnInit{
           name: item.attitude_skill_name, // Gunakan nama attitude skill
         });
       });
-  
+
     // Proses Achievement
     this.groupedAchievement
       .filter((item) => item.group_enabled === 1 && item.enabled === 1) // Abaikan item yang disabled
@@ -153,14 +177,13 @@ export class SummaryComponent implements OnInit{
         });
       });
   }
-  
 
   groupAndSumData(data: Item[]): GroupedItem[] {
     const groupedData = data.reduce((acc, item) => {
       if (item.group_enabled === 0 || item.enabled === 0) {
         return acc;
       }
-  
+
       if (!acc[item.group]) {
         acc[item.group] = {
           group: item.group,
@@ -173,19 +196,19 @@ export class SummaryComponent implements OnInit{
           details: [], // Tambahkan array untuk menyimpan detail
         };
       }
-  
+
       acc[item.group].score += item.score; // Tambahkan skor
       acc[item.group].count += 1; // Hitung jumlah item
-  
+
       // Tambahkan detail item ke dalam array
       acc[item.group].details.push({
         name: item.name, // Nama dari attitude_skill_name atau achievement
         score: item.score, // Skor item
       });
-  
+
       return acc;
     }, {} as Record<string, GroupedItem>);
-  
+
     return Object.values(groupedData).map((item) => ({
       group: item.group,
       percentage: item.percentage,
@@ -197,25 +220,47 @@ export class SummaryComponent implements OnInit{
       details: item.details, // Tambahkan details ke hasil akhir
     }));
   }
-  
-  
-  
 
+  printPDF() {
+    const pdf = new jsPDF();
 
+    // Menambahkan judul
+    pdf.setFontSize(18);
+    pdf.text('Assessment Summary', 14, 22);
 
+    // Menambahkan tahun
+    pdf.setFontSize(12);
+    pdf.text(`Year: ${this.selectedYear}`, 14, 30);
 
+    // Menyiapkan data untuk tabel
+    const headers = ['Aspect', 'Score', 'Weight', 'Final Score'];
+    const data = this.groupedData.map((item) => [
+      item.group,
+      item.score.toFixed(2), // Mengonversi angka menjadi string dengan 2 desimal
+      item.percentage.toFixed(2) + '%', // Mengonversi angka menjadi string dengan 2 desimal dan menambahkan %
+      ((item.score * item.percentage) / 100).toFixed(2), // Mengonversi angka menjadi string dengan 2 desimal
+    ]);
 
-// normalizePercentages(data: any[]): any[] {
-//   // Hitung total percentage saat ini
-//   const totalPercentage = data.reduce((acc, item) => acc + item.percentage, 0);
+    // Menggunakan autoTable untuk menambahkan tabel
+    autoTable(pdf, {
+      head: [headers],
+      body: data,
+      startY: 40, // Posisi Y untuk tabel
+      theme: 'grid', // Tema tabel
+      styles: {
+        fontSize: 10,
+        cellPadding: 3,
+      },
+      headStyles: {
+        fillColor: [22, 160, 133], // Warna latar belakang header
+        textColor: [255, 255, 255], // Warna teks header
+        fontSize: 12,
+      },
+      margin: { top: 30 },
+    });
 
-//   // Normalisasi percentage untuk setiap grup
-//   return data.map((item) => ({
-//     ...item,
-//     percentage: (item.percentage / totalPercentage) * 100, // Sesuaikan untuk total 100%
-//   }));
-// }
-
-  
-
+    // Menyimpan PDF dengan nama file unik
+    const timestamp = new Date().toISOString().replace(/[-:.]/g, ''); // Menghasilkan timestamp unik
+    pdf.save(`assessment_summary_${timestamp}.pdf`); // Nama file PDF
+  }
 }

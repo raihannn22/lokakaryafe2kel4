@@ -46,7 +46,7 @@ import { ConfirmedComponent } from '../../../confirmed/confirmed.component';
     DetailUserComponent,
     DropdownModule,
     MultiSelectModule,
-    ConfirmedComponent
+    ConfirmedComponent,
   ],
   templateUrl: './user.component.html',
   styleUrl: './user.component.css',
@@ -82,6 +82,27 @@ export class UserComponent implements OnInit {
 
   divisionId: string = '';
   confirmed!: any[];
+
+  first: number = 0;
+  totalRecords: number = 0;
+
+  pageSizeOptions: number[] = [5, 10, 20];
+  selectedPageSize: number = 5;
+  currentPage: number = 0;
+
+  sortingDirection: string = 'asc';
+  currentSortBy: string = 'username';
+
+  sortOptions = [
+    { label: 'Username', value: 'username' },
+    { label: 'Full Name', value: 'fullname' },
+    { label: 'Position', value: 'position' },
+    { label: 'Email Address', value: 'email' },
+    { label: 'Join Date', value: 'joinDate' },
+  ];
+
+  searchKeyword: string = '';
+
   // userId: string | undefined;
 
   onYearChange(event: any) {
@@ -187,7 +208,6 @@ export class UserComponent implements OnInit {
     }
   }
 
-
   getDivisionIdFromUserId(): void {
     const userId = localStorage.getItem('id');
     if (userId) {
@@ -211,37 +231,146 @@ export class UserComponent implements OnInit {
     }
   }
 
-  getAllUsers() {
+  getAllUsers(
+    sort: string = this.currentSortBy,
+    direction: string = this.sortingDirection,
+    searchKeyword: string = this.searchKeyword
+  ) {
     forkJoin({
-      user: this.userService.getAllUsers(),
+      user: this.userService.getAllUsers(
+        this.currentPage,
+        this.selectedPageSize,
+        this.currentSortBy,
+        this.sortingDirection,
+        this.searchKeyword
+      ),
       total: this.summaryService.getTotalScore(this.selectedYear),
       userSummary: this.summaryService.getUserAndSummary(this.selectedYear),
-    }).subscribe(({ user, total , userSummary }) => {
+    }).subscribe(({ user, total, userSummary }) => {
       this.loading = false;
       this.scoreUsers = total;
       this.users = user.content;
-
+      this.totalRecords = user.total_data;
       this.UsersSummary = userSummary.content;
 
+      // Cek apakah data pengguna kosong
+      if (this.users.length === 0) {
+        Swal.fire({
+          icon: 'info',
+          title: 'No Data Found',
+          text: 'No matching data found for your search criteria.',
+          confirmButtonText: 'OK',
+        }).then((result) => {
+          if (result.isConfirmed) {
+            // Reset search keyword only
+            this.searchKeyword = '';
+            this.getAllUsers(
+              this.currentSortBy,
+              this.sortingDirection,
+              this.searchKeyword
+            );
+          }
+        });
+      } else {
+        // Filter users based on role
+        if (this.userRoles.includes('HR')) {
+          // HR can see all users
+          this.usersWithScore = this.users.map((user) => {
+            const score = this.scoreUsers.find((s) => s.userId === user.id);
+            return {
+              ...user,
+              totalScore: score ? score.totalScore : 0,
+            };
+          });
+        } else {
+          // Other roles can only see users in their division
+          this.usersWithScore = this.users
+            .filter((user) => user.division_id === this.divisionId) // Filter by division
+            .map((user) => {
+              const score = this.scoreUsers.find((s) => s.userId === user.id);
+              return {
+                ...user,
+                totalScore: score ? score.totalScore : 0,
+              };
+            });
+        }
 
+        console.log('Users with Score:', this.usersWithScore);
 
-      this.usersWithScore = this.users.map((user) => {
-        // Temukan skor berdasarkan ID pengguna
-        const score = this.scoreUsers.find((s) => s.userId === user.id);
-        return {
-          ...user, // Data pengguna asli
-          totalScore: score ? score.totalScore : 0, // Tambahkan totalScore
-        };
-      });
-      console.log('Users with Score:', this.usersWithScore);
-
-      if (this.router.url === '/summary-approve') {
-        this.usersWithScore = this.UsersSummary
+        if (this.router.url === '/summary-approve') {
+          this.usersWithScore = this.UsersSummary;
+        }
       }
     });
-
-
   }
+
+  resetFilters() {
+    this.searchKeyword = '';
+    this.currentSortBy = 'username';
+    this.sortingDirection = 'asc';
+    this.currentPage = 0;
+    this.selectedPageSize = 5;
+
+    this.getAllUsers(
+      this.currentSortBy,
+      this.sortingDirection,
+      this.searchKeyword
+    );
+  }
+
+  loadPage(event: any) {
+    this.currentPage = event.first / event.rows; // Menghitung halaman berdasarkan offset
+    this.selectedPageSize = event.rows; // Ambil jumlah baris per halaman
+    console.log('Page Size Change Triggered');
+    console.log('Selected Page Size:', this.selectedPageSize);
+    this.getAllUsers(this.currentSortBy, this.sortingDirection); // Muat ulang data dengan ukuran halaman baru
+  }
+
+  onSortChange(event: any) {
+    this.currentSortBy = event.value; // Update current sort by
+    console.log('Sorting by:', this.currentSortBy); // Log for debugging
+
+    this.currentPage = 0; // Reset to the first page
+    console.log('Sorting direction:', this.sortingDirection); // Log for debugging
+
+    this.getAllUsers(this.currentSortBy, this.sortingDirection); // Call to load data with new sorting
+  }
+
+  toggleSortingDirection() {
+    // Toggle between 'asc' and 'desc'
+    this.sortingDirection = this.sortingDirection === 'asc' ? 'desc' : 'asc';
+    console.log('Sorting direction changed to:', this.sortingDirection); // Log the new direction
+    // Reload achievements with the current sort criteria and new sorting direction
+    this.getAllUsers(this.currentSortBy, this.sortingDirection);
+  }
+  // getAllUsers() {
+  //   forkJoin({
+  //     user: this.userService.getAllUsers(),
+  //     total: this.summaryService.getTotalScore(this.selectedYear),
+  //     userSummary: this.summaryService.getUserAndSummary(this.selectedYear),
+  //   }).subscribe(({ user, total , userSummary }) => {
+  //     this.loading = false;
+  //     this.scoreUsers = total;
+  //     this.users = user.content;
+
+  //     this.UsersSummary = userSummary.content;
+
+  //     this.usersWithScore = this.users.map((user) => {
+  //       // Temukan skor berdasarkan ID pengguna
+  //       const score = this.scoreUsers.find((s) => s.userId === user.id);
+  //       return {
+  //         ...user, // Data pengguna asli
+  //         totalScore: score ? score.totalScore : 0, // Tambahkan totalScore
+  //       };
+  //     });
+  //     console.log('Users with Score:', this.usersWithScore);
+
+  //     if (this.router.url === '/summary-approve') {
+  //       this.usersWithScore = this.UsersSummary
+  //     }
+  //   });
+
+  // }
 
   getAllDivision() {
     this.userService.getAllDivision().subscribe({
