@@ -10,9 +10,21 @@ export class UserService {
 
   constructor(private http: HttpClient) {}
 
-  getAllUsers(): Observable<any> {
-    return this.http.get(`${this.apiUrl}/get/all`);
+  getAllUsers(
+    page: number = 0,
+    size: number = 10,
+    sort: string = 'username',
+    direction: string = 'asc',
+    searchKeyword: string = ''
+  ): Observable<any> {
+    return this.http.get(
+      `${this.apiUrl}/get/paginated?page=${page}&size=${size}&sort=${sort}&direction=${direction}&searchKeyword=${searchKeyword}`
+    );
   }
+
+  // getAllUsers(): Observable<any> {
+  //   return this.http.get(`${this.apiUrl}/get/all`);
+  // }
 
   getUsersByDivisionId(divisionId: string): Observable<any> {
     return this.http.get(`${this.apiUrl}/get/by-division-id`, {
