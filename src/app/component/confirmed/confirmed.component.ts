@@ -6,11 +6,11 @@ import { TableModule } from 'primeng/table';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { DropdownModule } from 'primeng/dropdown';
 import { DialogModule } from 'primeng/dialog';
-import { GroupAttitudeSkillService } from '../service/group-attitude-skill/group-attitude-skill.service';
-import { EmpAttitudeSkillService } from '../service/emp-attitude-skill/emp-attitude-skill.service';
+import { GroupAttitudeSkillService } from '../../service/group-attitude-skill/group-attitude-skill.service';
+import { EmpAttitudeSkillService } from '../../service/emp-attitude-skill/emp-attitude-skill.service';
 import Swal from 'sweetalert2';
-import { SummaryService } from '../service/summary/summary.service';
-import { EmpAchievementSkillService } from '../service/emp-achievement-skill/emp-achievement-skill.service';
+import { SummaryService } from '../../service/summary/summary.service';
+import { EmpAchievementSkillService } from '../../service/emp-achievement-skill/emp-achievement-skill.service';
 import { ToggleButtonModule } from 'primeng/togglebutton';
 import { forkJoin } from 'rxjs';
 interface AttitudeSkill {

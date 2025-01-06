@@ -1,20 +1,21 @@
 <div class="text-center mb-2">
   <h3 style="font-weight: bold; font-size: 2.25rem">
     Division Management
-    <p-button
-      label=""
-      icon="pi pi-plus"
-      (click)="openCreateDialog()"
-      class="p-button-text"
-    ></p-button>
+
   </h3>
 </div>
 
-<!-- <p-button label="Add Division" icon="pi pi-plus" (click)="openCreateDialog()" class="p-5 mt-5" ></p-button> -->
 
-<!-- Tombol global untuk membuat pengguna baru -->
 
 <div class="p-5">
+  <div class="mb-2">
+    <p-button
+    label="Tambah Data"
+    icon="pi pi-plus"
+    (click)="openCreateDialog()"
+    class="p-button-text"
+    ></p-button>
+  </div>
   <p-table
     [value]="divisions"
     lazy="true"
