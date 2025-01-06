@@ -69,6 +69,18 @@ export class AttitudeSkillComponent implements OnInit {
   first: number = 0;
   totalRecords: number = 0;
 
+  pageSizeOptions: number[] = [5, 10, 20];
+  selectedPageSize: number = 5;
+  currentPage: number = 0;
+
+  sortingDirection: string = 'asc';
+  currentSortBy: string = 'groupAttitudeSkill.id';
+
+  sortOptions = [
+    { label: 'Group Name', value: 'groupAttitudeSkill.id' },
+    { label: 'Attitude Skill', value: 'attitudeSkill' },
+  ];
+
   constructor(
     private attitudeSkillService: AttitudeSkillService,
     private groupAchievementService: GroupAchievementService,
@@ -80,25 +92,97 @@ export class AttitudeSkillComponent implements OnInit {
     this.getAllGroupAttitudeSkills();
   }
 
-  getAllAttitudeSkills() {
+  getAllAttitudeSkills(
+    sort: string = this.currentSortBy,
+    direction: string = this.sortingDirection,
+    searchKeyword: string = this.searchKeyword
+  ) {
     this.loading = true;
-    this.attitudeSkillService.getAllAttitudeSkills().subscribe({
-      next: (response) => {
-        this.attitudeSkills = response.content;
-        this.totalRecords = response.totalRecords;
-        this.filteredAttitudeSkill = this.attitudeSkills;
-        this.loading = false;
-      },
-      error: (error) => {
-        // console.error('Error fetching attitudeSkills:', error);
-        this.loading = false;
-      },
-    });
+    console.log(
+      'Loading achievement skill with sorting:',
+      sort,
+      'and direction:',
+      direction
+    );
+    this.attitudeSkillService
+      .getAllAttitudeSkills(
+        this.currentPage,
+        this.selectedPageSize,
+        sort,
+        direction,
+        searchKeyword
+      )
+      .subscribe({
+        next: (response) => {
+          this.attitudeSkills = response.content;
+          this.totalRecords = response.total_data;
+          this.filteredAttitudeSkill = this.attitudeSkills;
+          this.loading = false;
+
+          if (this.filteredAttitudeSkill.length === 0) {
+            Swal.fire({
+              icon: 'info',
+              title: 'No Data Found',
+              text: 'No matching data found for your search criteria.',
+              confirmButtonText: 'OK',
+            }).then((result) => {
+              if (result.isConfirmed) {
+                // Reset search keyword only
+                this.searchKeyword = '';
+                this.getAllAttitudeSkills(
+                  this.currentSortBy,
+                  this.sortingDirection,
+                  this.searchKeyword
+                );
+              }
+            });
+          }
+        },
+        error: (error) => {
+          // console.error('Error fetching attitudeSkills:', error);
+          this.loading = false;
+        },
+      });
+  }
+
+  resetFilters() {
+    this.searchKeyword = '';
+    this.currentSortBy = 'groupAttitudeSkill.id';
+    this.sortingDirection = 'asc';
+    this.currentPage = 0;
+    this.selectedPageSize = 5;
+
+    this.getAllAttitudeSkills(
+      this.currentSortBy,
+      this.sortingDirection,
+      this.searchKeyword
+    );
   }
 
   loadPage(event: any) {
-    this.first = event.first;
-    this.getAllAttitudeSkills();
+    this.currentPage = event.first / event.rows; // Menghitung halaman berdasarkan offset
+    this.selectedPageSize = event.rows; // Ambil jumlah baris per halaman
+    console.log('Page Size Change Triggered');
+    console.log('Selected Page Size:', this.selectedPageSize);
+    this.getAllAttitudeSkills(this.currentSortBy, this.sortingDirection);
+  }
+
+  onSortChange(event: any) {
+    this.currentSortBy = event.value; // Update current sort by
+    console.log('Sorting by:', this.currentSortBy); // Log for debugging
+
+    this.currentPage = 0; // Reset to the first page
+    console.log('Sorting direction:', this.sortingDirection); // Log for debugging
+
+    this.getAllAttitudeSkills(this.currentSortBy, this.sortingDirection); // Call to load data with new sorting
+  }
+
+  toggleSortingDirection() {
+    // Toggle between 'asc' and 'desc'
+    this.sortingDirection = this.sortingDirection === 'asc' ? 'desc' : 'asc';
+    console.log('Sorting direction changed to:', this.sortingDirection); // Log the new direction
+    // Reload achievements with the current sort criteria and new sorting direction
+    this.getAllAttitudeSkills(this.currentSortBy, this.sortingDirection);
   }
 
   getAllGroupAttitudeSkills() {
