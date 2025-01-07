@@ -44,8 +44,20 @@
             label="PDF"
             icon="pi pi-print"
             severity="danger"
-            (click)="printPDF()"
+            (click)="printToPDF()"
           ></button>
+        </div>
+        <div>
+          <div>
+            <button
+              pButton
+              type="button"
+              label="Excel"
+              icon="pi pi-file-excel"
+              severity="success"
+              (click)="printToExcel()"
+            ></button>
+          </div>
         </div>
       </div>
 

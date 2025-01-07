@@ -10,6 +10,7 @@ import { FormsModule } from '@angular/forms';
 import { ButtonModule } from 'primeng/button';
 import html2canvas from 'html2canvas';
 import jsPDF from 'jspdf';
+import * as XLSX from 'xlsx';
 import Swal from 'sweetalert2';
 import autoTable from 'jspdf-autotable';
 
@@ -222,7 +223,7 @@ export class SummaryComponent implements OnInit {
     }));
   }
 
-  printPDF() {
+  printToPDF() {
     const pdf = new jsPDF();
     const tableColumn = ['Aspect', 'Score', 'Weight', 'Final Score'];
     const tableRows: any[] = [];
@@ -324,5 +325,212 @@ export class SummaryComponent implements OnInit {
     // Menyimpan PDF dengan nama file
     const fileName = `Assessment Summary - ${fullName} - ${year}.pdf`;
     pdf.save(fileName);
+  }
+
+  // printToExcel() {
+  //   const wb = XLSX.utils.book_new();
+  //   const wsData = [];
+  //   const fullName = this.user.full_name || 'Unknown';
+  //   const year = this.selectedYear || 'Unknown Year';
+
+  //   // Menambahkan informasi pengguna dan tahun
+  //   wsData.push(['Employee Name:', fullName, '', '']);
+  //   wsData.push(['Assessment Year:', year, '', '']);
+  //   wsData.push(['', '', '', '']); // Baris kosong untuk pemisah
+  //   wsData.push(['Aspect', 'Score', 'Weight', 'Final Score']);
+
+  //   // Variabel untuk menyimpan panjang maksimum kolom "Aspect"
+  //   let maxAspectLength = 'Aspect'.length; // Mulai dengan panjang header
+
+  //   // Loop melalui groupedData untuk mengisi wsData
+  //   this.groupedData.forEach((group) => {
+  //     wsData.push([
+  //       {
+  //         v: group.group,
+  //         s: {
+  //           fill: { rgb: 'D3D3D3' },
+  //           font: { bold: true },
+  //           alignment: { horizontal: 'center', wrapText: true }, // Rata tengah
+  //         },
+  //       },
+  //       {
+  //         v: group.score.toFixed(2),
+  //         s: { alignment: { horizontal: 'center' } }, // Rata tengah
+  //       },
+  //       {
+  //         v: group.percentage + '%',
+  //         s: { alignment: { horizontal: 'center' } }, // Rata tengah
+  //       },
+  //       {
+  //         v: ((group.score * group.percentage) / 100).toFixed(2),
+  //         s: { alignment: { horizontal: 'center' } }, // Rata tengah
+  //       },
+  //     ]);
+
+  //     // Update panjang maksimum untuk kolom "Aspect"
+  //     maxAspectLength = Math.max(maxAspectLength, group.group.length);
+
+  //     // Menambahkan detail sikap di bawah grup yang sesuai
+  //     group.details.forEach((detail: { name: string; score: number }) => {
+  //       wsData.push([
+  //         {
+  //           v: `- ${detail.name}`,
+  //           s: { alignment: { horizontal: 'left' } }, // Rata kiri
+  //         },
+  //         {
+  //           v: detail.score.toFixed(2),
+  //           s: { alignment: { horizontal: 'center' } }, // Rata tengah
+  //         },
+  //         '',
+  //         '',
+  //       ]);
+
+  //       // Update panjang maksimum untuk detail
+  //       maxAspectLength = Math.max(maxAspectLength, detail.name.length); // +2 untuk menambahkan '- '
+  //     });
+  //   });
+
+  //   // Menambahkan total di akhir tabel
+  //   const totalWeight = this.groupedData.reduce(
+  //     (total, item) => total + item.percentage,
+  //     0
+  //   );
+  //   wsData.push([
+  //     {
+  //       v: 'Total Score:',
+  //       s: { alignment: { horizontal: 'center' }, font: { bold: true } }, // Rata tengah dan teks tebal
+  //     },
+  //     '',
+  //     {
+  //       v: totalWeight + '%',
+  //       s: { alignment: { horizontal: 'center' } }, // Rata tengah
+  //     },
+  //     {
+  //       v: this.totalFinalScore.toFixed(2),
+  //       s: { alignment: { horizontal: 'center' } }, // Rata tengah
+  //     },
+  //   ]);
+
+  //   // Mengonversi data ke worksheet
+  //   const ws = XLSX.utils.aoa_to_sheet(wsData);
+  //   XLSX.utils.book_append_sheet(wb, ws, 'Assessment Summary');
+
+  //   // Mengatur lebar kolom
+  //   const aspectColumnWidth = Math.min(Math.max(maxAspectLength * 10, 100)); // Lebar kolom untuk Aspect, minimal 100px dan maksimal 300px
+  //   ws['!cols'] = [
+  //     { wpx: aspectColumnWidth }, // Lebar kolom untuk Aspect
+  //     { wpx: 100 }, // Lebar kolom untuk Score
+  //     { wpx: 100 }, // Lebar kolom untuk Weight
+  //     { wpx: 100 }, // Lebar kolom untuk Final Score
+  //   ];
+
+  //   // Menyimpan file Excel
+  //   const fileName = `Assessment_Summary_${fullName}_${year}.xlsx`;
+  //   XLSX.writeFile(wb, fileName);
+  // }
+
+  printToExcel() {
+    const wb = XLSX.utils.book_new();
+    const wsData = [];
+    const fullName = this.user.full_name || 'Unknown';
+    const year = this.selectedYear || 'Unknown Year';
+
+    // Menambahkan informasi pengguna dan tahun
+    wsData.push(['Employee Name:', fullName, '', '']);
+    wsData.push(['Assessment Year:', year, '', '']);
+    wsData.push(['', '', '', '']); // Baris kosong untuk pemisah
+    wsData.push(['Aspect', 'Score', 'Weight', 'Final Score']);
+
+    // Variabel untuk menyimpan panjang maksimum kolom "Aspect"
+    let maxAspectLength = 'Aspect'.length; // Mulai dengan panjang header
+
+    // Loop melalui groupedData untuk mengisi wsData
+    this.groupedData.forEach((group) => {
+      wsData.push([
+        {
+          v: group.group,
+          s: {
+            fill: { rgb: 'D3D3D3' },
+            font: { bold: true },
+            alignment: { horizontal: 'center', wrapText: true }, // Rata tengah
+          },
+        },
+        {
+          v: group.score.toFixed(2),
+          s: { alignment: { horizontal: 'center' } }, // Rata tengah
+        },
+        {
+          v: group.percentage + '%',
+          s: { alignment: { horizontal: 'center' } }, // Rata tengah
+        },
+        {
+          v: ((group.score * group.percentage) / 100).toFixed(2),
+          s: { alignment: { horizontal: 'center' } }, // Rata tengah
+        },
+      ]);
+
+      // Update panjang maksimum untuk kolom "Aspect"
+      maxAspectLength = Math.max(maxAspectLength, group.group.length);
+
+      // Menambahkan detail sikap di bawah grup yang sesuai
+      group.details.forEach((detail: any) => {
+        wsData.push([
+          {
+            v: `- ${detail.name}`,
+            s: { alignment: { horizontal: 'left' } }, // Rata kiri
+          },
+          {
+            v: detail.score.toFixed(2),
+            s: { alignment: { horizontal: 'center' } }, // Rata tengah
+          },
+          '',
+          '',
+        ]);
+
+        // Update panjang maksimum untuk detail
+        maxAspectLength = Math.max(maxAspectLength, detail.name.length + 2); // +2 untuk menambahkan '- '
+      });
+    });
+
+    // Menambahkan total di akhir tabel
+    const totalWeight = this.groupedData.reduce(
+      (total, item) => total + item.percentage,
+      0
+    );
+    wsData.push([
+      {
+        v: 'Total Score:',
+        s: { alignment: { horizontal: 'center' }, font: { bold: true } }, // Rata tengah dan teks tebal
+      },
+      '',
+      {
+        v: totalWeight + '%',
+        s: { alignment: { horizontal: 'center' } }, // Rata tengah
+      },
+      {
+        v: this.totalFinalScore.toFixed(2),
+        s: { alignment: { horizontal: 'center' } }, // Rata tengah
+      },
+    ]);
+
+    // Mengonversi data ke worksheet
+    const ws = XLSX.utils.aoa_to_sheet(wsData);
+    XLSX.utils.book_append_sheet(wb, ws, 'Assessment Summary');
+
+    // Mengatur lebar kolom
+    const aspectColumnWidth = Math.min(
+      Math.max(maxAspectLength * 10, 100),
+      300
+    ); // Lebar kolom untuk Aspect, minimal 100px dan maksimal 300px
+    ws['!cols'] = [
+      { wpx: aspectColumnWidth }, // Lebar kolom untuk Aspect
+      { wpx: 100 }, // Lebar kolom untuk Score
+      { wpx: 100 }, // Lebar kolom untuk Weight
+      { wpx: 100 }, // Lebar kolom untuk Final Score
+    ];
+
+    // Menyimpan file Excel
+    const fileName = `Assessment_Summary_${fullName}_${year}.xlsx`;
+    XLSX.writeFile(wb, fileName);
   }
 }
