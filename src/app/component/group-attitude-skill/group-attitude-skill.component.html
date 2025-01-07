@@ -2,7 +2,7 @@
   <div class="p-5">
     @if (totalPercentage == 100) {
       <p-message severity="success" text="Total Percentage = 100%"></p-message>
-      }@else {
+      }@else{
       <p-message
         severity="error"
         text="Percentage is not 100%, still remaining total {{
@@ -14,13 +14,15 @@
     <div class="text-center mb-2">
       <h3 style="font-weight: bold; font-size: 2.25rem">
         Attitude & Skill Group
-        <p-button
-          label=""
-          icon="pi pi-plus"
-          (click)="showAddDialog()"
-          class="p-button-text"
-        ></p-button>
       </h3>
+    </div>
+    <div class="mb-2">
+      <p-button
+      label="Tambah Data"
+      icon="pi pi-plus"
+      (click)="showAddDialog()"
+      class="p-button-text"
+      ></p-button>
     </div>
     <p-table
       [value]="filteredGroupAttitudeSkills"

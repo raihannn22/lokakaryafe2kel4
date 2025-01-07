@@ -94,6 +94,8 @@ export class GroupAttitudeSkillComponent implements OnInit {
     { label: 'Group Name', value: 'groupName' },
     { label: 'Percentage', value: 'percentage' },
   ];
+  atitudeSkills: any;
+  groupAchievementEnabled: any;
 
   constructor(
     private groupAttitudeSkillService: GroupAttitudeSkillService,
@@ -108,8 +110,7 @@ export class GroupAttitudeSkillComponent implements OnInit {
     this.loading = true; // Set loading to true while fetching data
 
     forkJoin({
-      groupAchievement:
-        this.groupAchievementService.getAllGroupAchievementsEnabled(),
+
       attitudeSkill: this.groupAttitudeSkillService.getAllGroupAttitudeSkills(
         this.currentPage,
         this.selectedPageSize,
@@ -117,12 +118,13 @@ export class GroupAttitudeSkillComponent implements OnInit {
         this.sortingDirection,
         this.searchKeyword
       ),
-      groupAttitudeEnabled:
+      gattitudeSkill:
         this.groupAttitudeSkillService.getGroupAttitudeSkillsEnabled(),
+      gAchievementEnabled:
+        this.groupAchievementService.getAllGroupAchievementsEnabled(),
     }).subscribe({
-      next: ({ groupAchievement, attitudeSkill, groupAttitudeEnabled }) => {
-        // Assign data for group achievements
-        this.groupAchievements = groupAchievement.content;
+      next: ({ attitudeSkill, gattitudeSkill, gAchievementEnabled }) => {
+      
         // Anda bisa menyimpan totalRecords untuk group achievements jika diperlukan
         // this.totalRecordsGroupAchievement = groupAchievement.totalRecords;
 
@@ -141,7 +143,35 @@ export class GroupAttitudeSkillComponent implements OnInit {
           console.warn('No records found for group attitude skills.');
         }
 
-        this.loading = false; // Set loading to false after data is fetched
+        this.totalPercentageAchieved = gAchievementEnabled.content.percentage;
+       
+        this.totalPercentageAchieved = this.percentageAchieved.reduce(
+          (acc, item) => acc + item,
+          0
+        );
+
+        // Assign data for attitude skills
+        this.groupAchievementEnabled = gAchievementEnabled.content;
+        this.percentageAchieved = this.groupAchievementEnabled.map(
+          (item: { percentage: any; }) => item.percentage
+        );
+        this.totalPercentageAchieved = this.percentageAchieved.reduce(
+          (acc, item) => acc + item,
+          0
+        );
+
+        // Assign data for attitude skills
+        this.atitudeSkills = gattitudeSkill.content;
+        this.percentageAttitude = this.atitudeSkills.map(
+          (item: { percentage: any; }) => item.percentage
+        );
+        this.totalPercentageAttitude = this.percentageAttitude.reduce(
+          (acc, item) => acc + item,
+          0
+        );
+
+        this.sumPercentage();
+        this.loading = false;
       },
       error: (error) => {
         this.loading = false; // Set loading to false on error

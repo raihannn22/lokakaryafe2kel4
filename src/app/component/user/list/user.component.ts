@@ -24,7 +24,7 @@ import { DropdownModule } from 'primeng/dropdown';
 import { MultiSelectModule } from 'primeng/multiselect';
 import { forkJoin } from 'rxjs';
 import { SummaryService } from '../../../service/summary/summary.service';
-import { ConfirmedComponent } from '../../../confirmed/confirmed.component';
+import { ConfirmedComponent } from '../../confirmed/confirmed.component';
 
 @Component({
   selector: 'app-user',
@@ -144,7 +144,7 @@ export class UserComponent implements OnInit {
 
     this.confirmed = [
       { label: 'Confirmed', value: '1' },
-      { label: 'Unconfirmed', value: '0' },
+      { label: 'Pending', value: '0' },
     ];
     // console.log(this.getUsernameFromToken());
   }
