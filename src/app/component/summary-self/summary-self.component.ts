@@ -7,6 +7,8 @@ import { forkJoin } from 'rxjs';
 import { EmpSuggestionComponent } from '../emp-suggestion/emp-suggestion.component';
 import { DropdownModule } from 'primeng/dropdown';
 import { FormsModule } from '@angular/forms';
+import * as XLSX from 'xlsx';
+import { ButtonModule } from 'primeng/button';
 interface Item {
   name: string;
   group: string;
@@ -30,7 +32,7 @@ interface GroupedItem {
 @Component({
   selector: 'app-summary-self',
   standalone: true,
-  imports: [DialogModule, TableModule, CommonModule, DropdownModule, FormsModule, EmpSuggestionComponent ],
+  imports: [DialogModule, TableModule, CommonModule, DropdownModule, FormsModule, EmpSuggestionComponent, ButtonModule ],
   templateUrl: './summary-self.component.html',
   styleUrl: './summary-self.component.css'
 })
@@ -189,6 +191,95 @@ export class SummarySelfComponent {
       source: item.source,
       details: item.details, // Tambahkan details ke hasil akhir
     }));
+  }
+
+  dataJson = [
+    { "id": 1, "name": "John", "score": 90 },
+    { "id": 2, "name": "Jane", "score": 85 },
+    { "id": 3, "name": "Doe", "score": 92 }
+  ];
+
+   // Fungsi untuk mengekspor data JSON ke file Excel
+   exportToExcel() {
+    let exportData = [];
+    let merges = [];
+    let rowIndex = 0;
+    let groupedBySource = this.groupBy(this.groupedData, 'source');
+
+    for (let source in groupedBySource) {
+      let sourceData = groupedBySource[source];
+      exportData.push({ Group: 'Source: ' + source, Name: '', Score: '', Percentage: '', TotalPercentage: '', Source: '' });
+      merges.push({ s: { r: rowIndex, c: 0 }, e: { r: rowIndex, c: 5 } });
+      rowIndex++;
+
+      sourceData.forEach((group: { details: any[]; percentage: number; group: any; source: any; }) => {
+        let averageScore = this.calculateAverageScore(group.details);
+        let totalPercentage = averageScore * (group.percentage / 100);
+
+        exportData.push({
+          Group: group.group,
+          Name: '',
+          Score: averageScore,
+          Percentage: group.percentage,
+          TotalPercentage: totalPercentage.toFixed(2),
+          Source: group.source
+        });
+
+        group.details.forEach(detail => {
+          exportData.push({
+            Group: '',
+            Name: detail.name,
+            Score: detail.score,
+            Percentage: '',
+            TotalPercentage: '',
+            Source: ''
+          });
+        });
+      });
+    }
+
+    const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(exportData);
+    ws['!merges'] = merges;
+
+    // Menyesuaikan lebar kolom berdasarkan panjang konten
+    const colWidths = this.calculateColumnWidths(exportData);
+    ws['!cols'] = colWidths;
+
+    const wb: XLSX.WorkBook = { Sheets: { 'data': ws }, SheetNames: ['data'] };
+    XLSX.writeFile(wb, 'data.xlsx');
+  }
+
+  groupBy(data: any[], key: string) {
+    return data.reduce((result, currentValue) => {
+      const groupKey = currentValue[key];
+      if (!result[groupKey]) {
+        result[groupKey] = [];
+      }
+      result[groupKey].push(currentValue);
+      return result;
+    }, {});
+  }
+
+  calculateAverageScore(details: any[]) {
+    let totalScore = details.reduce((sum, detail) => sum + detail.score, 0);
+    return totalScore / details.length;
+  }
+
+  // Fungsi untuk menyesuaikan lebar kolom berdasarkan panjang teks
+  calculateColumnWidths(data: any[]) {
+    const colWidths: { wpx: number; }[] = [];
+    const columns = Object.keys(data[0]);
+    
+    columns.forEach((column, index) => {
+      let maxLength = column.length;
+      data.forEach(row => {
+        const cellValue = String(row[column]);
+        maxLength = Math.max(maxLength, cellValue.length);
+      });
+      colWidths.push({ wpx: maxLength * 7 }); // Set lebar kolom sesuai panjang teks, kalikan dengan 10 untuk menyesuaikan
+    });
+
+    return colWidths;
   }
 
 }
