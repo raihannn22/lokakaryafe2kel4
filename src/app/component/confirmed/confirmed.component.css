@@ -11,22 +11,7 @@
     width: 50%;
   }
   
-  .column1 {
-    width: 50%;
-    text-align: left;
-    overflow: hidden;
-    /* text-overflow: ellipsis; */
-  }
   
-  .column2-th {
-    width: 20%;
-    text-align: right;
-  }
-  
-  .column2-td {
-    width: 20%;
-    text-align: right;
-  }
   
   .p-table td {
     padding: 10px;
@@ -58,3 +43,16 @@
 .custom-swal-popup {
   z-index: 1050 !important; /* Pastikan lebih tinggi dari modal/dialog lainnya */
 }
+
+.column1-th, .column1 {
+  width: 65%; /* Menyesuaikan lebar kolom pertama */
+}
+
+.column2-th, .column2-td {
+  width: 10%; /* Menyesuaikan lebar kolom kedua */
+}
+
+.column3-td {
+  width: 25%; /* Menyesuaikan lebar kolom ketiga */
+}
+

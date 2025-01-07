@@ -144,7 +144,7 @@ export class UserComponent implements OnInit {
 
     this.confirmed = [
       { label: 'Confirmed', value: '1' },
-      { label: 'Unconfirmed', value: '0' },
+      { label: 'Pending', value: '0' },
     ];
     // console.log(this.getUsernameFromToken());
   }

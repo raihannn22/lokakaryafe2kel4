@@ -47,6 +47,7 @@ export class EmpAchievementSkillService {
     return this.http.patch(`${this.apiUrl}/update/${id}`, empAchievementSkill);
   }
 
+
   getEmpAchievementSkillById(id: string): Observable<any> {
     return this.http.get(`${this.apiUrl}/get/${id}`);
   }
