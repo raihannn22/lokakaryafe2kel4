@@ -1,5 +1,4 @@
 import { Component } from '@angular/core';
-import { EmpAchievementSkillComponent } from '../component/emp-achievement-skill/emp-achievement-skill.component';
 import { EmpAttitudeSkillComponent } from '../component/emp-attitude-skill/emp-attitude-skill.component';
 import { EmpDevplanComponent } from '../component/emp-devplan/emp-devplan.component';
 import { EmpSuggestionComponent } from '../component/emp-suggestion/emp-suggestion.component';

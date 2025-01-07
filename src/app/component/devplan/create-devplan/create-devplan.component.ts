@@ -22,8 +22,8 @@ import { DropdownModule } from 'primeng/dropdown';
   styleUrl: './create-devplan.component.css',
 })
 export class CreateDevplanComponent {
-  @Input() visible: boolean = false; // Menyambungkan dengan property di komponen induk
-  @Output() visibleChange = new EventEmitter<boolean>(); // Emit perubahan visibility
+  @Input() visible: boolean = false;
+  @Output() visibleChange = new EventEmitter<boolean>();
   @Output() devplanCreated = new EventEmitter<any>();
 
   oldDevplans: any[] = [];
@@ -58,9 +58,7 @@ export class CreateDevplanComponent {
       next: (response) => {
         this.oldDevplans = response.content;
       },
-      error: (error) => {
-        console.error('Error fetching divisions:', error);
-      },
+      error: (error) => {},
     });
   }
 
@@ -76,13 +74,10 @@ export class CreateDevplanComponent {
   onSubmit() {
     this.devplanService.saveDevPlan(this.newDevplan).subscribe({
       next: (response) => {
-        this.devplanCreated.emit(response); // Emit event ke komponen induk
-        this.closeDialog(); // Tutup dialog setelah berhasil
+        this.devplanCreated.emit(response);
+        this.closeDialog();
       },
-      error: (error) => {
-        console.error('Error creating Division:', error);
-        // Tambahkan penanganan error di sini
-      },
+      error: (error) => {},
     });
   }
 }

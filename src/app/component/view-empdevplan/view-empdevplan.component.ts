@@ -53,12 +53,9 @@ export class ViewEmpdevplanComponent implements OnInit {
   ngOnInit() {
     this.userService.getAllUsers().subscribe({
       next: (response) => {
-        this.users = response.content; // Data ada di 'content'
-        console.log('ini isi usernyaa:', response.content);
+        this.users = response.content;
       },
-      error: (error) => {
-        console.error('Error fetching users:', error);
-      },
+      error: (error) => {},
     });
   }
 
@@ -67,20 +64,13 @@ export class ViewEmpdevplanComponent implements OnInit {
       .getAllEmpDevPlan(this.selectedUser.id, this.selectedYear)
       .subscribe({
         next: (response) => {
-          this.empdevplans = response.content; // Data ada di 'content'
-          console.log('ini isi usernyaa:', response.content);
+          this.empdevplans = response.content;
         },
-        error: (error) => {
-          console.error('Error fetching users:', error);
-        },
+        error: (error) => {},
       });
   }
 
   submit() {
-    console.log('Selected User:', this.selectedUser.id);
-    console.log('Selected Year:', this.selectedYear);
     this.getEmpdevplan();
-
-    console.log('ini isi empdevnyaa:', this.empdevplans);
   }
 }

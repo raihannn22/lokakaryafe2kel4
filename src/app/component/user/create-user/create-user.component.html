@@ -1,37 +1,91 @@
 <div class="card flex justify-content-center">
-  <!-- Tombol untuk membuka dialog -->
-  <!-- <p-button label="Tambah Pengguna" icon="pi pi-plus" (click)="visible = true" class="mb-3"></p-button> -->
-
-  <p-dialog header="Add User" [modal]="true" (onHide)="closeDialog()" [(visible)]="visible" [style]="{ width: '40rem' }">
+  <p-dialog
+    header="Add User"
+    [modal]="true"
+    (onHide)="closeDialog()"
+    [(visible)]="visible"
+    [style]="{ width: '40rem' }"
+  >
     <div class="p-fluid">
       <div class="field">
-        <label for="username">Username<span class="text-red-600">*</span></label>
-        <input pInputText id="username" [(ngModel)]="newUser.username" name="username" #username="ngModel" required />
-        <small class="p-error" *ngIf="!isUniqueUsername() && newUser.username">username already in use.</small>
-        <small class="p-error" *ngIf="username.invalid && username.touched">username is required.</small>
+        <label for="username"
+          >Username<span class="text-red-600">*</span></label
+        >
+        <input
+          pInputText
+          id="username"
+          [(ngModel)]="newUser.username"
+          name="username"
+          #username="ngModel"
+          required
+        />
+        <small class="p-error" *ngIf="!isUniqueUsername() && newUser.username"
+          >username already in use.</small
+        >
+        <small class="p-error" *ngIf="username.invalid && username.touched"
+          >username is required.</small
+        >
       </div>
 
       <div class="field">
-        <label for="full_name">Full Name<span class="text-red-600">*</span></label>
-        <input pInputText id="full_name" [(ngModel)]="newUser.full_name" name="full_name" #fullName="ngModel" required />
-        <small class="p-error" *ngIf="fullName.invalid && fullName.touched">Full Name is required.</small>
+        <label for="full_name"
+          >Full Name<span class="text-red-600">*</span></label
+        >
+        <input
+          pInputText
+          id="full_name"
+          [(ngModel)]="newUser.full_name"
+          name="full_name"
+          #fullName="ngModel"
+          required
+        />
+        <small class="p-error" *ngIf="fullName.invalid && fullName.touched"
+          >Full Name is required.</small
+        >
       </div>
 
       <div class="field">
-        <label for="position">Position<span class="text-red-600">*</span></label>
-        <input pInputText id="position" [(ngModel)]="newUser.position" name="position" #position="ngModel" required />
-        <small class="p-error" *ngIf="position.invalid && position.touched">Position is required.</small>
+        <label for="position"
+          >Position<span class="text-red-600">*</span></label
+        >
+        <input
+          pInputText
+          id="position"
+          [(ngModel)]="newUser.position"
+          name="position"
+          #position="ngModel"
+          required
+        />
+        <small class="p-error" *ngIf="position.invalid && position.touched"
+          >Position is required.</small
+        >
       </div>
 
       <div class="field">
-        <label for="email">Email Address<span class="text-red-600">*</span></label>
-        <input pInputText id="email" [(ngModel)]="newUser.email_address" name="email" type="email" #email="ngModel" required />
-        <small class="p-error" *ngIf="!isUniqueEmail() && newUser.email_address">Email Address already in use.</small>
-        <small class="p-error" *ngIf="email.invalid && email.touched">Email Address is required.</small>
+        <label for="email"
+          >Email Address<span class="text-red-600">*</span></label
+        >
+        <input
+          pInputText
+          id="email"
+          [(ngModel)]="newUser.email_address"
+          name="email"
+          type="email"
+          #email="ngModel"
+          required
+        />
+        <small class="p-error" *ngIf="!isUniqueEmail() && newUser.email_address"
+          >Email Address already in use.</small
+        >
+        <small class="p-error" *ngIf="email.invalid && email.touched"
+          >Email Address is required.</small
+        >
       </div>
 
       <div class="field">
-        <label for="employee_status">Employee Status<span class="text-red-600">*</span></label>
+        <label for="employee_status"
+          >Employee Status<span class="text-red-600">*</span></label
+        >
         <p-dropdown
           [options]="employeeStatusOptions"
           [(ngModel)]="newUser.employee_status"
@@ -39,13 +93,20 @@
           id="employee_status"
           name="employee_status"
           #employeeStatus="ngModel"
-          required>
+          required
+        >
         </p-dropdown>
-        <small class="p-error" *ngIf="employeeStatus.invalid && employeeStatus.touched">Employee Status must be selected.</small>
+        <small
+          class="p-error"
+          *ngIf="employeeStatus.invalid && employeeStatus.touched"
+          >Employee Status must be selected.</small
+        >
       </div>
 
       <div class="field">
-        <label for="join_date">Date Joined<span class="text-red-600">*</span></label>
+        <label for="join_date"
+          >Date Joined<span class="text-red-600">*</span></label
+        >
         <p-calendar
           [(ngModel)]="newUser.join_date"
           dateFormat="yy-mm-dd"
@@ -54,13 +115,18 @@
           #joinDate="ngModel"
           [showIcon]="true"
           appendTo="body"
-          required>
+          required
+        >
         </p-calendar>
-        <small class="p-error" *ngIf="joinDate.invalid && joinDate.touched">Join Date is required.</small>
+        <small class="p-error" *ngIf="joinDate.invalid && joinDate.touched"
+          >Join Date is required.</small
+        >
       </div>
 
       <div class="field">
-        <label for="enabled">Account Status<span class="text-red-600">*</span></label>
+        <label for="enabled"
+          >Account Status<span class="text-red-600">*</span></label
+        >
         <p-dropdown
           [options]="enabledOptions"
           [(ngModel)]="newUser.enabled"
@@ -68,13 +134,18 @@
           id="enabled"
           name="enabled"
           #enabled="ngModel"
-          required>
+          required
+        >
         </p-dropdown>
-        <small class="p-error" *ngIf="enabled.invalid && enabled.touched">Account Status must be selected.</small>
+        <small class="p-error" *ngIf="enabled.invalid && enabled.touched"
+          >Account Status must be selected.</small
+        >
       </div>
 
       <div class="field">
-        <label for="division_id">Division<span class="text-red-600">*</span></label>
+        <label for="division_id"
+          >Division<span class="text-red-600">*</span></label
+        >
         <p-dropdown
           [options]="divisions"
           [(ngModel)]="newUser.division_id"
@@ -83,9 +154,12 @@
           placeholder="Choose Divisi"
           name="division_id"
           #division="ngModel"
-          required>
+          required
+        >
         </p-dropdown>
-        <small class="p-error" *ngIf="division.invalid && division.touched">Division must be selected.</small>
+        <small class="p-error" *ngIf="division.invalid && division.touched"
+          >Division must be selected.</small
+        >
       </div>
 
       <div class="field">
@@ -97,7 +171,8 @@
               [value]="role.ID"
               name="roles"
               [label]="role.ROLENAME"
-              required>
+              required
+            >
             </p-checkbox>
           </div>
         </div>
@@ -105,8 +180,18 @@
     </div>
 
     <div class="flex justify-content-end gap-2 mt-3">
-      <p-button label="Cancel" icon="pi pi-times" severity="secondary" (click)="closeDialog()"></p-button>
-      <p-button label="Save" icon="pi pi-check" (click)="onSubmit()" [disabled]="!isValidForm()"></p-button>
+      <p-button
+        label="Cancel"
+        icon="pi pi-times"
+        severity="secondary"
+        (click)="closeDialog()"
+      ></p-button>
+      <p-button
+        label="Save"
+        icon="pi pi-check"
+        (click)="onSubmit()"
+        [disabled]="!isValidForm()"
+      ></p-button>
     </div>
   </p-dialog>
 </div>

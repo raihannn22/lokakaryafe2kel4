@@ -11,17 +11,26 @@ import Swal from 'sweetalert2';
 @Component({
   selector: 'app-menu-management',
   standalone: true,
-  imports: [CheckboxModule, TableModule, FormsModule, ButtonModule, ToastModule],
+  imports: [
+    CheckboxModule,
+    TableModule,
+    FormsModule,
+    ButtonModule,
+    ToastModule,
+  ],
   templateUrl: './menu-management.component.html',
-  styleUrl: './menu-management.component.css'
+  styleUrl: './menu-management.component.css',
 })
 export class MenuManagementComponent implements OnInit {
   roles: any[] = [];
   menus: any[] = [];
   approlemenu: any[] = [];
-  roleMenuMap: { [key: string]: { [key: string]: boolean } } = {}; // Map untuk role dan menu
+  roleMenuMap: { [key: string]: { [key: string]: boolean } } = {};
 
-  constructor(private menuManagementService: MenuManagementService, private messageService: MessageService) {}
+  constructor(
+    private menuManagementService: MenuManagementService,
+    private messageService: MessageService
+  ) {}
 
   ngOnInit(): void {
     this.getAllMenu();
@@ -68,7 +77,7 @@ export class MenuManagementComponent implements OnInit {
         this.menus = response.content.map((menu: any) => {
           return {
             ...menu,
-            MENU_NAME: this.mapMenuName(menu.MENU_NAME) // Ganti nama menu
+            MENU_NAME: this.mapMenuName(menu.MENU_NAME),
           };
         });
         this.initializeRoleMenuMap();
@@ -81,7 +90,7 @@ export class MenuManagementComponent implements OnInit {
     for (const role of this.roles) {
       this.roleMenuMap[role.ID] = {};
       for (const menu of this.menus) {
-        this.roleMenuMap[role.ID][menu.ID] = false; // Inisialisasi semua checkbox
+        this.roleMenuMap[role.ID][menu.ID] = false;
       }
     }
 
@@ -91,10 +100,11 @@ export class MenuManagementComponent implements OnInit {
         this.approlemenu.forEach((mapping: any) => {
           const roleId = mapping.ROLE_ID.id;
           const menuId = mapping.MENU_ID.id;
-          this.roleMenuMap[roleId][menuId] = true; // Set checkbox sesuai data backend
+          this.roleMenuMap[roleId][menuId] = true;
         });
       },
-      error: (error) => console.error('Error fetching role-menu mappings:', error),
+      error: (error) =>
+        console.error('Error fetching role-menu mappings:', error),
     });
   }
 
@@ -106,61 +116,43 @@ export class MenuManagementComponent implements OnInit {
     const result: { [key: string]: string[] } = {};
 
     for (const roleId in this.roleMenuMap) {
-      result[roleId] = Object.keys(this.roleMenuMap[roleId])
-        .filter((menuId) => this.roleMenuMap[roleId][menuId]); // Ambil menu yang dicentang
+      result[roleId] = Object.keys(this.roleMenuMap[roleId]).filter(
+        (menuId) => this.roleMenuMap[roleId][menuId]
+      );
     }
 
-
-      Swal.fire({
-        title: 'Are you sure?',
-        text: 'Apakah Anda yakin ingin menyimpan data ini?',
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#d33',
-        confirmButtonText: 'Yes, change it!'
-      }).then((response) => {
-        if (response.isConfirmed) {
-          // Panggil service untuk ubah password jika user konfirmasi
-          this.menuManagementService.updateRoleMenu(result).subscribe(
-            () => {
-              Swal.fire({
-                icon: 'success',
-                title: 'Success',
-                text: 'data berhasil disimpan!',
-              }).then((result) => {
-                // Cek jika tombol OK ditekan
-                if (result.isConfirmed) {
-                  // Reload halaman setelah menekan OK
-                  window.location.reload();
-                }
-              });
-            }
-            ,
-            (error: any) => {
-              // Tampilkan Swal error jika ada kesalahan
-              Swal.fire({
-                icon: 'error',
-                title: 'Error',
-                text: 'gagal untuk menyimpan data!',
-              });
-              console.error('Error changing password:', error);
-            }
-          );
-        }
-      });
-
-
-    // this.menuManagementService.updateRoleMenu(result).subscribe({
-
-    //   next: (response) => {
-    //     console.log('Role-menu updated successfully:', response);
-    //     this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Message Content' });
-    //   },
-    //   error: (error) => console.error('Error updating role-menu:', error),
-    // })
-
-    // console.log('Resulting JSON:', result);
-    // Lakukan aksi lanjutan, seperti kirim ke backend
+    Swal.fire({
+      title: 'Are you sure?',
+      text: 'Apakah Anda yakin ingin menyimpan data ini?',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, change it!',
+    }).then((response) => {
+      if (response.isConfirmed) {
+        this.menuManagementService.updateRoleMenu(result).subscribe(
+          () => {
+            Swal.fire({
+              icon: 'success',
+              title: 'Success',
+              text: 'data berhasil disimpan!',
+            }).then((result) => {
+              if (result.isConfirmed) {
+                window.location.reload();
+              }
+            });
+          },
+          (error: any) => {
+            Swal.fire({
+              icon: 'error',
+              title: 'Error',
+              text: 'gagal untuk menyimpan data!',
+            });
+            console.error('Error changing password:', error);
+          }
+        );
+      }
+    });
   }
 }

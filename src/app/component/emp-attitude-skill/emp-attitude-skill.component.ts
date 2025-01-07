@@ -59,8 +59,7 @@ export class EmpAttitudeSkillComponent implements OnInit {
   assessmentYear: number = new Date().getFullYear();
   userName: string | null = '';
   statusAssessment: number | null = 0;
-  isScoreDropdownDisabled: boolean = false; // Menyimpan status disabled
-
+  isScoreDropdownDisabled: boolean = false;
   scoreOptions = [
     { label: 'Sangat Baik', value: 100 },
     { label: 'Baik', value: 80 },
@@ -68,7 +67,6 @@ export class EmpAttitudeSkillComponent implements OnInit {
     { label: 'Kurang', value: 40 },
     { label: 'Sangat Kurang', value: 20 },
   ];
-
   yearOptions = [
     { label: '2023', value: 2023 },
     { label: '2024', value: 2024 },
@@ -87,28 +85,22 @@ export class EmpAttitudeSkillComponent implements OnInit {
       .getGroupAttitudeSkillsWithDetails()
       .subscribe((response) => {
         if (Array.isArray(response.content)) {
-          // console.log('response', response.content);
           this.attitudeSkills = response.content;
 
           const userId = localStorage.getItem('id');
           if (userId) {
-            // console.log('User  ID', userId);
             this.onYearChange();
-
           } else {
-            // console.error('User  ID is null or undefined');
           }
         } else {
-          // console.error('Response is not an array', response);
         }
       });
   }
 
   onYearChange(): void {
     const userId = localStorage.getItem('id');
-    const currentYear = new Date().getFullYear(); // Ambil tahun saat ini
+    const currentYear = new Date().getFullYear();
 
-    // Disable dropdown jika tahun yang dipilih bukan tahun saat ini
     this.isScoreDropdownDisabled = this.statusAssessment == 1;
 
     if (userId) {
@@ -161,23 +153,21 @@ export class EmpAttitudeSkillComponent implements OnInit {
               });
             }
           },
-          error: (err) => {
-            console.error('Error fetching emp attitude skills:', err);
-          },
+          error: (err) => {},
         });
 
-      this.summaryService.getAssessmentStatus(userId, this.assessmentYear).subscribe(
-        {next: (response) => {
-          this.statusAssessment = response.content.status;
-          console.log('Status Assessment:', this.statusAssessment);
-          this.isScoreDropdownDisabled = this.statusAssessment == 1;
-        }, error: (error) => {
-          this.statusAssessment = 0;
-          console.log('Status Assessment:', this.statusAssessment);
-          console.error('Error fetching assessment status:', error);
-          this.isScoreDropdownDisabled = this.statusAssessment == 1;
-        }
-      });
+      this.summaryService
+        .getAssessmentStatus(userId, this.assessmentYear)
+        .subscribe({
+          next: (response) => {
+            this.statusAssessment = response.content.status;
+            this.isScoreDropdownDisabled = this.statusAssessment == 1;
+          },
+          error: (error) => {
+            this.statusAssessment = 0;
+            this.isScoreDropdownDisabled = this.statusAssessment == 1;
+          },
+        });
     }
   }
   isFormComplete(): boolean {
@@ -189,14 +179,7 @@ export class EmpAttitudeSkillComponent implements OnInit {
     const allDisabled = this.attitudeSkills.every((group) =>
       group.attitude_skills.every((skill) => skill.isDisabled)
     );
-    // console.log(
-    //   'Scores:',
-    //   this.attitudeSkills.map((group) =>
-    //     group.attitude_skills.map((skill) => skill.score)
-    //   )
-    // );
-    // console.log('Is form complete:', allComplete);
-    // console.log('Are all dropdowns disabled:', allDisabled);
+
     return allComplete && !allDisabled;
   }
 
@@ -213,8 +196,6 @@ export class EmpAttitudeSkillComponent implements OnInit {
             assessment_year: currentYear,
           }))
       );
-
-      // console.log('Data yang akan dikirim:', dataToSend);
 
       this.empAttitudeSkillService
         .saveAllEmpAttitudeSkills(dataToSend)
@@ -234,7 +215,6 @@ export class EmpAttitudeSkillComponent implements OnInit {
             });
           },
           error: (error) => {
-            // console.error('Error saving multiple attitude skills:', error);
             this.isSaving = false;
             Swal.fire({
               icon: 'error',
@@ -244,7 +224,6 @@ export class EmpAttitudeSkillComponent implements OnInit {
           },
         });
     } else {
-      // console.warn('No data to save');
     }
   }
 }

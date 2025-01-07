@@ -1,99 +1,94 @@
-
-
 #body {
-    font-family: Arial, sans-serif;
-    background-color: #f0f0f0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    margin: 0;
-    background-image: url(https://media.licdn.com/dms/image/v2/D560BAQHEUtBzmp51ig/company-logo_200_200/company-logo_200_200/0/1690187720655/ogya_tekno_nusantara_logo?e=1742428800&v=beta&t=727hFZsaaogGejtuh94QHP1DpLk96agzTip0LZsF6fg);
-    background-position: center;
-    background-repeat: no-repeat;
-    background-size: cover;
+  font-family: Arial, sans-serif;
+  background-color: #f0f0f0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  margin: 0;
+  background-image: url(https://media.licdn.com/dms/image/v2/D560BAQHEUtBzmp51ig/company-logo_200_200/company-logo_200_200/0/1690187720655/ogya_tekno_nusantara_logo?e=1742428800&v=beta&t=727hFZsaaogGejtuh94QHP1DpLk96agzTip0LZsF6fg);
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
 }
 
 #body::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: inherit;
-    filter: blur(7px); /* Efek blur */
-    z-index: 1;
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: inherit;
+  filter: blur(7px);
+  z-index: 1;
 }
 
 .blur-overlay::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: inherit;
-    filter: blur(10px); /* Efek blur */
-    z-index: 1;
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: inherit;
+  filter: blur(10px);
+  z-index: 1;
 }
 
 .login-container {
-    position: relative;
-    z-index: 2;
-    color: white;
-    padding: 20px;
+  position: relative;
+  z-index: 2;
+  color: white;
+  padding: 20px;
 }
 
-
 .login-container {
-    background-color: #fff;
-    padding: 2em;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    width: 300px;
-    text-align: center;
+  background-color: #fff;
+  padding: 2em;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  width: 300px;
+  text-align: center;
 }
 
 .login-container h2 {
-    margin-bottom: 1em;
-    color: #333;
+  margin-bottom: 1em;
+  color: #333;
 }
 
 .input-group {
-    margin-bottom: 1em;
-    text-align: left;
+  margin-bottom: 1em;
+  text-align: left;
 }
 
 .input-group label {
-    display: block;
-    margin-bottom: 0.5em;
-    color: #666;
+  display: block;
+  margin-bottom: 0.5em;
+  color: #666;
 }
 
 .input-group input {
-    width: 100%;
-    border: 1px solid #ccc;
-    border-radius: 4px;
+  width: 100%;
+  border: 1px solid #ccc;
+  border-radius: 4px;
 }
 
 :host ::ng-deep .p-inputtext {
-    width: 100%;
+  width: 100%;
 }
 
-
-
 button {
-    background-color: #007BFF;
-    color: #fff;
-    border: none;
-    padding: 0.75em;
-    border-radius: 4px;
-    width: 50%;
-    cursor: pointer;
-    font-size: 1em;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  padding: 0.75em;
+  border-radius: 4px;
+  width: 50%;
+  cursor: pointer;
+  font-size: 1em;
 }
 
 button:hover {
-    background-color: #0056b3;
+  background-color: #0056b3;
 }

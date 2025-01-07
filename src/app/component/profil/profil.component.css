@@ -1,41 +1,41 @@
 .input-group {
-    margin-bottom: 1em;
-    text-align: left;
+  margin-bottom: 1em;
+  text-align: left;
 }
 
 .input-group label {
-    margin-right: 0.5em;
-    margin-bottom: 0.5em;
-    color: #666;
+  margin-right: 0.5em;
+  margin-bottom: 0.5em;
+  color: #666;
 }
 
 .input-group input {
-    width: 100%;
-    padding: 0.75em;
-    border: 1px solid #ccc;
-    border-radius: 4px;
+  width: 100%;
+  padding: 0.75em;
+  border: 1px solid #ccc;
+  border-radius: 4px;
 }
 
 dl {
-    display: grid;
-    grid-template-columns: 150px 1fr;
-    gap: 12px 24px;
-    font-family: Arial, sans-serif;
-    font-size: 16px;
-  }
-  
-  dt {
-    font-weight: bold;
-    text-align: right;
-  }
-  
-  dd {
-    margin: 0;
-  }
-  
-  .profile-details {
-    padding: 24px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    background-color: #f9f9f9;
-  }
+  display: grid;
+  grid-template-columns: 150px 1fr;
+  gap: 12px 24px;
+  font-family: Arial, sans-serif;
+  font-size: 16px;
+}
+
+dt {
+  font-weight: bold;
+  text-align: right;
+}
+
+dd {
+  margin: 0;
+}
+
+.profile-details {
+  padding: 24px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  background-color: #f9f9f9;
+}

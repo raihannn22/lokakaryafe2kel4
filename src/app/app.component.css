@@ -1,24 +1,24 @@
 .app-container {
-    display: flex;
-  }
-  
-  .content {
-    margin-left: 250px;  /* Menyesuaikan dengan lebar sidebar */
-    padding: 20px;
-    flex-grow: 1;
-    background-color: #f4f4f4;
-    min-height: 100vh;
-    transition: margin-left 0.3s;
-  }
-  
-  .sidebar.closed ~ .content {
-    margin-left: 60px;
-  }
-   
-  .card {
-    padding: 20px;
-    border: 1px solid #dcdcdc;
-    border-radius: 8px;
-    width: 100%;
-    box-shadow: 2px 2px 12px #ccc;
-  }
+  display: flex;
+}
+
+.content {
+  margin-left: 250px;
+  padding: 20px;
+  flex-grow: 1;
+  background-color: #f4f4f4;
+  min-height: 100vh;
+  transition: margin-left 0.3s;
+}
+
+.sidebar.closed ~ .content {
+  margin-left: 60px;
+}
+
+.card {
+  padding: 20px;
+  border: 1px solid #dcdcdc;
+  border-radius: 8px;
+  width: 100%;
+  box-shadow: 2px 2px 12px #ccc;
+}

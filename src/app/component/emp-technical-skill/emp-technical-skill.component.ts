@@ -48,9 +48,9 @@ export class EmpTechnicalSkillComponent implements OnInit {
 
   groupedTechnicalSkills: GroupedTechnicalSkill[] = [];
 
-  isAddRowDisabled: boolean = false; // Menyimpan status disabled untuk tombol tambah row
+  isAddRowDisabled: boolean = false;
 
-  isFormComplete: boolean = false; // Menyimpan status apakah form lengkap
+  isFormComplete: boolean = false;
 
   yearOptions = [
     { label: '2023', value: 2023 },
@@ -89,13 +89,10 @@ export class EmpTechnicalSkillComponent implements OnInit {
             isDisabled: false,
           }));
         } else {
-          // console.error('Technical skills data is not an array:', response);
-          this.technicalSkillsList = []; // Ensure empty array on error
+          this.technicalSkillsList = [];
         }
       },
-      error: (err) => {
-        // console.error('Error fetching technical skills list:', err);
-      },
+      error: (err) => {},
     });
   }
 
@@ -106,7 +103,7 @@ export class EmpTechnicalSkillComponent implements OnInit {
 
   addRow(groupedSkill: GroupedTechnicalSkill): void {
     const newEmpSkill: TechnicalSkill = {
-      id: groupedSkill.technical_skill_id, // Atur ID sesuai kebutuhan
+      id: groupedSkill.technical_skill_id,
       technical_skill: groupedSkill.technical_skill,
       criteria: '',
       score: null,
@@ -114,7 +111,7 @@ export class EmpTechnicalSkillComponent implements OnInit {
       isDisabled: false,
     };
     groupedSkill.empSkills.push(newEmpSkill);
-    this.checkFormCompleteness(); // Periksa status form setelah menambahkan baris
+    this.checkFormCompleteness();
   }
 
   checkFormCompleteness(): void {
@@ -132,9 +129,8 @@ export class EmpTechnicalSkillComponent implements OnInit {
   }
   onYearChange(): void {
     const userId = localStorage.getItem('id');
-    const currentYear = new Date().getFullYear(); // Ambil tahun saat ini
+    const currentYear = new Date().getFullYear();
 
-    // Disable tombol tambah row jika tahun yang dipilih bukan tahun saat ini
     this.isAddRowDisabled = this.assessmentYear !== currentYear;
 
     if (userId) {
@@ -168,9 +164,7 @@ export class EmpTechnicalSkillComponent implements OnInit {
               }
             );
           },
-          error: (err) => {
-            console.error('Error fetching emp technical skills:', err);
-          },
+          error: (err) => {},
         });
     }
   }
@@ -223,7 +217,6 @@ export class EmpTechnicalSkillComponent implements OnInit {
                     title: 'Success!',
                     text: 'Successfully saved your technical skill!',
                   });
-                  // window.location.reload();
                 },
                 error: (err) => {
                   this.isSaving = false;
@@ -239,14 +232,6 @@ export class EmpTechnicalSkillComponent implements OnInit {
       }
     }
   }
-
-  // isFormComplete(): boolean {
-  //   return this.groupedTechnicalSkills.every((groupedSkill) =>
-  //     groupedSkill.empSkills.every(
-  //       (skill) => skill.isDisabled || (skill.criteria && skill.score !== null)
-  //     )
-  //   );
-  // }
 
   hasDisabledSkills(groupedSkill: GroupedTechnicalSkill): boolean {
     return groupedSkill.empSkills.some((skill) => skill.isDisabled);

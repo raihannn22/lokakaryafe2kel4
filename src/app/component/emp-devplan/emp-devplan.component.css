@@ -1,14 +1,11 @@
 .keterangan-field {
-    display: flex;
-    align-items: center;
-    margin-bottom: 8px;
-  }
-  
-  .keterangan-field input {
-    flex: 1;
-  }
-  
-  .keterangan-field button {
-    margin-left: 8px;
-  }
-  
+  display: flex;
+  align-items: center;
+  margin-bottom: 8px;
+}
+.keterangan-field input {
+  flex: 1;
+}
+.keterangan-field button {
+  margin-left: 8px;
+}

@@ -49,8 +49,8 @@ interface GroupedItem {
   styleUrl: './summary.component.css',
 })
 export class SummaryComponent implements OnInit {
-  @Input() visible: boolean = false; // Menyambungkan dengan property di komponen induk
-  @Output() visibleChange = new EventEmitter<boolean>(); // Emit perubahan visibility
+  @Input() visible: boolean = false;
+  @Output() visibleChange = new EventEmitter<boolean>();
   @Input() user: any = {};
   @Input() year: number = new Date().getFullYear();
 
@@ -139,9 +139,6 @@ export class SummaryComponent implements OnInit {
           (total, item) => total + (item.score * item.percentage) / 100,
           0
         );
-        console.log(this.groupedData, 'ini grouped data');
-        console.log(this.groupedAchievement, 'ini grouped achievement');
-        console.log(this.attitudeSkill, 'ini attitude skill');
       }
     );
   }
@@ -149,9 +146,8 @@ export class SummaryComponent implements OnInit {
   mapData() {
     this.combinedData = [];
 
-    // Proses Attitude Skill
     this.attitudeSkill
-      .filter((item) => item.group_enabled === 1 && item.enabled === 1) // Abaikan item yang disabled
+      .filter((item) => item.group_enabled === 1 && item.enabled === 1)
       .forEach((item) => {
         this.combinedData.push({
           group: item.group_attitude_skill_name || 'Attitude',
@@ -160,13 +156,12 @@ export class SummaryComponent implements OnInit {
           enabled: item.enabled,
           group_enabled: item.group_enabled,
           source: 'Attitude',
-          name: item.attitude_skill_name, // Gunakan nama attitude skill
+          name: item.attitude_skill_name,
         });
       });
 
-    // Proses Achievement
     this.groupedAchievement
-      .filter((item) => item.group_enabled === 1 && item.enabled === 1) // Abaikan item yang disabled
+      .filter((item) => item.group_enabled === 1 && item.enabled === 1)
       .forEach((item) => {
         this.combinedData.push({
           group: item.group_name || 'Achievement',
@@ -175,7 +170,7 @@ export class SummaryComponent implements OnInit {
           enabled: item.enabled,
           group_enabled: item.group_enabled,
           source: 'Achievement',
-          name: item.achievement, // Gunakan nama achievement
+          name: item.achievement,
         });
       });
   }
@@ -195,17 +190,16 @@ export class SummaryComponent implements OnInit {
           enabled: item.enabled,
           group_enabled: item.group_enabled,
           source: item.source,
-          details: [], // Tambahkan array untuk menyimpan detail
+          details: [],
         };
       }
 
-      acc[item.group].score += item.score; // Tambahkan skor
-      acc[item.group].count += 1; // Hitung jumlah item
+      acc[item.group].score += item.score;
+      acc[item.group].count += 1;
 
-      // Tambahkan detail item ke dalam array
       acc[item.group].details.push({
-        name: item.name, // Nama dari attitude_skill_name atau achievement
-        score: item.score, // Skor item
+        name: item.name,
+        score: item.score,
       });
 
       return acc;
@@ -214,12 +208,12 @@ export class SummaryComponent implements OnInit {
     return Object.values(groupedData).map((item) => ({
       group: item.group,
       percentage: item.percentage,
-      score: item.score / item.count, // Skor rata-rata
+      score: item.score / item.count,
       count: item.count,
       enabled: item.enabled,
       group_enabled: item.group_enabled,
       source: item.source,
-      details: item.details, // Tambahkan details ke hasil akhir
+      details: item.details,
     }));
   }
 
@@ -230,7 +224,6 @@ export class SummaryComponent implements OnInit {
     const fullName = this.user.full_name || 'Unknown';
     const year = this.selectedYear || 'Unknown Year';
 
-    // Menambahkan informasi pengguna dan tahun
     tableRows.push([
       {
         content: 'Employee Name:',
@@ -254,7 +247,6 @@ export class SummaryComponent implements OnInit {
       },
     ]);
 
-    // Loop through groupedData untuk mengisi tableRows
     this.groupedData.forEach((group) => {
       tableRows.push([
         {
@@ -279,7 +271,6 @@ export class SummaryComponent implements OnInit {
         },
       ]);
 
-      // Menambahkan detail sikap di bawah grup yang sesuai
       group.details.forEach((detail: { name: string; score: number }) => {
         tableRows.push([
           `${detail.name}`,
@@ -290,7 +281,6 @@ export class SummaryComponent implements OnInit {
       });
     });
 
-    // Menambahkan total di akhir tabel
     const totalWeight = this.groupedData.reduce(
       (total, item) => total + item.percentage,
       0
@@ -307,7 +297,6 @@ export class SummaryComponent implements OnInit {
       },
     ]);
 
-    // Menghasilkan tabel
     autoTable(pdf, {
       head: [tableColumn],
       body: tableRows,
@@ -322,112 +311,9 @@ export class SummaryComponent implements OnInit {
       margin: { top: 10 },
     });
 
-    // Menyimpan PDF dengan nama file
     const fileName = `Assessment Summary - ${fullName} - ${year}.pdf`;
     pdf.save(fileName);
   }
-
-  // printToExcel() {
-  //   const wb = XLSX.utils.book_new();
-  //   const wsData = [];
-  //   const fullName = this.user.full_name || 'Unknown';
-  //   const year = this.selectedYear || 'Unknown Year';
-
-  //   // Menambahkan informasi pengguna dan tahun
-  //   wsData.push(['Employee Name:', fullName, '', '']);
-  //   wsData.push(['Assessment Year:', year, '', '']);
-  //   wsData.push(['', '', '', '']); // Baris kosong untuk pemisah
-  //   wsData.push(['Aspect', 'Score', 'Weight', 'Final Score']);
-
-  //   // Variabel untuk menyimpan panjang maksimum kolom "Aspect"
-  //   let maxAspectLength = 'Aspect'.length; // Mulai dengan panjang header
-
-  //   // Loop melalui groupedData untuk mengisi wsData
-  //   this.groupedData.forEach((group) => {
-  //     wsData.push([
-  //       {
-  //         v: group.group,
-  //         s: {
-  //           fill: { rgb: 'D3D3D3' },
-  //           font: { bold: true },
-  //           alignment: { horizontal: 'center', wrapText: true }, // Rata tengah
-  //         },
-  //       },
-  //       {
-  //         v: group.score.toFixed(2),
-  //         s: { alignment: { horizontal: 'center' } }, // Rata tengah
-  //       },
-  //       {
-  //         v: group.percentage + '%',
-  //         s: { alignment: { horizontal: 'center' } }, // Rata tengah
-  //       },
-  //       {
-  //         v: ((group.score * group.percentage) / 100).toFixed(2),
-  //         s: { alignment: { horizontal: 'center' } }, // Rata tengah
-  //       },
-  //     ]);
-
-  //     // Update panjang maksimum untuk kolom "Aspect"
-  //     maxAspectLength = Math.max(maxAspectLength, group.group.length);
-
-  //     // Menambahkan detail sikap di bawah grup yang sesuai
-  //     group.details.forEach((detail: { name: string; score: number }) => {
-  //       wsData.push([
-  //         {
-  //           v: `- ${detail.name}`,
-  //           s: { alignment: { horizontal: 'left' } }, // Rata kiri
-  //         },
-  //         {
-  //           v: detail.score.toFixed(2),
-  //           s: { alignment: { horizontal: 'center' } }, // Rata tengah
-  //         },
-  //         '',
-  //         '',
-  //       ]);
-
-  //       // Update panjang maksimum untuk detail
-  //       maxAspectLength = Math.max(maxAspectLength, detail.name.length); // +2 untuk menambahkan '- '
-  //     });
-  //   });
-
-  //   // Menambahkan total di akhir tabel
-  //   const totalWeight = this.groupedData.reduce(
-  //     (total, item) => total + item.percentage,
-  //     0
-  //   );
-  //   wsData.push([
-  //     {
-  //       v: 'Total Score:',
-  //       s: { alignment: { horizontal: 'center' }, font: { bold: true } }, // Rata tengah dan teks tebal
-  //     },
-  //     '',
-  //     {
-  //       v: totalWeight + '%',
-  //       s: { alignment: { horizontal: 'center' } }, // Rata tengah
-  //     },
-  //     {
-  //       v: this.totalFinalScore.toFixed(2),
-  //       s: { alignment: { horizontal: 'center' } }, // Rata tengah
-  //     },
-  //   ]);
-
-  //   // Mengonversi data ke worksheet
-  //   const ws = XLSX.utils.aoa_to_sheet(wsData);
-  //   XLSX.utils.book_append_sheet(wb, ws, 'Assessment Summary');
-
-  //   // Mengatur lebar kolom
-  //   const aspectColumnWidth = Math.min(Math.max(maxAspectLength * 10, 100)); // Lebar kolom untuk Aspect, minimal 100px dan maksimal 300px
-  //   ws['!cols'] = [
-  //     { wpx: aspectColumnWidth }, // Lebar kolom untuk Aspect
-  //     { wpx: 100 }, // Lebar kolom untuk Score
-  //     { wpx: 100 }, // Lebar kolom untuk Weight
-  //     { wpx: 100 }, // Lebar kolom untuk Final Score
-  //   ];
-
-  //   // Menyimpan file Excel
-  //   const fileName = `Assessment_Summary_${fullName}_${year}.xlsx`;
-  //   XLSX.writeFile(wb, fileName);
-  // }
 
   printToExcel() {
     const wb = XLSX.utils.book_new();
@@ -435,16 +321,13 @@ export class SummaryComponent implements OnInit {
     const fullName = this.user.full_name || 'Unknown';
     const year = this.selectedYear || 'Unknown Year';
 
-    // Menambahkan informasi pengguna dan tahun
     wsData.push(['Employee Name:', fullName, '', '']);
     wsData.push(['Assessment Year:', year, '', '']);
-    wsData.push(['', '', '', '']); // Baris kosong untuk pemisah
+    wsData.push(['', '', '', '']);
     wsData.push(['Aspect', 'Score', 'Weight', 'Final Score']);
 
-    // Variabel untuk menyimpan panjang maksimum kolom "Aspect"
-    let maxAspectLength = 'Aspect'.length; // Mulai dengan panjang header
+    let maxAspectLength = 'Aspect'.length;
 
-    // Loop melalui groupedData untuk mengisi wsData
     this.groupedData.forEach((group) => {
       wsData.push([
         {
@@ -452,47 +335,43 @@ export class SummaryComponent implements OnInit {
           s: {
             fill: { rgb: 'D3D3D3' },
             font: { bold: true },
-            alignment: { horizontal: 'center', wrapText: true }, // Rata tengah
+            alignment: { horizontal: 'center', wrapText: true },
           },
         },
         {
           v: group.score.toFixed(2),
-          s: { alignment: { horizontal: 'center' } }, // Rata tengah
+          s: { alignment: { horizontal: 'center' } },
         },
         {
           v: group.percentage + '%',
-          s: { alignment: { horizontal: 'center' } }, // Rata tengah
+          s: { alignment: { horizontal: 'center' } },
         },
         {
           v: ((group.score * group.percentage) / 100).toFixed(2),
-          s: { alignment: { horizontal: 'center' } }, // Rata tengah
+          s: { alignment: { horizontal: 'center' } },
         },
       ]);
 
-      // Update panjang maksimum untuk kolom "Aspect"
       maxAspectLength = Math.max(maxAspectLength, group.group.length);
 
-      // Menambahkan detail sikap di bawah grup yang sesuai
       group.details.forEach((detail: any) => {
         wsData.push([
           {
             v: `- ${detail.name}`,
-            s: { alignment: { horizontal: 'left' } }, // Rata kiri
+            s: { alignment: { horizontal: 'left' } },
           },
           {
             v: detail.score.toFixed(2),
-            s: { alignment: { horizontal: 'center' } }, // Rata tengah
+            s: { alignment: { horizontal: 'center' } },
           },
           '',
           '',
         ]);
 
-        // Update panjang maksimum untuk detail
-        maxAspectLength = Math.max(maxAspectLength, detail.name.length + 2); // +2 untuk menambahkan '- '
+        maxAspectLength = Math.max(maxAspectLength, detail.name.length + 2);
       });
     });
 
-    // Menambahkan total di akhir tabel
     const totalWeight = this.groupedData.reduce(
       (total, item) => total + item.percentage,
       0
@@ -500,36 +379,33 @@ export class SummaryComponent implements OnInit {
     wsData.push([
       {
         v: 'Total Score:',
-        s: { alignment: { horizontal: 'center' }, font: { bold: true } }, // Rata tengah dan teks tebal
+        s: { alignment: { horizontal: 'center' }, font: { bold: true } },
       },
       '',
       {
         v: totalWeight + '%',
-        s: { alignment: { horizontal: 'center' } }, // Rata tengah
+        s: { alignment: { horizontal: 'center' } },
       },
       {
         v: this.totalFinalScore.toFixed(2),
-        s: { alignment: { horizontal: 'center' } }, // Rata tengah
+        s: { alignment: { horizontal: 'center' } },
       },
     ]);
 
-    // Mengonversi data ke worksheet
     const ws = XLSX.utils.aoa_to_sheet(wsData);
     XLSX.utils.book_append_sheet(wb, ws, 'Assessment Summary');
 
-    // Mengatur lebar kolom
     const aspectColumnWidth = Math.min(
       Math.max(maxAspectLength * 10, 100),
       300
-    ); // Lebar kolom untuk Aspect, minimal 100px dan maksimal 300px
+    );
     ws['!cols'] = [
-      { wpx: aspectColumnWidth }, // Lebar kolom untuk Aspect
-      { wpx: 100 }, // Lebar kolom untuk Score
-      { wpx: 100 }, // Lebar kolom untuk Weight
-      { wpx: 100 }, // Lebar kolom untuk Final Score
+      { wpx: aspectColumnWidth },
+      { wpx: 100 },
+      { wpx: 100 },
+      { wpx: 100 },
     ];
 
-    // Menyimpan file Excel
     const fileName = `Assessment_Summary_${fullName}_${year}.xlsx`;
     XLSX.writeFile(wb, fileName);
   }

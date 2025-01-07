@@ -1,9 +1,8 @@
 import { HttpInterceptorFn } from '@angular/common/http';
 
 export const authInterceptor: HttpInterceptorFn = (req, next) => {
-  // Jangan tambahkan token jika URL adalah login
   if (req.url.includes('/login')) {
-    return next(req);  // Lewatkan request tanpa modifikasi
+    return next(req);
   }
 
   if (req.method === 'POST' && req.url.endsWith('/login')) {
@@ -15,8 +14,8 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
     const authReq = req.clone({
       setHeaders: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`
-      }
+        Authorization: `Bearer ${token}`,
+      },
     });
 
     return next(authReq);

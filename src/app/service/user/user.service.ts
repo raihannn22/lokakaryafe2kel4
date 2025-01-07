@@ -22,10 +22,6 @@ export class UserService {
     );
   }
 
-  // getAllUsers(): Observable<any> {
-  //   return this.http.get(`${this.apiUrl}/get/all`);
-  // }
-
   getUsersByDivisionId(divisionId: string): Observable<any> {
     return this.http.get(`${this.apiUrl}/get/by-division-id`, {
       params: { divisionId },

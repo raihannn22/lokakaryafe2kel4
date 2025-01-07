@@ -1,123 +1,129 @@
-<div class="container p-4 mx-auto" style="max-width: 1500px;">
-  <!-- Header Section -->
+<div class="container p-4 mx-auto" style="max-width: 1500px">
   <div class="card mb-4 p-3 shadow-sm border-round">
-      <h2 class="text-center text-2xl font-semibold text-primary-900 m-0 mb-2">Role Access Management</h2>
-      <p class="text-center text-gray-600 m-0">Manage menu permissions and role access</p>
+    <h2 class="text-center text-2xl font-semibold text-primary-900 m-0 mb-2">
+      Role Access Management
+    </h2>
+    <p class="text-center text-gray-600 m-0">
+      Manage menu permissions and role access
+    </p>
   </div>
 
-  <!-- Table Section -->
   <div class="card shadow-sm border-round">
-      <p-table
-          [value]="menus"
-          [tableStyle]="{ 'min-width': '60rem' }"
-          styleClass="p-datatable-gridlines p-datatable-sm">
-          <ng-template pTemplate="header">
-              <tr>
-                  <th class="font-semibold text-primary-900 bg-primary-50">Permissions</th>
-                  @for (roles of roles; track $index) {
-                      <th class="font-semibold text-primary-900 bg-primary-50 text-center">
-                          {{roles.ROLENAME}}
-                      </th>
-                  }
-              </tr>
-          </ng-template>
-          <ng-template pTemplate="body" let-menu>
-              <tr>
-                  <td class="font-medium">{{menu.MENU_NAME}}</td>
-                  @for (item of roles; track $index) {
-                      <td class="text-center">
-                        @if ( item.ROLENAME == "HR" && menu.MENU_NAME == "Role Menu - All" ) {
-                          <p-checkbox
-                              [binary]="true"
-                              [(ngModel)]="roleMenuMap[item.ID][menu.ID]"
-                              (ngModelChange)="updateRoleMenu(item.ID, menu.ID, $event)"
-                              styleClass="checkbox-center"
-                              [disabled]="true">
-                          </p-checkbox>
-                        }@else {
-                          <p-checkbox
-                          
-                              [binary]="true"
-                              [(ngModel)]="roleMenuMap[item.ID][menu.ID]"
-                              (ngModelChange)="updateRoleMenu(item.ID, menu.ID, $event)"
-                              styleClass="checkbox-center">
-                          </p-checkbox>
-                        }
-                      </td>
-                  }
-              </tr>
-          </ng-template>
-      </p-table>
+    <p-table
+      [value]="menus"
+      [tableStyle]="{ 'min-width': '60rem' }"
+      styleClass="p-datatable-gridlines p-datatable-sm"
+    >
+      <ng-template pTemplate="header">
+        <tr>
+          <th class="font-semibold text-primary-900 bg-primary-50">
+            Permissions
+          </th>
+          @for (roles of roles; track $index) {
+          <th class="font-semibold text-primary-900 bg-primary-50 text-center">
+            {{ roles.ROLENAME }}
+          </th>
+          }
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-menu>
+        <tr>
+          <td class="font-medium">{{ menu.MENU_NAME }}</td>
+          @for (item of roles; track $index) {
+          <td class="text-center">
+            @if ( item.ROLENAME == "HR" && menu.MENU_NAME == "Role Menu - All" )
+            {
+            <p-checkbox
+              [binary]="true"
+              [(ngModel)]="roleMenuMap[item.ID][menu.ID]"
+              (ngModelChange)="updateRoleMenu(item.ID, menu.ID, $event)"
+              styleClass="checkbox-center"
+              [disabled]="true"
+            >
+            </p-checkbox>
+            }@else {
+            <p-checkbox
+              [binary]="true"
+              [(ngModel)]="roleMenuMap[item.ID][menu.ID]"
+              (ngModelChange)="updateRoleMenu(item.ID, menu.ID, $event)"
+              styleClass="checkbox-center"
+            >
+            </p-checkbox>
+            }
+          </td>
+          }
+        </tr>
+      </ng-template>
+    </p-table>
   </div>
 
-  <!-- Footer Action Section -->
   <div class="flex justify-content-end mt-4">
-      <p-button
-          (click)="savePermissions()"
-          label="Simpan Perubahan"
-          icon="pi pi-save"
-          styleClass="p-button-primary"
-          [raised]="true">
-      </p-button>
+    <p-button
+      (click)="savePermissions()"
+      label="Simpan Perubahan"
+      icon="pi pi-save"
+      styleClass="p-button-primary"
+      [raised]="true"
+    >
+    </p-button>
   </div>
 
-  <!-- Toast -->
   <p-toast position="top-right" />
 </div>
 
 <style>
-.container {
-  background-color: var(--surface-ground);
-}
+  .container {
+    background-color: var(--surface-ground);
+  }
 
-.card {
-  background: white;
-  transition: all 0.2s ease;
-  border-radius: 8px;
-}
+  .card {
+    background: white;
+    transition: all 0.2s ease;
+    border-radius: 8px;
+  }
 
-.card:hover {
-  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-}
+  .card:hover {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
 
-:host ::ng-deep .p-datatable {
-  border-radius: 8px;
-  overflow: hidden;
-}
+  :host ::ng-deep .p-datatable {
+    border-radius: 8px;
+    overflow: hidden;
+  }
 
-:host ::ng-deep .p-datatable .p-datatable-header {
-  background: var(--surface-0);
-  border: none;
-}
+  :host ::ng-deep .p-datatable .p-datatable-header {
+    background: var(--surface-0);
+    border: none;
+  }
 
-:host ::ng-deep .p-datatable .p-datatable-thead > tr > th {
-  background: var(--surface-0);
-  padding: 1rem;
-  border-bottom: 2px solid var(--surface-200);
-}
+  :host ::ng-deep .p-datatable .p-datatable-thead > tr > th {
+    background: var(--surface-0);
+    padding: 1rem;
+    border-bottom: 2px solid var(--surface-200);
+  }
 
-:host ::ng-deep .p-datatable .p-datatable-tbody > tr {
-  transition: background-color 0.2s;
-}
+  :host ::ng-deep .p-datatable .p-datatable-tbody > tr {
+    transition: background-color 0.2s;
+  }
 
-:host ::ng-deep .p-datatable .p-datatable-tbody > tr:hover {
-  background: var(--surface-100);
-}
+  :host ::ng-deep .p-datatable .p-datatable-tbody > tr:hover {
+    background: var(--surface-100);
+  }
 
-:host ::ng-deep .checkbox-center {
-  display: flex;
-  justify-content: center;
-}
+  :host ::ng-deep .checkbox-center {
+    display: flex;
+    justify-content: center;
+  }
 
-:host ::ng-deep .p-checkbox {
-  margin: 0 auto;
-}
+  :host ::ng-deep .p-checkbox {
+    margin: 0 auto;
+  }
 
-:host ::ng-deep .p-button.p-button-success {
-  padding: 0.75rem 1.5rem;
-}
+  :host ::ng-deep .p-button.p-button-success {
+    padding: 0.75rem 1.5rem;
+  }
 
-:host ::ng-deep .p-button .p-button-icon {
-  margin-right: 0.5rem;
-}
+  :host ::ng-deep .p-button .p-button-icon {
+    margin-right: 0.5rem;
+  }
 </style>

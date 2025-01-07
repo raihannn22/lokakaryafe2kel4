@@ -123,7 +123,6 @@ export class TechnicalSkillComponent implements OnInit {
               confirmButtonText: 'OK',
             }).then((result) => {
               if (result.isConfirmed) {
-                // Reset search keyword only
                 this.searchKeyword = '';
                 this.getAllTechnicalSkills(
                   this.currentSortBy,
@@ -133,12 +132,8 @@ export class TechnicalSkillComponent implements OnInit {
               }
             });
           }
-
-          // console.log('Data Technical Skills:', this.technicalSkills);
-          // console.log('Total Records:', this.totalRecords);
         },
         error: (error) => {
-          console.error('Error fetching technical Skills:', error);
           this.loading = false;
         },
       });
@@ -159,40 +154,30 @@ export class TechnicalSkillComponent implements OnInit {
   }
 
   loadPage(event: any) {
-    this.currentPage = event.first / event.rows; // Menghitung halaman berdasarkan offset
-    this.selectedPageSize = event.rows; // Ambil jumlah baris per halaman
-    console.log('Page Size Change Triggered');
-    console.log('Selected Page Size:', this.selectedPageSize);
+    this.currentPage = event.first / event.rows;
+    this.selectedPageSize = event.rows;
     this.getAllTechnicalSkills(this.currentSortBy, this.sortingDirection);
   }
 
   onSortChange(event: any) {
-    this.currentSortBy = event.value; // Update current sort by
-    console.log('Sorting by:', this.currentSortBy); // Log for debugging
-
-    this.currentPage = 0; // Reset to the first page
-    console.log('Sorting direction:', this.sortingDirection); // Log for debugging
-
-    this.getAllTechnicalSkills(this.currentSortBy, this.sortingDirection); // Call to load data with new sorting
+    this.currentSortBy = event.value;
+    this.currentPage = 0;
+    this.getAllTechnicalSkills(this.currentSortBy, this.sortingDirection);
   }
 
   toggleSortingDirection() {
-    // Toggle between 'asc' and 'desc'
     this.sortingDirection = this.sortingDirection === 'asc' ? 'desc' : 'asc';
-    console.log('Sorting direction changed to:', this.sortingDirection); // Log the new direction
-    // Reload achievements with the current sort criteria and new sorting direction
+
     this.getAllTechnicalSkills(this.currentSortBy, this.sortingDirection);
   }
 
   showAddDialog() {
-    // console.log('Menampilkan dialog tambah');
     this.resetTecnicalSkill();
     this.technicalSkillDialog = true;
     this.isTechnicalSkillDuplicate = false;
   }
 
   editTechnicalSkill(technicalSkill: any) {
-    // console.log('Mengedit technical skill', technicalSkill);
     this.technicalSkill = { ...technicalSkill };
     this.technicalSkillDialog = true;
     this.isTechnicalSkillDuplicate = false;

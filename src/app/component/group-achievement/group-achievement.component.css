@@ -19,10 +19,10 @@
   z-index: 1050 !important;
 }
 input[type="text"] {
-  width: 200px; /* Atur lebar input pencarian */
-  margin-right: 10px; /* Jarak antara input dan tombol */
+  width: 200px;
+  margin-right: 10px;
 }
 
 .p-button {
-  margin-left: 5px; /* Jarak antara tombol */
+  margin-left: 5px;
 }

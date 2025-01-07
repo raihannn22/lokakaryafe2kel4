@@ -8,7 +8,6 @@ import { DialogModule } from 'primeng/dialog';
 import { TagModule } from 'primeng/tag';
 import { ToastModule } from 'primeng/toast';
 import Swal from 'sweetalert2';
-
 import { IconFieldModule } from 'primeng/iconfield';
 import { InputIconModule } from 'primeng/inputicon';
 import { InputTextModule } from 'primeng/inputtext';
@@ -101,7 +100,6 @@ export class DivisiComponent {
               confirmButtonText: 'OK',
             }).then((result) => {
               if (result.isConfirmed) {
-                // Reset search keyword only
                 this.searchKeyword = '';
                 this.getAllDivisions(
                   this.currentSortBy,
@@ -115,7 +113,6 @@ export class DivisiComponent {
           this.loading = false;
         },
         error: (error) => {
-          console.error('Error fetching divisions:', error);
           this.loading = false;
         },
       });
@@ -136,26 +133,20 @@ export class DivisiComponent {
   }
 
   loadPage(event: any) {
-    this.currentPage = event.first / event.rows; // Update current page
-    this.selectedPageSize = event.rows; // Update page size
-    this.getAllDivisions(this.currentSortBy, this.sortingDirection); // Reload data with new page size
+    this.currentPage = event.first / event.rows;
+    this.selectedPageSize = event.rows;
+    this.getAllDivisions(this.currentSortBy, this.sortingDirection);
   }
 
   onSortChange(event: any) {
-    this.currentSortBy = event.value; // Update current sort by
-    console.log('Sorting by:', this.currentSortBy); // Log for debugging
-
-    this.currentPage = 0; // Reset to the first page
-    console.log('Sorting direction:', this.sortingDirection); // Log for debugging
-
-    this.getAllDivisions(this.currentSortBy, this.sortingDirection); // Call to load data with new sorting
+    this.currentSortBy = event.value;
+    this.currentPage = 0;
+    this.getAllDivisions(this.currentSortBy, this.sortingDirection);
   }
 
   toggleSortingDirection() {
-    // Toggle between 'asc' and 'desc'
     this.sortingDirection = this.sortingDirection === 'asc' ? 'desc' : 'asc';
-    console.log('Sorting direction changed to:', this.sortingDirection); // Log the new direction
-    // Reload achievements with the current sort criteria and new sorting direction
+
     this.getAllDivisions(this.currentSortBy, this.sortingDirection);
   }
 
@@ -168,10 +159,7 @@ export class DivisiComponent {
     this.displayUpdateDialog = true;
   }
 
-  // Fungsi menangani event divisi yang dibuat
   ondivisionCreated(newdivision: any) {
-    console.log('division baru:', newdivision);
-    // Logika untuk menyimpan division ke database (via API)
     this.getAllDivisions();
     this.displayCreateDialog = false;
     this.messageService.add({
@@ -179,7 +167,6 @@ export class DivisiComponent {
       summary: 'Success',
       detail: 'Message Content',
     });
-    // Tambahkan division baru ke daftar divisions atau update data sesuai kebutuhan
   }
 
   confirmDelete(divisions: any) {
@@ -197,7 +184,7 @@ export class DivisiComponent {
         this.divisiService.deleteDivision(divisions.ID).subscribe({
           next: () => {
             Swal.fire('Terhapus!', 'Divisi berhasil dihapus.', 'success');
-            this.getAllDivisions(); // Panggil metode untuk memperbarui tabel
+            this.getAllDivisions();
           },
           error: (error) => {
             Swal.fire(
@@ -205,7 +192,6 @@ export class DivisiComponent {
               'Terjadi kesalahan saat menghapus Divisi.',
               'error'
             );
-            console.error('Error deleting division:', error);
           },
         });
       }

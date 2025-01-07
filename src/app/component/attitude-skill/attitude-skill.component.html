@@ -7,10 +7,10 @@
     </div>
     <div class="mb-2">
       <p-button
-      label="Tambah Data"
-      icon="pi pi-plus"
-      (click)="showAddDialog()"
-      class="p-button-text"
+        label="Tambah Data"
+        icon="pi pi-plus"
+        (click)="showAddDialog()"
+        class="p-button-text"
       ></p-button>
     </div>
     <p-table
@@ -94,7 +94,7 @@
       <ng-template pTemplate="body" let-attitudeSkill let-rowIndex="rowIndex">
         <tr>
           <td>{{ rowIndex + 1 }}</td>
-          <!-- <td>{{ attitudeSkill.group_name }}</td> -->
+
           <td>{{ attitudeSkill.attitude_skill }}</td>
           <td>
             <p-tag
@@ -174,8 +174,6 @@
         appendTo="body"
       >
       </p-dropdown>
-      <!-- <small class="p-error" *ngIf="!attitudeSkill.enabled && attitudeSkillDialog">Status wajib
-                dipilih.</small> -->
     </div>
   </div>
 

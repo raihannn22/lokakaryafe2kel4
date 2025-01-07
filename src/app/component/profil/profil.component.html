@@ -1,128 +1,129 @@
 <div class="grid">
-    <!-- Bagian Menu -->
-    <div class="col-4">
-      <p-card class="h-full">
-        <p-panelMenu [model]="menuItems"></p-panelMenu>
-      </p-card>
-    </div>
-  
-    <!-- Bagian Konten -->
-    <div class="col-7">
-        @if (selectedContent === 'profileDetail') {
-        <p-card *ngIf="selectedContent === 'profileDetail'">
-    
-          <ng-template pTemplate="content">
-            <!-- List Profil Detail -->
-            <div class="profile-details">
-            
-            
-                <dl class="grid grid-cols-2 gap-4">
-                  <dt class="font-bolt text-right">Username :</dt>
-                  <dd>{{userDetails.username}}</dd>
-            
-                  <dt class="font-bolt text-right">Full Name :</dt>
-                  <dd>{{userDetails.full_name}}</dd>
-            
-                  <dt class="font-bolt text-right">Position :</dt>
-                  <dd>{{userDetails.position}}</dd>
-            
-                  <dt class="font-bolt text-right">Email Address :</dt>
-                  <dd>{{userDetails.email_address}}</dd>
-            
-                  <dt class="font-bolt text-right">Employee Status :</dt>
-                  <dd>{{status}}</dd>
-            
-                  <dt class="font-bolt text-right">Division :</dt>
-                  <dd>{{userDetails.division_name}}</dd>
-                </dl>
-             
-            </div>
-            <!-- <ul>
-              <li><strong>Username:</strong> {{userDetails.username}}</li>
-              <li><strong>Full Name:</strong> {{userDetails.full_name}}</li>
-              <li><strong>Position:</strong> {{userDetails.position}}</li>
-              <li><strong>Email Address:</strong> {{userDetails.email_address}}</li>
-              <li><strong>Employee Status:</strong> {{status}}</li>
-              <li><strong>Divisi :</strong> {{userDetails.division_name}}</li>
-            </ul> -->
-          </ng-template>
-        </p-card>
-        }
-
-        @if (selectedContent === 'changePassword') {
-        <p-card *ngIf="selectedContent === 'changePassword'">
-          <ng-template pTemplate="content">
-            <form >
-          
-                <div class="input-group">
-                  <label for="newPassword">Current Password<span class="text-red-600 mr-2">*</span></label>
-                  <p-password 
-                    [(ngModel)]="currentPassword" 
-                    name="password" 
-                    id="password" 
-                    [feedback]="false" 
-                    [toggleMask]="true" 
-                    required
-                    minlength="6"
-                    #PasswordField="ngModel"
-                  ></p-password>
-                  <small *ngIf="PasswordField.invalid && PasswordField.touched" class="p-error ml-2">
-                    <span *ngIf="PasswordField.errors?.['required']">Current password is required.</span>
-                    <span *ngIf="PasswordField.errors?.['minlength']">Current password must be at least 6 characters.</span>
-                  </small>
-                </div>
-
-                <div class="input-group mr-auto">
-                  <label for="newPassword">New Password<span class="text-red-600 mr-5">*</span></label>
-                  <p-password 
-                    [(ngModel)]="newPassword" 
-                    name="newPassword" 
-                    id="newPassword" 
-                    [feedback]="false" 
-                    [toggleMask]="true" 
-                    required
-                    minlength="6"
-                    #newPasswordField="ngModel"
-                  ></p-password>
-                  <small *ngIf="newPasswordField.invalid && newPasswordField.touched" class="p-error ml-2">
-                    <span *ngIf="newPasswordField.errors?.['required']">New password is required.</span>
-                    <span *ngIf="newPasswordField.errors?.['minlength']">New password must be at least 6 characters.</span>
-                  </small>
-                  @if (newPassword === currentPassword) {
-                    <small class="p-error ml-2">
-                      New password cannot be the same as the current password.
-                    </small>
-                  }
-                </div>
-  
-                <div class="input-group mr-auto">
-                  <label for="confirmPassword">Confirm Password<span class="text-red-600 mr-2">*</span></label>
-                  <p-password 
-                    [(ngModel)]="confirmPassword" 
-                    name="confirmPassword" 
-                    id="confirmPassword" 
-                    [feedback]="false" 
-                    [toggleMask]="true" 
-                    required
-                    #confirmPasswordField="ngModel"
-                  ></p-password>
-                  @if (confirmPasswordField.invalid && confirmPasswordField.touched) {
-                    <small class="p-error ml-2">
-                      Confirm password is required.
-                    </small>
-                  }@else if(confirmPassword !== newPassword && confirmPasswordField.touched) {
-                    <small  class="p-error ml-2">
-                      Passwords do not match.
-                    </small>
-                  }
-                </div>
-                    
-              <p-button  type="submit" label="Change Password" (click)="onSubmit()"></p-button>
-            </form>
-          </ng-template>
-        </p-card>
-    }
-      </div>
-    
+  <div class="col-4">
+    <p-card class="h-full">
+      <p-panelMenu [model]="menuItems"></p-panelMenu>
+    </p-card>
   </div>
-  
+
+  <div class="col-7">
+    @if (selectedContent === 'profileDetail') {
+    <p-card *ngIf="selectedContent === 'profileDetail'">
+      <ng-template pTemplate="content">
+        <div class="profile-details">
+          <dl class="grid grid-cols-2 gap-4">
+            <dt class="font-bolt text-right">Username :</dt>
+            <dd>{{ userDetails.username }}</dd>
+
+            <dt class="font-bolt text-right">Full Name :</dt>
+            <dd>{{ userDetails.full_name }}</dd>
+
+            <dt class="font-bolt text-right">Position :</dt>
+            <dd>{{ userDetails.position }}</dd>
+
+            <dt class="font-bolt text-right">Email Address :</dt>
+            <dd>{{ userDetails.email_address }}</dd>
+
+            <dt class="font-bolt text-right">Employee Status :</dt>
+            <dd>{{ status }}</dd>
+
+            <dt class="font-bolt text-right">Division :</dt>
+            <dd>{{ userDetails.division_name }}</dd>
+          </dl>
+        </div>
+      </ng-template>
+    </p-card>
+    } @if (selectedContent === 'changePassword') {
+    <p-card *ngIf="selectedContent === 'changePassword'">
+      <ng-template pTemplate="content">
+        <form>
+          <div class="input-group">
+            <label for="newPassword"
+              >Current Password<span class="text-red-600 mr-2">*</span></label
+            >
+            <p-password
+              [(ngModel)]="currentPassword"
+              name="password"
+              id="password"
+              [feedback]="false"
+              [toggleMask]="true"
+              required
+              minlength="6"
+              #PasswordField="ngModel"
+            ></p-password>
+            <small
+              *ngIf="PasswordField.invalid && PasswordField.touched"
+              class="p-error ml-2"
+            >
+              <span *ngIf="PasswordField.errors?.['required']"
+                >Current password is required.</span
+              >
+              <span *ngIf="PasswordField.errors?.['minlength']"
+                >Current password must be at least 6 characters.</span
+              >
+            </small>
+          </div>
+
+          <div class="input-group mr-auto">
+            <label for="newPassword"
+              >New Password<span class="text-red-600 mr-5">*</span></label
+            >
+            <p-password
+              [(ngModel)]="newPassword"
+              name="newPassword"
+              id="newPassword"
+              [feedback]="false"
+              [toggleMask]="true"
+              required
+              minlength="6"
+              #newPasswordField="ngModel"
+            ></p-password>
+            <small
+              *ngIf="newPasswordField.invalid && newPasswordField.touched"
+              class="p-error ml-2"
+            >
+              <span *ngIf="newPasswordField.errors?.['required']"
+                >New password is required.</span
+              >
+              <span *ngIf="newPasswordField.errors?.['minlength']"
+                >New password must be at least 6 characters.</span
+              >
+            </small>
+            @if (newPassword === currentPassword) {
+            <small class="p-error ml-2">
+              New password cannot be the same as the current password.
+            </small>
+            }
+          </div>
+
+          <div class="input-group mr-auto">
+            <label for="confirmPassword"
+              >Confirm Password<span class="text-red-600 mr-2">*</span></label
+            >
+            <p-password
+              [(ngModel)]="confirmPassword"
+              name="confirmPassword"
+              id="confirmPassword"
+              [feedback]="false"
+              [toggleMask]="true"
+              required
+              #confirmPasswordField="ngModel"
+            ></p-password>
+            @if (confirmPasswordField.invalid && confirmPasswordField.touched) {
+            <small class="p-error ml-2"> Confirm password is required. </small>
+            }@else if(confirmPassword !== newPassword &&
+            confirmPasswordField.touched) {
+            <small class="p-error ml-2"> Passwords do not match. </small>
+            }
+          </div>
+
+          <p-button
+            type="submit"
+            label="Change Password"
+            (click)="onSubmit()"
+          ></p-button>
+        </form>
+      </ng-template>
+    </p-card>
+    }
+  </div>
+</div>

@@ -82,14 +82,11 @@ export class GroupAttitudeSkillComponent implements OnInit {
   userPercentage: number = 0;
   enabled: number = 0;
   groupAttitudeEnabled: any[] = [];
-
   pageSizeOptions: number[] = [5, 10, 20];
   selectedPageSize: number = 5;
   currentPage: number = 0;
-
   sortingDirection: string = 'asc';
   currentSortBy: string = 'groupName';
-
   sortOptions = [
     { label: 'Group Name', value: 'groupName' },
     { label: 'Percentage', value: 'percentage' },
@@ -107,10 +104,9 @@ export class GroupAttitudeSkillComponent implements OnInit {
   }
 
   loadAllData() {
-    this.loading = true; // Set loading to true while fetching data
+    this.loading = true;
 
     forkJoin({
-
       attitudeSkill: this.groupAttitudeSkillService.getAllGroupAttitudeSkills(
         this.currentPage,
         this.selectedPageSize,
@@ -124,13 +120,8 @@ export class GroupAttitudeSkillComponent implements OnInit {
         this.groupAchievementService.getAllGroupAchievementsEnabled(),
     }).subscribe({
       next: ({ attitudeSkill, gattitudeSkill, gAchievementEnabled }) => {
-      
-        // Anda bisa menyimpan totalRecords untuk group achievements jika diperlukan
-        // this.totalRecordsGroupAchievement = groupAchievement.totalRecords;
-
-        // Assign data for attitude skills
         this.groupAttitudeSkills = attitudeSkill.content;
-        this.totalRecords = attitudeSkill.total_data; // Update total records for attitude skills
+        this.totalRecords = attitudeSkill.total_data;
         this.filteredGroupAttitudeSkills = this.groupAttitudeSkills;
 
         console.log(
@@ -138,32 +129,28 @@ export class GroupAttitudeSkillComponent implements OnInit {
           this.totalRecords
         );
 
-        // Jika total data untuk group attitude skills adalah 0, Anda mungkin ingin menangani ini
         if (this.totalRecords === 0) {
-          console.warn('No records found for group attitude skills.');
         }
 
         this.totalPercentageAchieved = gAchievementEnabled.content.percentage;
-       
+
         this.totalPercentageAchieved = this.percentageAchieved.reduce(
           (acc, item) => acc + item,
           0
         );
 
-        // Assign data for attitude skills
         this.groupAchievementEnabled = gAchievementEnabled.content;
         this.percentageAchieved = this.groupAchievementEnabled.map(
-          (item: { percentage: any; }) => item.percentage
+          (item: { percentage: any }) => item.percentage
         );
         this.totalPercentageAchieved = this.percentageAchieved.reduce(
           (acc, item) => acc + item,
           0
         );
 
-        // Assign data for attitude skills
         this.atitudeSkills = gattitudeSkill.content;
         this.percentageAttitude = this.atitudeSkills.map(
-          (item: { percentage: any; }) => item.percentage
+          (item: { percentage: any }) => item.percentage
         );
         this.totalPercentageAttitude = this.percentageAttitude.reduce(
           (acc, item) => acc + item,
@@ -174,8 +161,7 @@ export class GroupAttitudeSkillComponent implements OnInit {
         this.loading = false;
       },
       error: (error) => {
-        this.loading = false; // Set loading to false on error
-        console.error('Error loading data:', error);
+        this.loading = false;
       },
     });
   }
@@ -196,10 +182,8 @@ export class GroupAttitudeSkillComponent implements OnInit {
       )
       .subscribe({
         next: (response) => {
-          // console.log('API Response for Group Attitude Skills:', response); // Log respons API
-
           this.groupAttitudeSkills = response.content;
-          this.totalRecords = response.total_data; // Ensure this matches the response from the backend
+          this.totalRecords = response.total_data;
           this.filteredGroupAttitudeSkills = this.groupAttitudeSkills;
           this.loading = false;
           if (this.filteredGroupAttitudeSkills.length === 0) {
@@ -210,7 +194,6 @@ export class GroupAttitudeSkillComponent implements OnInit {
               confirmButtonText: 'OK',
             }).then((result) => {
               if (result.isConfirmed) {
-                // Reset search keyword only
                 this.searchKeyword = '';
                 this.getAllGroupAttitudeSkills(
                   this.currentSortBy,
@@ -225,7 +208,6 @@ export class GroupAttitudeSkillComponent implements OnInit {
         },
         error: (error) => {
           this.loading = false;
-          console.error('Error fetching AttitudeSkills:', error);
         },
       });
   }
@@ -250,28 +232,20 @@ export class GroupAttitudeSkillComponent implements OnInit {
   }
 
   loadPage(event: any) {
-    this.currentPage = event.first / event.rows; // Menghitung halaman berdasarkan offset
-    this.selectedPageSize = event.rows; // Ambil jumlah baris per halaman
-    console.log('Page Size Change Triggered');
-    console.log('Selected Page Size:', this.selectedPageSize);
-    this.getAllGroupAttitudeSkills(this.currentSortBy, this.sortingDirection); // Muat ulang data dengan ukuran halaman baru
+    this.currentPage = event.first / event.rows;
+    this.selectedPageSize = event.rows;
+    this.getAllGroupAttitudeSkills(this.currentSortBy, this.sortingDirection);
   }
 
   onSortChange(event: any) {
-    this.currentSortBy = event.value; // Update current sort by
-    console.log('Sorting by:', this.currentSortBy); // Log for debugging
-
-    this.currentPage = 0; // Reset to the first page
-    console.log('Sorting direction:', this.sortingDirection); // Log for debugging
-
-    this.getAllGroupAttitudeSkills(this.currentSortBy, this.sortingDirection); // Call to load data with new sorting
+    this.currentSortBy = event.value;
+    this.currentPage = 0;
+    this.getAllGroupAttitudeSkills(this.currentSortBy, this.sortingDirection);
   }
 
   toggleSortingDirection() {
-    // Toggle between 'asc' and 'desc'
     this.sortingDirection = this.sortingDirection === 'asc' ? 'desc' : 'asc';
-    console.log('Sorting direction changed to:', this.sortingDirection); // Log the new direction
-    // Reload achievements with the current sort criteria and new sorting direction
+
     this.getAllGroupAttitudeSkills(this.currentSortBy, this.sortingDirection);
   }
 
@@ -284,7 +258,6 @@ export class GroupAttitudeSkillComponent implements OnInit {
     }
   }
   showAddDialog() {
-    // console.log('Menampilkan dialog tambah');
     this.groupAttitudeSkill = { group_name: '', percentage: null, enabled: 1 };
     this.groupAttitudeSkillDialog = true;
     this.isGroupNameDuplicate = false;
@@ -292,7 +265,6 @@ export class GroupAttitudeSkillComponent implements OnInit {
   }
 
   editGroupAttitudeSkill(groupAttitudeSkill: any) {
-    // console.log('Mengedit group AttitudeSkill', groupAttitudeSkill);
     this.groupAttitudeSkill = { ...groupAttitudeSkill };
     this.userPercentage = this.groupAttitudeSkill.percentage;
     this.enabled = this.groupAttitudeSkill.enabled;

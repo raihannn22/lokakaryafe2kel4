@@ -22,10 +22,6 @@ export class AchievementService {
     );
   }
 
-  // getAllAchievements(): Observable<any> {
-  //   return this.http.get(`${this.apiUrl}/all`);
-  // }
-
   getAllGroupAchievements(): Observable<any> {
     return this.http.get('http://localhost:8081/group-achievement/all');
   }
