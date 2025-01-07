@@ -6,7 +6,6 @@ import { TableModule } from 'primeng/table';
 import { EmpDevplanService } from '../../service/emp-devplan/emp-devplan.service';
 import { InputTextModule } from 'primeng/inputtext';
 import { TagModule } from 'primeng/tag';
-import { ThisReceiver } from '@angular/compiler';
 import Swal from 'sweetalert2';
 import { ToolbarModule } from 'primeng/toolbar';
 
@@ -30,15 +29,14 @@ export class EmpDevplanComponent implements OnInit {
   empdevplans: any[] = [];
   userId: any;
   remove: boolean = true;
-
   userName: string | null = '';
 
   constructor(private empDevplanService: EmpDevplanService) {}
   validateKeterangan(keterangan: any) {
     if (!keterangan.value.trim()) {
-      keterangan.isInvalid = true; // Menandakan bahwa input kosong
+      keterangan.isInvalid = true;
     } else {
-      keterangan.isInvalid = false; // Menandakan bahwa input valid
+      keterangan.isInvalid = false;
     }
   }
 
@@ -50,23 +48,15 @@ export class EmpDevplanComponent implements OnInit {
   }
 
   loadPerihals() {
-// <<<<<<< banu
-//     this.empDevplanService.getAllDevPlan().subscribe((data) => {
-//       this.empdevplans = data.content.map((item: { ID: any; PLAN: any }) => ({
-//         id: item.ID,
-//         title: item.PLAN,
-//         keterangans: [{ value: '' }], // Gunakan objek untuk tiap keterangan
-// =======
-    this.empDevplanService.getAllDevPlan().subscribe(data => {
-      this.empdevplans = data.content.map((item: {
-        ENABLED: any; ID: any; PLAN: any; 
-}) => ({
-        id: item.ID,
-        title: item.PLAN,
-        enabled: item.ENABLED,
-        keterangans: [{ value: '' }]  // Gunakan objek untuk tiap keterangan
-// >>>>>>> main
-      }));
+    this.empDevplanService.getAllDevPlan().subscribe((data) => {
+      this.empdevplans = data.content.map(
+        (item: { ENABLED: any; ID: any; PLAN: any }) => ({
+          id: item.ID,
+          title: item.PLAN,
+          enabled: item.ENABLED,
+          keterangans: [{ value: '' }],
+        })
+      );
     });
   }
 
@@ -79,33 +69,27 @@ export class EmpDevplanComponent implements OnInit {
             (p) => p.id === item.DEV_PLAN_ID
           );
           if (perihal) {
-            // Hapus input kosong jika sudah ada data dari backend
             if (
               perihal.keterangans.length === 1 &&
               perihal.keterangans[0].value.trim() === ''
             ) {
-              perihal.keterangans.pop(); // Hapus input kosong
+              perihal.keterangans.pop();
             }
-            // Tambahkan keterangan dari backend
+
             perihal.keterangans.push({ value: item.DETAIL, isExisting: true });
           }
         });
       });
   }
 
-  // Menambah input keterangan baru untuk perihal tertentu
   addKeterangan(perihal: any) {
-    // Tambahkan input baru hanya jika tidak ada keterangan kosong
     perihal.keterangans.push({ value: '', isExisting: false });
   }
 
-  // Menghapus input keterangan berdasarkan indeks
   removeKeterangan(perihal: any, index: number) {
     const keteranganToRemove = perihal.keterangans[index];
 
-    // Cek apakah input yang akan dihapus adalah disabled (isExisting: true)
     if (keteranganToRemove.isExisting) {
-      // Tampilkan alert jika input yang dihapus disabled
       Swal.fire({
         title: 'Are you sure?',
         text: 'Apakah Anda yakin ingin menghapus data ini?',
@@ -120,17 +104,14 @@ export class EmpDevplanComponent implements OnInit {
         }
       });
     } else {
-      // Hapus keterangan jika tidak disabled
       if (perihal.keterangans.length > 1) {
-        perihal.keterangans.splice(index, 1); // Menghapus keterangan pada indeks tertentu
+        perihal.keterangans.splice(index, 1);
       } else {
-        // Jika hanya satu keterangan, hapus form inputan terakhir
-        perihal.keterangans.pop(); // Menghapus elemen terakhir dari array
+        perihal.keterangans.pop();
       }
     }
   }
 
-  // Simpan data ke database
   saveToDatabase() {
     const dataToSave = this.empdevplans.flatMap((perihal: any) =>
       perihal.keterangans.map((keterangan: { value: string }) => ({
@@ -181,7 +162,6 @@ export class EmpDevplanComponent implements OnInit {
                 title: 'Error',
                 text: 'gagal untuk menyimpan data!',
               });
-              console.error('Error changing password:', error);
             }
           );
         }

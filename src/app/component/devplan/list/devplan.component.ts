@@ -8,7 +8,6 @@ import { DialogModule } from 'primeng/dialog';
 import { TagModule } from 'primeng/tag';
 import { ToastModule } from 'primeng/toast';
 import Swal from 'sweetalert2';
-
 import { IconFieldModule } from 'primeng/iconfield';
 import { InputIconModule } from 'primeng/inputicon';
 import { InputTextModule } from 'primeng/inputtext';
@@ -90,7 +89,7 @@ export class DevplanComponent {
       )
       .subscribe({
         next: (response) => {
-          // console.log('API Response for Dev Plans:', response); // Log respons API
+          // ; // Log respons API
 
           this.devplans = response.content; // Data ada di 'content'
           this.totalRecords = response.total_data; // Total data dari respons
@@ -118,7 +117,6 @@ export class DevplanComponent {
           this.loading = false;
         },
         error: (error) => {
-          console.error('Error fetching dev plans:', error);
           this.loading = false;
         },
       });
@@ -145,19 +143,14 @@ export class DevplanComponent {
   }
 
   onSortChange(event: any) {
-    this.currentSortBy = event.value; // Update current sort by
-    console.log('Sorting by:', this.currentSortBy); // Log for debugging
-
-    this.currentPage = 0; // Reset to the first page
-    console.log('Sorting direction:', this.sortingDirection); // Log for debugging
-
+    this.currentSortBy = event.value; // Update current sort by // Log for debugging
+    this.currentPage = 0; // Reset to the first page // Log for debugging
     this.getAllDevplans(this.currentSortBy, this.sortingDirection); // Call to load data with new sorting
   }
 
   toggleSortingDirection() {
     // Toggle between 'asc' and 'desc'
-    this.sortingDirection = this.sortingDirection === 'asc' ? 'desc' : 'asc';
-    console.log('Sorting direction changed to:', this.sortingDirection); // Log the new direction
+    this.sortingDirection = this.sortingDirection === 'asc' ? 'desc' : 'asc'; // Log the new direction
     // Reload achievements with the current sort criteria and new sorting direction
     this.getAllDevplans(this.currentSortBy, this.sortingDirection);
   }
@@ -168,13 +161,12 @@ export class DevplanComponent {
 
   openUpdateDialog(divisions: any) {
     this.selecteddevplan = divisions;
-    // console.log(this.selecteddevplan);
+    // ;
     this.displayUpdateDialog = true;
   }
 
   // Fungsi menangani event divisi yang dibuat
   ondevplanCreated(newdivision: any) {
-    console.log('awqqq baru:', newdivision);
     // Logika untuk menyimpan division ke database (via API)
     this.getAllDevplans();
     this.displayCreateDialog = false;
@@ -209,7 +201,6 @@ export class DevplanComponent {
               'Terjadi kesalahan saat menghapus Divisi.',
               'error'
             );
-            console.error('Error deleting division:', error);
           },
         });
       }

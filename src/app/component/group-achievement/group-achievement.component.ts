@@ -120,12 +120,10 @@ export class GroupAchievementComponent implements OnInit {
         this.groupAchievementService.getAllGroupAchievementsEnabled(),
     }).subscribe({
       next: ({ groupAchievement, attitudeSkill, gAchievementEnabled }) => {
-        // Assign data for group achievements
         this.groupAchievements = groupAchievement.content;
-        this.totalRecords = groupAchievement.total_data; // Ensure this matches the response from the backend
+        this.totalRecords = groupAchievement.total_data;
         this.filteredGroupAchievements = this.groupAchievements;
 
-        // Assign data for group achievement enabled
         this.groupAchievementEnabled = gAchievementEnabled.content;
         this.percentageAchieved = this.groupAchievementEnabled.map(
           (item) => item.percentage
@@ -135,7 +133,6 @@ export class GroupAchievementComponent implements OnInit {
           0
         );
 
-        // Assign data for attitude skills
         this.atitudeSkills = attitudeSkill.content;
         this.percentageAttitude = this.atitudeSkills.map(
           (item) => item.percentage
@@ -150,7 +147,6 @@ export class GroupAchievementComponent implements OnInit {
       },
       error: (error) => {
         this.loading = false;
-        console.error('Error loading data:', error);
       },
     });
   }
@@ -179,7 +175,7 @@ export class GroupAchievementComponent implements OnInit {
       .subscribe({
         next: (response) => {
           this.groupAchievements = response.content;
-          this.totalRecords = response.total_data; // Ensure this matches the response from the backend
+          this.totalRecords = response.total_data;
           this.filteredGroupAchievements = this.groupAchievements;
           this.loading = false;
 
@@ -191,7 +187,6 @@ export class GroupAchievementComponent implements OnInit {
               confirmButtonText: 'OK',
             }).then((result) => {
               if (result.isConfirmed) {
-                // Reset search keyword only
                 this.searchKeyword = '';
                 this.getAllGroupAchievements(
                   this.currentSortBy,
@@ -203,12 +198,9 @@ export class GroupAchievementComponent implements OnInit {
           }
 
           this.loading = false;
-          // console.log('Data Group Achievements:', this.groupAchievements);
-          // console.log('Total Records:', this.totalRecords);
         },
         error: (error) => {
           this.loading = false;
-          console.error('Error fetching group achievements:', error);
         },
       });
   }
@@ -230,32 +222,23 @@ export class GroupAchievementComponent implements OnInit {
   sumPercentage() {
     this.totalPercentage =
       this.totalPercentageAttitude + this.totalPercentageAchieved;
-    // console.log('ttal', this.totalPercentage);
   }
 
   loadPage(event: any) {
-    this.currentPage = event.first / event.rows; // Menghitung halaman berdasarkan offset
-    this.selectedPageSize = event.rows; // Ambil jumlah baris per halaman
-    console.log('Page Size Change Triggered');
-    console.log('Selected Page Size:', this.selectedPageSize);
-    this.getAllGroupAchievements(this.currentSortBy, this.sortingDirection); // Muat ulang data dengan ukuran halaman baru
+    this.currentPage = event.first / event.rows;
+    this.selectedPageSize = event.rows;
+    this.getAllGroupAchievements(this.currentSortBy, this.sortingDirection);
   }
 
   onSortChange(event: any) {
-    this.currentSortBy = event.value; // Update current sort by
-    console.log('Sorting by:', this.currentSortBy); // Log for debugging
-
-    this.currentPage = 0; // Reset to the first page
-    console.log('Sorting direction:', this.sortingDirection); // Log for debugging
-
-    this.getAllGroupAchievements(this.currentSortBy, this.sortingDirection); // Call to load data with new sorting
+    this.currentSortBy = event.value;
+    this.currentPage = 0;
+    this.getAllGroupAchievements(this.currentSortBy, this.sortingDirection);
   }
 
   toggleSortingDirection() {
-    // Toggle between 'asc' and 'desc'
     this.sortingDirection = this.sortingDirection === 'asc' ? 'desc' : 'asc';
-    console.log('Sorting direction changed to:', this.sortingDirection); // Log the new direction
-    // Reload achievements with the current sort criteria and new sorting direction
+
     this.getAllGroupAchievements(this.currentSortBy, this.sortingDirection);
   }
 
@@ -270,7 +253,7 @@ export class GroupAchievementComponent implements OnInit {
 
   validateMaxValue(event: any): void {
     const maxValue = this.totalPercentage;
-    // console.log(maxValue);
+
     const inputValue = Number(event.target.value);
 
     if (inputValue > maxValue) {
@@ -281,7 +264,6 @@ export class GroupAchievementComponent implements OnInit {
   }
 
   showAddDialog() {
-    // console.log('Menampilkan dialog tambah');
     this.resetGroupAchievement();
     this.enabled = 0;
     this.groupAchievementDialog = true;
@@ -289,12 +271,10 @@ export class GroupAchievementComponent implements OnInit {
   }
 
   editGroupAchievement(groupAchievement: any) {
-    // console.log('Mengedit group achievement', groupAchievement);
     this.groupAchievement = { ...groupAchievement };
     this.userPercentage = this.groupAchievement.percentage;
     this.enabled = this.groupAchievement.enabled;
-    // console.log(this.userPercentage, 'ini user percentagenya');
-    // console.log(this.totalPercentage, 'total persentase');
+
     this.groupAchievementDialog = true;
     this.isGroupNameDuplicate = false;
   }
@@ -329,12 +309,10 @@ export class GroupAchievementComponent implements OnInit {
   }
 
   saveGroupAchievement() {
-    console.log(this.groupAchievement.enabled);
     if (!this.validateGroupAchievement()) {
       return;
     }
     if (this.groupAchievement.id && this.enabled != 0) {
-      console.log('atas');
       const maxValue = 100 - this.totalPercentage + this.userPercentage;
       if (this.groupAchievement.percentage > maxValue) {
         Swal.fire({
@@ -349,7 +327,6 @@ export class GroupAchievementComponent implements OnInit {
         return;
       }
     } else {
-      console.log('bawah');
       const maxValue = 100 - this.totalPercentage;
       if (this.groupAchievement.percentage > maxValue) {
         Swal.fire({
@@ -365,7 +342,6 @@ export class GroupAchievementComponent implements OnInit {
       }
     }
 
-    // console.log('Data yang dikirim:', this.groupAchievement);
     if (this.groupAchievement.id) {
       this.groupAchievementService
         .updateGroupAchievement(this.groupAchievement.id, this.groupAchievement)

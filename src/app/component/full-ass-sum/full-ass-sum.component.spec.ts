@@ -8,10 +8,9 @@ describe('FullAssSumComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [FullAssSumComponent]
-    })
-    .compileComponents();
-    
+      imports: [FullAssSumComponent],
+    }).compileComponents();
+
     fixture = TestBed.createComponent(FullAssSumComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();

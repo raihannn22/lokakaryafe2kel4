@@ -1,19 +1,50 @@
 <div class="card flex justify-content-center">
+  <p-dialog
+    header="Tambah Divisi"
+    [modal]="true"
+    (onHide)="closeDialog()"
+    [(visible)]="visible"
+    [style]="{ width: '40rem' }"
+  >
+    <div class="p-fluid">
+      <div class="field">
+        <label for="division"
+          >Division Name<span class="text-red-600">*</span></label
+        >
+        <input
+          pInputText
+          id="division"
+          [(ngModel)]="newDivision.DIVISION_NAME"
+          name="division"
+          #division_name="ngModel"
+          required
+        />
+        <small
+          class="p-error"
+          *ngIf="!isValidForm() && newDivision.DIVISION_NAME"
+          >Division name already in use.</small
+        >
+        <small
+          class="p-error"
+          *ngIf="division_name.invalid && division_name.touched"
+          >Division name is required.</small
+        >
+      </div>
 
-    <p-dialog header="Tambah Divisi" [modal]="true" (onHide)="closeDialog()" [(visible)]="visible" [style]="{ width: '40rem' }">
-        <div class="p-fluid">
-            <div class="field">
-                <label for="division">Division Name<span class="text-red-600">*</span></label>
-                <input pInputText id="division" [(ngModel)]="newDivision.DIVISION_NAME" name="division" #division_name="ngModel" required />
-                <small class="p-error" *ngIf="!isValidForm() && newDivision.DIVISION_NAME">Division name already in use.</small>
-                <small class="p-error" *ngIf="division_name.invalid && division_name.touched">Division name is required.</small>
-            </div>
-        
-            <div class="flex justify-content-end gap-2 mt-3">
-                <p-button label="Cancel" icon="pi pi-times" severity="secondary" (click)="closeDialog()"></p-button>
-                <p-button label="Save" icon="pi pi-check" (click)="onSubmit()" [disabled]="!isValidForm()"></p-button>
-            </div>
-        </div>
-    </p-dialog>
-  </div>
-  
+      <div class="flex justify-content-end gap-2 mt-3">
+        <p-button
+          label="Cancel"
+          icon="pi pi-times"
+          severity="secondary"
+          (click)="closeDialog()"
+        ></p-button>
+        <p-button
+          label="Save"
+          icon="pi pi-check"
+          (click)="onSubmit()"
+          [disabled]="!isValidForm()"
+        ></p-button>
+      </div>
+    </div>
+  </p-dialog>
+</div>

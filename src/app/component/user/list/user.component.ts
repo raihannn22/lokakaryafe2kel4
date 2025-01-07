@@ -4,8 +4,6 @@ import { FormsModule } from '@angular/forms';
 import { ButtonModule } from 'primeng/button';
 import { CalendarModule } from 'primeng/calendar';
 import { Table, TableModule } from 'primeng/table';
-// import { UserService } from '../service/user.service';
-// import { CreateUserComponent } from '/component/create-user/create-user.component';
 import { DialogModule } from 'primeng/dialog';
 import { TagModule } from 'primeng/tag';
 import { ToastModule } from 'primeng/toast';
@@ -103,8 +101,6 @@ export class UserComponent implements OnInit {
 
   searchKeyword: string = '';
 
-  // userId: string | undefined;
-
   onYearChange(event: any) {
     this.getAllUsers();
   }
@@ -122,10 +118,10 @@ export class UserComponent implements OnInit {
   }
 
   isViewUserRoute(): boolean {
-    return this.router.url === '/view-user'; // Memeriksa jika URL adalah /login
+    return this.router.url === '/view-user';
   }
   isSummaryApproveRoute(): boolean {
-    return this.router.url === '/summary-approve'; // Memeriksa jika URL adalah /login
+    return this.router.url === '/summary-approve';
   }
 
   ngOnInit() {
@@ -134,7 +130,7 @@ export class UserComponent implements OnInit {
     this.getRolesFromToken();
     this.getUsernameFromToken();
     this.getAllDivision();
-    // this.getUserIdFromLocalStorage();
+
     this.getDivisionIdFromUserId();
 
     this.statuses = [
@@ -146,7 +142,6 @@ export class UserComponent implements OnInit {
       { label: 'Confirmed', value: '1' },
       { label: 'Pending', value: '0' },
     ];
-    // console.log(this.getUsernameFromToken());
   }
 
   getSeverity(status: string) {
@@ -181,30 +176,23 @@ export class UserComponent implements OnInit {
         const decoded: any = jwtDecode(this.token);
         let roles = decoded.role;
         roles = roles
-          .slice(1, -1) // Hilangkan karakter "[" dan "]"
-          .split(',') // Pecah berdasarkan koma
-          .map((role: string) => role.trim()); // Hapus spasi di sekitar elemen
+          .slice(1, -1)
+          .split(',')
+          .map((role: string) => role.trim());
 
         this.userRoles = roles.join(', ');
-      } catch (error) {
-        console.error('Error decoding roles from token:', error);
-      }
+      } catch (error) {}
     } else {
-      console.warn('Token not found');
     }
   }
 
   getUsernameFromToken(): void {
     if (this.token) {
       try {
-        const decoded: any = jwtDecode(this.token); // Decode JWT token
-        this.userName = decoded.sub || 'Unknown'; // Ambil nilai dari field "sub"
-        console.log('Decoded username:', this.userName);
-      } catch (error) {
-        console.error('Error decoding username from token:', error);
-      }
+        const decoded: any = jwtDecode(this.token);
+        this.userName = decoded.sub || 'Unknown';
+      } catch (error) {}
     } else {
-      console.warn('Token not found');
     }
   }
 
@@ -214,20 +202,14 @@ export class UserComponent implements OnInit {
       this.userService.getUserById(userId).subscribe(
         (response) => {
           if (response && response.content) {
-            // Akses division_id dari objek content
             const divisionId = response.content.division_id;
-            console.log('Division ID:', divisionId);
-            this.divisionId = divisionId; // Simpan divisionId untuk digunakan di tempat lain
+            this.divisionId = divisionId;
           } else {
-            console.warn('Response is missing content or division_id');
           }
         },
-        (error) => {
-          console.error('Error fetching user data:', error);
-        }
+        (error) => {}
       );
     } else {
-      console.warn('User ID not found in local storage');
     }
   }
 
@@ -253,7 +235,6 @@ export class UserComponent implements OnInit {
       this.totalRecords = user.total_data;
       this.UsersSummary = userSummary.content;
 
-      // Cek apakah data pengguna kosong
       if (this.users.length === 0) {
         Swal.fire({
           icon: 'info',
@@ -262,7 +243,6 @@ export class UserComponent implements OnInit {
           confirmButtonText: 'OK',
         }).then((result) => {
           if (result.isConfirmed) {
-            // Reset search keyword only
             this.searchKeyword = '';
             this.getAllUsers(
               this.currentSortBy,
@@ -272,9 +252,7 @@ export class UserComponent implements OnInit {
           }
         });
       } else {
-        // Filter users based on role
         if (this.userRoles.includes('HR')) {
-          // HR can see all users
           this.usersWithScore = this.users.map((user) => {
             const score = this.scoreUsers.find((s) => s.userId === user.id);
             return {
@@ -283,9 +261,8 @@ export class UserComponent implements OnInit {
             };
           });
         } else {
-          // Other roles can only see users in their division
           this.usersWithScore = this.users
-            .filter((user) => user.division_id === this.divisionId) // Filter by division
+            .filter((user) => user.division_id === this.divisionId)
             .map((user) => {
               const score = this.scoreUsers.find((s) => s.userId === user.id);
               return {
@@ -294,8 +271,6 @@ export class UserComponent implements OnInit {
               };
             });
         }
-
-        console.log('Users with Score:', this.usersWithScore);
 
         if (this.router.url === '/summary-approve') {
           this.usersWithScore = this.UsersSummary;
@@ -319,69 +294,30 @@ export class UserComponent implements OnInit {
   }
 
   loadPage(event: any) {
-    this.currentPage = event.first / event.rows; // Menghitung halaman berdasarkan offset
-    this.selectedPageSize = event.rows; // Ambil jumlah baris per halaman
-    console.log('Page Size Change Triggered');
-    console.log('Selected Page Size:', this.selectedPageSize);
-    this.getAllUsers(this.currentSortBy, this.sortingDirection); // Muat ulang data dengan ukuran halaman baru
+    this.currentPage = event.first / event.rows;
+    this.selectedPageSize = event.rows;
+    this.getAllUsers(this.currentSortBy, this.sortingDirection);
   }
 
   onSortChange(event: any) {
-    this.currentSortBy = event.value; // Update current sort by
-    console.log('Sorting by:', this.currentSortBy); // Log for debugging
-
-    this.currentPage = 0; // Reset to the first page
-    console.log('Sorting direction:', this.sortingDirection); // Log for debugging
-
-    this.getAllUsers(this.currentSortBy, this.sortingDirection); // Call to load data with new sorting
+    this.currentSortBy = event.value;
+    this.currentPage = 0;
+    this.getAllUsers(this.currentSortBy, this.sortingDirection);
   }
 
   toggleSortingDirection() {
-    // Toggle between 'asc' and 'desc'
     this.sortingDirection = this.sortingDirection === 'asc' ? 'desc' : 'asc';
-    console.log('Sorting direction changed to:', this.sortingDirection); // Log the new direction
-    // Reload achievements with the current sort criteria and new sorting direction
+
     this.getAllUsers(this.currentSortBy, this.sortingDirection);
   }
-  // getAllUsers() {
-  //   forkJoin({
-  //     user: this.userService.getAllUsers(),
-  //     total: this.summaryService.getTotalScore(this.selectedYear),
-  //     userSummary: this.summaryService.getUserAndSummary(this.selectedYear),
-  //   }).subscribe(({ user, total , userSummary }) => {
-  //     this.loading = false;
-  //     this.scoreUsers = total;
-  //     this.users = user.content;
-
-  //     this.UsersSummary = userSummary.content;
-
-  //     this.usersWithScore = this.users.map((user) => {
-  //       // Temukan skor berdasarkan ID pengguna
-  //       const score = this.scoreUsers.find((s) => s.userId === user.id);
-  //       return {
-  //         ...user, // Data pengguna asli
-  //         totalScore: score ? score.totalScore : 0, // Tambahkan totalScore
-  //       };
-  //     });
-  //     console.log('Users with Score:', this.usersWithScore);
-
-  //     if (this.router.url === '/summary-approve') {
-  //       this.usersWithScore = this.UsersSummary
-  //     }
-  //   });
-
-  // }
 
   getAllDivision() {
     this.userService.getAllDivision().subscribe({
       next: (response) => {
-        this.divisi = response.content; // Data ada di 'content'
-        // console.log('Total divisi:', this.divisi);
+        this.divisi = response.content;
       },
 
-      error: (error) => {
-        console.error('Error fetching users:', error);
-      },
+      error: (error) => {},
       complete: () => {
         this.divisionName = this.divisi.map((item) => item.DIVISION_NAME);
       },
@@ -407,9 +343,7 @@ export class UserComponent implements OnInit {
     this.displayConfirmedDialog = true;
   }
 
-  // Fungsi menangani event user yang dibuat
   onUserCreated(newUser: any) {
-    // Logika untuk menyimpan user ke database (via API)
     this.getAllUsers();
     this.displayCreateDialog = false;
     this.messageService.add({
@@ -417,7 +351,6 @@ export class UserComponent implements OnInit {
       summary: 'Success',
       detail: 'Message Content',
     });
-    // Tambahkan user baru ke daftar users atau update data sesuai kebutuhan
   }
 
   confirmDelete(user: any) {
@@ -435,7 +368,7 @@ export class UserComponent implements OnInit {
         this.userService.deleteUser(user.id).subscribe({
           next: () => {
             Swal.fire('Deleted!', 'User Already Deleted.', 'success');
-            this.getAllUsers(); // Panggil metode untuk memperbarui tabel
+            this.getAllUsers();
           },
           error: (error) => {
             Swal.fire(
@@ -443,7 +376,6 @@ export class UserComponent implements OnInit {
               'Terjadi kesalahan saat menghapus pengguna.',
               'error'
             );
-            console.error('Error deleting user:', error);
           },
         });
       }

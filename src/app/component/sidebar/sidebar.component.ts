@@ -15,7 +15,6 @@ import { Sidebar } from 'primeng/sidebar';
 import { RouterLink } from '@angular/router';
 import { MenuManagementService } from '../../service/menu-management/menu-management.service';
 import { CommonModule } from '@angular/common';
-import { emit } from 'process';
 
 @Component({
   selector: 'app-sidebar',
@@ -164,7 +163,6 @@ export class SidebarComponent implements OnInit {
         path: '/summary-approve',
         icon: 'pi pi-list-check',
       },
-      // Tambahkan mapping lainnya di sini
     };
 
     return menuData.map((menu) => ({

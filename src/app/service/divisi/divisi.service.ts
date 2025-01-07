@@ -25,9 +25,6 @@ export class DivisiService {
       `${this.apiUrl}/division/get/paginated?page=${page}&size=${size}&sort=${sort}&direction=${direction}&searchKeyword=${searchKeyword}`
     );
   }
-  // getAllDivisions(): Observable<any> {
-  //   return this.http.get(`${this.apiUrl}/division/get/all`);
-  // }
 
   saveDivision(division: any): Observable<any> {
     return this.http.put(`${this.apiUrl}/division/save`, division);

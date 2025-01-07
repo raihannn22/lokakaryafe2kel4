@@ -1,33 +1,33 @@
 .p-datatable {
-    font-size: 14px;
+  font-size: 14px;
 }
 
 .p-datatable th {
-    text-align: left;
-    background-color: #f1f1f1;
+  text-align: left;
+  background-color: #f1f1f1;
 }
 
 .p-datatable td {
-    padding: 10px;
+  padding: 10px;
 }
 
 td.flex.gap-2 {
-    justify-content: center;
+  justify-content: center;
 }
 
 th.aksi {
-    text-align: center;
+  text-align: center;
 }
 
 .year-selector {
-    flex-direction: column;
-    margin-bottom: 15px;
-  }
-  
-  .custom-label {
-    font-size: 1.2rem;
-    font-weight: bold;
-    color: #4a4a4a;
-    margin-bottom: 5px;
-    font-family: 'Arial', sans-serif;
-  }
+  flex-direction: column;
+  margin-bottom: 15px;
+}
+
+.custom-label {
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: #4a4a4a;
+  margin-bottom: 5px;
+  font-family: "Arial", sans-serif;
+}

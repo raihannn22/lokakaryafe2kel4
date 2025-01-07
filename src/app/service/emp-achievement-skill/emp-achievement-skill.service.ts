@@ -47,7 +47,6 @@ export class EmpAchievementSkillService {
     return this.http.patch(`${this.apiUrl}/update/${id}`, empAchievementSkill);
   }
 
-
   getEmpAchievementSkillById(id: string): Observable<any> {
     return this.http.get(`${this.apiUrl}/get/${id}`);
   }
@@ -60,7 +59,10 @@ export class EmpAchievementSkillService {
     return this.http.get('http://localhost:8081/achievement/get/all/enabled');
   }
 
-  getAllEmpAchievementSkillsByYearAndUserId(year: number , id: string): Observable<any> {
+  getAllEmpAchievementSkillsByYearAndUserId(
+    year: number,
+    id: string
+  ): Observable<any> {
     return this.http.get(`${this.apiUrl}/get/user/${id}/year/${year}`);
   }
 }

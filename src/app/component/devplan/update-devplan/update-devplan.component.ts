@@ -29,7 +29,7 @@ export class UpdateDevplanComponent {
   }
 
   isUniqueDevplan(): boolean {
-    if (!this.newDevplan.PLAN) return false; // Validasi jika email kosong
+    if (!this.newDevplan.PLAN) return false;
     return (
       Array.isArray(this.oldDevplans) &&
       !this.oldDevplans.some(
@@ -42,8 +42,8 @@ export class UpdateDevplanComponent {
     );
   }
 
-  @Input() visible: boolean = false; // Menyambungkan dengan property di komponen induk
-  @Output() visibleChange = new EventEmitter<boolean>(); // Emit perubahan visibility
+  @Input() visible: boolean = false;
+  @Output() visibleChange = new EventEmitter<boolean>();
   @Input() devplan: any;
   @Output() divisionCreated = new EventEmitter<any>();
 
@@ -61,9 +61,7 @@ export class UpdateDevplanComponent {
       next: (response) => {
         this.oldDevplans = response.content;
       },
-      error: (error) => {
-        console.error('Error fetching divisions:', error);
-      },
+      error: (error) => {},
     });
   }
 
@@ -86,14 +84,10 @@ export class UpdateDevplanComponent {
     const updatedData: any = { ...this.newDevplan };
     this.devplanService.updateDevPlan(this.devplan.ID, updatedData).subscribe({
       next: (response) => {
-        console.log('Division updated successfully:', response);
-        this.divisionCreated.emit(response); // Emit event ke komponen induk
-        this.closeDialog(); // Tutup dialog setelah berhasil
+        this.divisionCreated.emit(response);
+        this.closeDialog();
       },
-      error: (error) => {
-        console.error('Error creating Division:', error);
-        // Tambahkan penanganan error di sini
-      },
+      error: (error) => {},
     });
   }
 }

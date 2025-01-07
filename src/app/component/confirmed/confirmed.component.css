@@ -1,58 +1,46 @@
 .attitude-skills-list {
-    margin-left: 10px;
-    margin-right: 10px;
-  }
-  
-  .skill-item {
-    margin-bottom: 15px;
-  }
-  .p-table {
-    table-layout: fixed;
-    width: 50%;
-  }
-  
-  
-  
-  .p-table td {
-    padding: 10px;
-  }
-  
-  .btn-simpan {
-    float: right;
-  }
-  
-  .justify-between {
-    justify-content: space-between;
-  }
-  
-  .align-items-center {
-    align-items: center;
-  }
-  
-  .line {
-    width: 50px; /* Panjang garis */
-    height: 2px; /* Ketebalan garis */
-    background-color: #000; /* Warna garis */
-    margin: 0 10px; /* Jarak garis dari teks */
+  margin-left: 10px;
+  margin-right: 10px;
 }
-
-:host ::ng-deep .p-dialog-mask{
+.skill-item {
+  margin-bottom: 15px;
+}
+.p-table {
+  table-layout: fixed;
+  width: 50%;
+}
+.p-table td {
+  padding: 10px;
+}
+.btn-simpan {
+  float: right;
+}
+.justify-between {
+  justify-content: space-between;
+}
+.align-items-center {
+  align-items: center;
+}
+.line {
+  width: 50px;
+  height: 2px;
+  background-color: #000;
+  margin: 0 10px;
+}
+:host ::ng-deep .p-dialog-mask {
   z-index: 1000 !important;
 }
-
 .custom-swal-popup {
-  z-index: 1050 !important; /* Pastikan lebih tinggi dari modal/dialog lainnya */
+  z-index: 1050 !important;
 }
-
-.column1-th, .column1 {
-  width: 65%; /* Menyesuaikan lebar kolom pertama */
+.column1-th,
+.column1 {
+  width: 65%;
 }
-
-.column2-th, .column2-td {
-  width: 10%; /* Menyesuaikan lebar kolom kedua */
+.column2-th,
+.column2-td {
+  width: 10%;
 }
-
 .column3-td {
-  width: 25%; /* Menyesuaikan lebar kolom ketiga */
+  width: 25%;
 }
-

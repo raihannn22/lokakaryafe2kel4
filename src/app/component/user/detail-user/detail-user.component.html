@@ -1,107 +1,115 @@
-<!-- <div>
-    {{this.user}}
-</div> -->
 <div class="card flex justify-content-center">
-    <!-- Tombol untuk membuka dialog -->
-    <!-- <p-button label="Tambah Pengguna" icon="pi pi-plus" (click)="visible = true" class="mb-3"></p-button> -->
-    <p-dialog header="User Detail" [modal]="true" (onHide)="closeDialog()" [(visible)]="visible" [style]="{ width: '40rem' }">
-        <div class="grid">
-            <div class="col-6">
-              <div class="p-2">
-                <label class="font-bold">Username:</label>
-                <div class="mt-1">{{newUser.username || '-'}}</div>
-              </div>
-            </div>
-            
-            <div class="col-6">
-              <div class="p-2">
-                <label class="font-bold">Full Name:</label>
-                <div class="mt-1">{{newUser.full_name || '-'}}</div>
-              </div>
-            </div>
-    
-            <div class="col-6">
-              <div class="p-2">
-                <label class="font-bold">Position:</label>
-                <div class="mt-1">{{newUser.position || '-'}}</div>
-              </div>
-            </div>
-    
-            <div class="col-6">
-              <div class="p-2">
-                <label class="font-bold">Email Address:</label>
-                <div class="mt-1">{{newUser.email_address || '-'}}</div>
-              </div>
-            </div>
-    
-            <div class="col-6">
-              <div class="p-2">
-                <label class="font-bold">Employee Status:</label>
-                <div class="mt-1">
-                  <p-tag 
-                  [severity]="newUser.employee_status === 1 ? 'warning' : 'info'"
-                  [value]="newUser.employee_status === 1 ? 'Contract' : 'Permanent'"
-                  ></p-tag>
-                </div>
-              </div>
-            </div>
-    
-            
-    
-            <div class="col-6">
-              <div class="p-2">
-                <label class="font-bold">Join Date:</label>
-                <div class="mt-1">
-                  {{newUser.join_date }}
-                </div>
-              </div>
-            </div>
-    
-            <div class="col-6">
-              <div class="p-2">
-                <label class="font-bold">Status:</label>
-                <div class="mt-1">
-                  <p-tag 
-                    [severity]="newUser.enabled ? 'success' : 'danger'"
-                    [value]="newUser.enabled ? 'Enabled' : 'Disabled'"
-                  ></p-tag>
-                </div>
-              </div>
-            </div>
-    
-            <div class="col-6">
-              <div class="p-2">
-                <label class="font-bold">Division:</label>
-                <div class="mt-1">{{newUser.division_name || '-'}}</div>
+  <p-dialog
+    header="User Detail"
+    [modal]="true"
+    (onHide)="closeDialog()"
+    [(visible)]="visible"
+    [style]="{ width: '40rem' }"
+  >
+    <div class="grid">
+      <div class="col-6">
+        <div class="p-2">
+          <label class="font-bold">Username:</label>
+          <div class="mt-1">{{ newUser.username || "-" }}</div>
+        </div>
+      </div>
+
+      <div class="col-6">
+        <div class="p-2">
+          <label class="font-bold">Full Name:</label>
+          <div class="mt-1">{{ newUser.full_name || "-" }}</div>
+        </div>
+      </div>
+
+      <div class="col-6">
+        <div class="p-2">
+          <label class="font-bold">Position:</label>
+          <div class="mt-1">{{ newUser.position || "-" }}</div>
+        </div>
+      </div>
+
+      <div class="col-6">
+        <div class="p-2">
+          <label class="font-bold">Email Address:</label>
+          <div class="mt-1">{{ newUser.email_address || "-" }}</div>
+        </div>
+      </div>
+
+      <div class="col-6">
+        <div class="p-2">
+          <label class="font-bold">Employee Status:</label>
+          <div class="mt-1">
+            <p-tag
+              [severity]="newUser.employee_status === 1 ? 'warning' : 'info'"
+              [value]="newUser.employee_status === 1 ? 'Contract' : 'Permanent'"
+            ></p-tag>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-6">
+        <div class="p-2">
+          <label class="font-bold">Join Date:</label>
+          <div class="mt-1">
+            {{ newUser.join_date }}
+          </div>
+        </div>
+      </div>
+
+      <div class="col-6">
+        <div class="p-2">
+          <label class="font-bold">Status:</label>
+          <div class="mt-1">
+            <p-tag
+              [severity]="newUser.enabled ? 'success' : 'danger'"
+              [value]="newUser.enabled ? 'Enabled' : 'Disabled'"
+            ></p-tag>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-6">
+        <div class="p-2">
+          <label class="font-bold">Division:</label>
+          <div class="mt-1">{{ newUser.division_name || "-" }}</div>
+        </div>
+      </div>
+    </div>
+    <div class="col-6">
+      <div class="p-2">
+        <label class="font-bold">App Roles:</label>
+        <div class="mt-1">
+          <div class="grid" *ngIf="newUser.app_role?.length; else noRoles">
+            <div class="col-6" *ngFor="let role of newUser.app_role">
+              <div class="flex align-items-center mb-2">
+                <i class="pi pi-check-circle text-green-500 mr-2"></i>
+                <span>{{ role }}</span>
               </div>
             </div>
           </div>
-          <div class="col-6">
-            <div class="p-2">
-                <label class="font-bold">App Roles:</label>
-                <div class="mt-1">
-                  <div class="grid" *ngIf="newUser.app_role?.length; else noRoles">
-                    <div class="col-6" *ngFor="let role of newUser.app_role">
-                      <div class="flex align-items-center mb-2">
-                        <i class="pi pi-check-circle text-green-500 mr-2"></i>
-                        <span>{{role}}</span>
-                      </div>
-                    </div>
-                  </div>
-                  <ng-template #noRoles>
-                    <span>-</span>
-                  </ng-template>
-                </div>
-              </div>
+          <ng-template #noRoles>
+            <span>-</span>
+          </ng-template>
         </div>
-  
-      <div class="flex justify-content-end gap-2 mt-3">
-        <p-button label="Cancel" icon="pi pi-times" severity="secondary" (click)="closeDialog()"></p-button>
-        <p-button label="Summary" icon="pi pi-file-arrow-up" severity="info" (click)="openSummaryDialog(user)"></p-button>
       </div>
-    </p-dialog>
-  </div>
-  
+    </div>
 
-  <app-summary [(visible)]="displaySummaryDialog" [user]="user" [year]="year">
-  </app-summary>
+    <div class="flex justify-content-end gap-2 mt-3">
+      <p-button
+        label="Cancel"
+        icon="pi pi-times"
+        severity="secondary"
+        (click)="closeDialog()"
+      ></p-button>
+      <p-button
+        label="Summary"
+        icon="pi pi-file-arrow-up"
+        severity="info"
+        (click)="openSummaryDialog(user)"
+      ></p-button>
+    </div>
+  </p-dialog>
+</div>
+
+<app-summary [(visible)]="displaySummaryDialog" [user]="user" [year]="year">
+</app-summary>

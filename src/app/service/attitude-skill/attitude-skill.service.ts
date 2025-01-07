@@ -22,10 +22,6 @@ export class AttitudeSkillService {
     );
   }
 
-  // getAllAttitudeSkills(): Observable<any> {
-  //   return this.http.get(`${this.apiUrl}/all`);
-  // }
-
   getAllGroupAttitudeSkills(): Observable<any> {
     return this.http.get('http://localhost:8081/group-attitude-skill/all');
   }

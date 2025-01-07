@@ -9,46 +9,60 @@ import { CalendarModule } from 'primeng/calendar';
 import { UserService } from '../../../service/user/user.service';
 import { CheckboxModule } from 'primeng/checkbox';
 
-
 @Component({
   selector: 'app-create-user',
   standalone: true,
-  imports: [DialogModule, InputTextModule, ButtonModule, CommonModule, CalendarModule, FormsModule, DropdownModule, CheckboxModule],
+  imports: [
+    DialogModule,
+    InputTextModule,
+    ButtonModule,
+    CommonModule,
+    CalendarModule,
+    FormsModule,
+    DropdownModule,
+    CheckboxModule,
+  ],
   templateUrl: './create-user.component.html',
-  styleUrls: ['./create-user.component.css']
+  styleUrls: ['./create-user.component.css'],
 })
 export class CreateUserComponent {
-
   isValidForm(): boolean {
-    // const isUniqueUsername = Array.isArray(this.oldUsers) && !this.oldUsers.some(
-    //   (user) => user.username.toLowerCase().trim() === this.newUser.username.toLowerCase().trim()
-    // );
-
-    return !!this.newUser.username &&
-           !!this.newUser.full_name &&
-           !!this.newUser.position &&
-           !!this.newUser.email_address &&
-           !!this.newUser.employee_status &&
-           !!this.newUser.join_date &&
-           !!this.newUser.enabled &&
-           !!this.newUser.division_id
+    return (
+      !!this.newUser.username &&
+      !!this.newUser.full_name &&
+      !!this.newUser.position &&
+      !!this.newUser.email_address &&
+      !!this.newUser.employee_status &&
+      !!this.newUser.join_date &&
+      !!this.newUser.enabled &&
+      !!this.newUser.division_id
+    );
   }
 
   isUniqueUsername(): boolean {
-    return Array.isArray(this.oldUsers) && !this.oldUsers.some(
-      (user) => user.username.toLowerCase().trim() === this.newUser.username.toLowerCase().trim()
+    return (
+      Array.isArray(this.oldUsers) &&
+      !this.oldUsers.some(
+        (user) =>
+          user.username.toLowerCase().trim() ===
+          this.newUser.username.toLowerCase().trim()
+      )
     );
   }
 
   isUniqueEmail(): boolean {
-    return Array.isArray(this.oldUsers) && !this.oldUsers.some(
-      (user) => user.email_address.toLowerCase().trim() === this.newUser.email_address.toLowerCase().trim()
+    return (
+      Array.isArray(this.oldUsers) &&
+      !this.oldUsers.some(
+        (user) =>
+          user.email_address.toLowerCase().trim() ===
+          this.newUser.email_address.toLowerCase().trim()
+      )
     );
   }
 
-
-  @Input() visible: boolean = false;  // Menyambungkan dengan property di komponen induk
-  @Output() visibleChange = new EventEmitter<boolean>();  // Emit perubahan visibility
+  @Input() visible: boolean = false;
+  @Output() visibleChange = new EventEmitter<boolean>();
 
   @Output() userCreated = new EventEmitter<any>();
 
@@ -56,9 +70,7 @@ export class CreateUserComponent {
   roles: any[] = [];
   oldUsers: any[] = [];
 
-  constructor(
-    private userService: UserService
-  ) {}
+  constructor(private userService: UserService) {}
 
   ngOnInit() {
     this.getAllDivision();
@@ -71,9 +83,7 @@ export class CreateUserComponent {
       next: (response) => {
         this.roles = response.content;
       },
-      error: (error) => {
-        console.error('Error fetching users:', error);
-      },
+      error: (error) => {},
     });
   }
 
@@ -82,9 +92,7 @@ export class CreateUserComponent {
       next: (response) => {
         this.divisions = response.content;
       },
-      error: (error) => {
-        console.error('Error fetching users:', error);
-      },
+      error: (error) => {},
     });
   }
 
@@ -93,9 +101,7 @@ export class CreateUserComponent {
       next: (response) => {
         this.oldUsers = response.content;
       },
-      error: (error) => {
-        console.error('Error fetching users:', error);
-      },
+      error: (error) => {},
     });
   }
 
@@ -105,41 +111,33 @@ export class CreateUserComponent {
     position: '',
     email_address: '',
     employee_status: null,
-    app_role : [],
+    app_role: [],
     join_date: null,
     enabled: 1,
-    division_id: ''
+    division_id: '',
   };
-
-
 
   employeeStatusOptions = [
     { label: 'Kontrak', value: 1 },
-    { label: 'Permanen', value: 2 }
+    { label: 'Permanen', value: 2 },
   ];
 
   enabledOptions = [
     { label: 'Enabled', value: 1 },
-    { label: 'Disabled', value: 0 }
+    { label: 'Disabled', value: 0 },
   ];
 
-
-
   closeDialog() {
-    this.visibleChange.emit(false)
+    this.visibleChange.emit(false);
   }
 
   onSubmit() {
     this.userService.saveUser(this.newUser).subscribe({
       next: (response) => {
-        console.log('User created successfully:', response);
-        this.userCreated.emit(response);// Emit event ke komponen induk
-        this.closeDialog();               // Tutup dialog setelah berhasil
+        this.userCreated.emit(response);
+        this.closeDialog();
       },
-      error: (error) => {
-        console.error('Error creating user:', error);
-        // Tambahkan penanganan error di sini
-      }
+      error: (error) => {},
     });
   }
 }

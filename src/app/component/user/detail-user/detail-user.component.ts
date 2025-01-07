@@ -27,14 +27,14 @@ import { SummaryComponent } from '../../summary/summary.component';
     CheckboxModule,
     TagModule,
     ChipsModule,
-    SummaryComponent
+    SummaryComponent,
   ],
   templateUrl: './detail-user.component.html',
   styleUrl: './detail-user.component.css',
 })
 export class DetailUserComponent {
-  @Input() visible: boolean = false; // Menyambungkan dengan property di komponen induk
-  @Output() visibleChange = new EventEmitter<boolean>(); // Emit perubahan visibility
+  @Input() visible: boolean = false;
+  @Output() visibleChange = new EventEmitter<boolean>();
   @Input() user: any = {};
   @Input() year: number = 0;
 
@@ -52,7 +52,6 @@ export class DetailUserComponent {
       this.newUser = { ...this.user };
     }
     if (this.user && this.user.app_role) {
-      // Ambil hanya ID dari setiap role di array app_role
       this.newUser.app_role = this.user.app_role.map(
         (role: any) => role.roleName
       );
@@ -65,7 +64,7 @@ export class DetailUserComponent {
   ngOnInit() {
     this.getAllDivision();
     this.getAllRole();
-    // this.newUser = { ...this.user };
+
     this.newUser = { ...this.user };
   }
 
@@ -75,27 +74,22 @@ export class DetailUserComponent {
         const decoded: any = jwtDecode(this.token);
         let roles = decoded.role;
         roles = roles
-          .slice(1, -1) // Hilangkan karakter "[" dan "]"
-          .split(',') // Pecah berdasarkan koma
-          .map((role: string) => role.trim()); // Hapus spasi di sekitar elemen
+          .slice(1, -1)
+          .split(',')
+          .map((role: string) => role.trim());
 
         this.userRoles = roles.join(', ');
-      } catch (error) {
-        console.error('Error decoding roles from token:', error);
-      }
+      } catch (error) {}
     } else {
-      console.warn('Token not found');
     }
   }
 
   getAllRole() {
     this.userService.getAllRole().subscribe({
       next: (response) => {
-        this.roles = response.content; 
+        this.roles = response.content;
       },
-      error: (error) => {
-        console.error('Error fetching users:', error);
-      },
+      error: (error) => {},
     });
   }
 
@@ -104,9 +98,7 @@ export class DetailUserComponent {
       next: (response) => {
         this.divisions = response.content;
       },
-      error: (error) => {
-        console.error('Error fetching users:', error);
-      },
+      error: (error) => {},
     });
   }
 
@@ -142,6 +134,4 @@ export class DetailUserComponent {
     this.visibleChange.emit(false);
     this.displaySummaryDialog = true;
   }
-
-  
 }

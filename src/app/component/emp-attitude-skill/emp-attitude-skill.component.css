@@ -2,7 +2,6 @@
   margin-left: 10px;
   margin-right: 10px;
 }
-
 .skill-item {
   margin-bottom: 15px;
 }
@@ -10,37 +9,29 @@
   table-layout: fixed;
   width: 100%;
 }
-
 .column1 {
   width: 80%;
   text-align: left;
   overflow: hidden;
   white-space: nowrap;
-  /* text-overflow: ellipsis; */
 }
-
 .column2-th {
   width: 20%;
   text-align: center;
 }
-
 .column2-td {
   width: 20%;
   text-align: right;
 }
-
 .p-table td {
   padding: 10px;
 }
-
 .btn-simpan {
   float: right;
 }
-
 .justify-between {
   justify-content: space-between;
 }
-
 .align-items-center {
   align-items: center;
 }

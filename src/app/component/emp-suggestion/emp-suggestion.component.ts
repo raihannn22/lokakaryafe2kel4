@@ -35,9 +35,9 @@ export class EmpSuggestionComponent implements OnInit {
   isExistingData = false;
   assessmentYear: number = new Date().getFullYear();
 
-  isAddRowDisabled: boolean = false; // Menyimpan status disabled untuk tombol tambah row
-  hasNewData: boolean = false; // Menyimpan status apakah ada data baru
-  isFormComplete: boolean = false; // Menyimpan status apakah form lengkap
+  isAddRowDisabled: boolean = false;
+  hasNewData: boolean = false;
+  isFormComplete: boolean = false;
 
   userName: string | null = '';
   yearOptions = [
@@ -76,7 +76,6 @@ export class EmpSuggestionComponent implements OnInit {
         }
       },
       error: (error) => {
-        console.error('Error fetching suggestions:', error);
         this.empSuggestions = [{ suggestion: '', isExisting: false }];
       },
     });
@@ -94,8 +93,8 @@ export class EmpSuggestionComponent implements OnInit {
       suggestion: '',
       isExisting: false,
     });
-    this.hasNewData = true; // Set hasNewData menjadi true saat menambahkan baris baru
-    this.checkFormCompleteness(); // Periksa status form setelah menambahkan baris
+    this.hasNewData = true;
+    this.checkFormCompleteness();
   }
 
   checkFormCompleteness(): void {
@@ -117,13 +116,6 @@ export class EmpSuggestionComponent implements OnInit {
       this.empSuggestions.splice(index, 1);
     }
   }
-
-  // isFormComplete(): boolean {
-  //   return this.empSuggestions.every(
-  //     (suggestion) =>
-  //       suggestion.suggestion && suggestion.suggestion.trim() !== ''
-  //   );
-  // }
 
   saveAllEmpSuggestions(): void {
     const currentYear = new Date().getFullYear();
@@ -163,7 +155,6 @@ export class EmpSuggestionComponent implements OnInit {
               next: () => {
                 this.isSaving = false;
 
-                // <<<<<<< banu
                 this.onYearChange();
                 this.empSuggestions.forEach((item) => {
                   if (
@@ -181,7 +172,6 @@ export class EmpSuggestionComponent implements OnInit {
                 });
               },
               error: (error) => {
-                console.error('Terjadi kesalahan saat menyimpan saran:', error);
                 Swal.fire({
                   icon: 'error',
                   title: 'Failed!',
@@ -197,9 +187,8 @@ export class EmpSuggestionComponent implements OnInit {
 
   onYearChange(): void {
     const userId = localStorage.getItem('id');
-    const currentYear = new Date().getFullYear(); // Ambil tahun saat ini
+    const currentYear = new Date().getFullYear();
 
-    // Disable tombol tambah row jika tahun yang dipilih bukan tahun saat ini
     this.isAddRowDisabled = this.assessmentYear !== currentYear;
 
     if (userId) {
@@ -218,46 +207,12 @@ export class EmpSuggestionComponent implements OnInit {
             } else {
               this.empSuggestions = [{ suggestion: '', isExisting: false }];
             }
-            this.checkFormCompleteness(); // Periksa status form setelah mengambil data
+            this.checkFormCompleteness();
           },
           error: (error) => {
-            console.error('Error fetching suggestions:', error);
             this.empSuggestions = [{ suggestion: '', isExisting: false }];
           },
         });
     }
   }
-  // =======
-  //   Swal.fire({
-  //     html: 'Apakah Anda yakin ingin menyimpan data ini? <br> data yang di submit tidak dapat diubah',
-  //     title: 'Are you sure?',
-  //     icon: 'warning',
-  //     showCancelButton: true,
-  //     confirmButtonColor: '#3085d6',
-  //     cancelButtonColor: '#d33',
-  //     confirmButtonText: 'Yes, change it!'
-  //   }).then((result) => {
-  //     if (result.isConfirmed) {
-  //       this.empSuggestionService.saveAllEmpSuggestions(dataToSave).subscribe({
-  //         next: () => {
-  //           this.empSuggestions.forEach((item) => {
-  //             if (dataToSave.find((savedItem) => savedItem.suggestion === item.suggestion)) {
-  //               item.isExisting = true;
-  //             }
-  //           });
-  //           this.isSaving = false;
-  //           window.location.reload();
-  //         },
-  //         error: (error) => {
-  //           console.error('Terjadi kesalahan saat menyimpan saran:', error);
-  //           alert('Gagal menyimpan saran. Silakan periksa konsol untuk detailnya.');
-  //           this.isSaving = false;
-  //         },
-  //       });
-  //     }else{
-  //       this.isSaving = false;
-  //     }
-  //   });
-
-  // >>>>>>> main
 }

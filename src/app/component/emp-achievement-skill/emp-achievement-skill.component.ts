@@ -100,7 +100,7 @@ export class EmpAchievementSkillComponent implements OnInit {
         this.loading = false;
       },
       error: (error) => {
-        // console.error('Error fetching empAchievementSkills:', error);
+        // ;
         this.loading = false;
       },
     });
@@ -114,7 +114,7 @@ export class EmpAchievementSkillComponent implements OnInit {
         this.loading = false;
       },
       error: (error) => {
-        // console.error('Error fetching achievements:', error);
+        // ;
         this.loading = false;
       },
     });
@@ -128,7 +128,7 @@ export class EmpAchievementSkillComponent implements OnInit {
         this.loading = false;
       },
       error: (error) => {
-        // console.error('Error fetching users:', error);
+        // ;
         this.loading = false;
       },
     });
@@ -146,7 +146,7 @@ export class EmpAchievementSkillComponent implements OnInit {
         this.loading = false;
       },
       error: (error) => {
-        // console.error('Error fetching group achievements:', error);
+        // ;
         this.loading = false;
       },
     });
@@ -183,7 +183,7 @@ export class EmpAchievementSkillComponent implements OnInit {
   }
 
   showAddDialog() {
-    // console.log('Menampilkan dialog tambah');
+    // ;
     this.empAchievementSkill = {
       achievement_id: null,
       user_id: null,
@@ -195,7 +195,7 @@ export class EmpAchievementSkillComponent implements OnInit {
   }
 
   editEmpAchievementSkill(empAchievementSkill: any) {
-    // console.log('Mengedit EmpAchievementSKill', empAchievementSkill);
+    // ;
     this.empAchievementSkill = { ...empAchievementSkill };
     this.empAchievementSkillDialog = true;
   }
@@ -232,7 +232,7 @@ export class EmpAchievementSkillComponent implements OnInit {
       const currentYear = new Date().getFullYear();
       this.empAchievementSkill.assessment_year = currentYear;
 
-      // console.log('Proses save, data yang dikirim:', this.empAchievementSkill);
+      // ;
       this.empAchievementSkillService
         .saveEmpAchievementSkill(this.empAchievementSkill)
         .subscribe({

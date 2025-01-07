@@ -1,33 +1,65 @@
 <div class="card flex justify-content-center">
+  <p-dialog
+    header="Tambah DevPlan"
+    [modal]="true"
+    (onHide)="closeDialog()"
+    [(visible)]="visible"
+    [style]="{ width: '40rem', height: '25rem' }"
+  >
+    <div class="p-fluid">
+      <div class="field">
+        <label for="division"
+          >DevPlan Name<span class="text-red-600">*</span></label
+        >
+        <input
+          pInputText
+          id="division"
+          [(ngModel)]="newDevplan.PLAN"
+          name="division"
+          #division="ngModel"
+          required
+        />
+        <small class="p-error" *ngIf="!isValidForm2() && newDevplan.PLAN"
+          >Devplan name already in use.</small
+        >
+        <small class="p-error" *ngIf="division.invalid && division.touched"
+          >Devplan name is required.</small
+        >
+      </div>
 
-    <p-dialog header="Tambah DevPlan" [modal]="true" (onHide)="closeDialog()" [(visible)]="visible" [style]="{ width: '40rem', height: '25rem' }">
-        <div class="p-fluid">
-            <div class="field">
-                <label for="division">DevPlan Name<span class="text-red-600">*</span></label>
-                <input pInputText id="division" [(ngModel)]="newDevplan.PLAN" name="division" #division="ngModel" required />
-                <small class="p-error" *ngIf="!isValidForm2() && newDevplan.PLAN">Devplan name already in use.</small>
-                <small class="p-error" *ngIf="division.invalid && division.touched">Devplan name is required.</small>
-            </div>
+      <div class="field">
+        <label for="enabled"
+          >Devplan Status<span class="text-red-600">*</span></label
+        >
+        <p-dropdown
+          [options]="enabledOptions"
+          [(ngModel)]="newDevplan.ENABLED"
+          placeholder="Pilih Status"
+          id="enabled"
+          name="enabled"
+          #enabled="ngModel"
+          required
+        >
+        </p-dropdown>
+        <small class="p-error" *ngIf="enabled.invalid && enabled.touched"
+          >Devplan status must be selected.</small
+        >
+      </div>
 
-            <div class="field">
-                <label for="enabled">Devplan Status<span class="text-red-600">*</span></label>
-                <p-dropdown 
-                  [options]="enabledOptions" 
-                  [(ngModel)]="newDevplan.ENABLED" 
-                  placeholder="Pilih Status" 
-                  id="enabled"
-                  name="enabled"
-                  #enabled="ngModel"
-                  required>
-                </p-dropdown>
-                <small class="p-error" *ngIf="enabled.invalid && enabled.touched">Devplan status must be selected.</small>
-              </div>
-        
-            <div class="flex justify-content-end gap-2 mt-3">
-                <p-button label="Cancel" icon="pi pi-times" severity="secondary" (click)="closeDialog()"></p-button>
-                <p-button label="Save" icon="pi pi-check" (click)="onSubmit()" [disabled]="!isValidForm2()"></p-button>
-            </div>
-        </div>
-    </p-dialog>
-  </div>
-  
+      <div class="flex justify-content-end gap-2 mt-3">
+        <p-button
+          label="Cancel"
+          icon="pi pi-times"
+          severity="secondary"
+          (click)="closeDialog()"
+        ></p-button>
+        <p-button
+          label="Save"
+          icon="pi pi-check"
+          (click)="onSubmit()"
+          [disabled]="!isValidForm2()"
+        ></p-button>
+      </div>
+    </div>
+  </p-dialog>
+</div>

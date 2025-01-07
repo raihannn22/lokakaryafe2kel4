@@ -19,7 +19,6 @@ import { DashboardComponent } from './component/dashboard/dashboard.component';
 import { EmpDevplanComponent } from './component/emp-devplan/emp-devplan.component';
 import { ViewEmpdevplanComponent } from './component/view-empdevplan/view-empdevplan.component';
 import { SummarySelfComponent } from './component/summary-self/summary-self.component';
-import { FullAssSumComponent } from './component/full-ass-sum/full-ass-sum.component';
 import { roleGuard } from './guard/role.guard';
 import { isLoggedInGuard } from './guard/is-logged-in.guard';
 import { EmployeeAssessmentComponent } from './emp-assessment/emp-assessment.component';
@@ -98,7 +97,7 @@ export const routes: Routes = [
     path: 'menu-management',
     canActivate: [authGuard, roleGuard],
     component: MenuManagementComponent,
-    data: { permission: 'role-menu#all' }
+    data: { permission: 'role-menu#all' },
   },
   {
     path: 'profile',
@@ -152,7 +151,8 @@ export const routes: Routes = [
     canActivate: [authGuard, roleGuard],
     component: SummarySelfComponent,
     data: { permission: 'summary#read.self' },
-  },{
+  },
+  {
     path: 'summary-approve',
     canActivate: [authGuard, roleGuard],
     component: UserComponent,

@@ -11,11 +11,11 @@ import { Router } from '@angular/router';
   standalone: true,
   imports: [TableModule, ButtonModule, TagModule, ButtonModule],
   templateUrl: './dashboard.component.html',
-  styleUrl: './dashboard.component.css'
+  styleUrl: './dashboard.component.css',
 })
 export class DashboardComponent implements OnInit {
   nama: string | null = '';
-  currentUser: any; // Sesuaikan dengan interface User Anda
+  currentUser: any;
   totalUsers: number = 0;
   totalRoles: number = 0;
   activeProjects: number = 0;
@@ -40,7 +40,7 @@ export class DashboardComponent implements OnInit {
       weekday: 'long',
       year: 'numeric',
       month: 'long',
-      day: 'numeric'
+      day: 'numeric',
     });
   }
   ngOnInit() {
@@ -52,11 +52,10 @@ export class DashboardComponent implements OnInit {
     this.getPassword();
   }
 
-  getPassword(){
+  getPassword() {
     this.userService.getUserById(this.userId).subscribe((response) => {
       this.hasChangedPassword = response.content.has_change_password;
-      console.log(this.hasChangedPassword);  
-    })
+    });
   }
 
   getRolesFromToken(): void {
@@ -65,32 +64,25 @@ export class DashboardComponent implements OnInit {
         const decoded: any = jwtDecode(this.token);
         let roles = decoded.role;
         roles = roles
-          .slice(1, -1) // Hilangkan karakter "[" dan "]"
-          .split(',') // Pecah berdasarkan koma
-          .map((role: string) => role.trim()); // Hapus spasi di sekitar elemen
+          .slice(1, -1)
+          .split(',')
+          .map((role: string) => role.trim());
         this.userRoles = roles.join(', ');
-      } catch (error) {
-        console.error('Error decoding roles from token:', error);
-      }
+      } catch (error) {}
     } else {
-      console.warn('Token not found');
     }
   }
 
   getUserCount(): void {
-    this.userService.getAllUsers().subscribe((response) => {
-      this.totalUsers = response.total_rows;
-    },
-    (error) => {
-      console.error('Error fetching user count:', error);
-    }
+    this.userService.getAllUsers().subscribe(
+      (response) => {
+        this.totalUsers = response.total_rows;
+      },
+      (error) => {}
     );
   }
 
   onChangePassword() {
-    this.router.navigate(['/profile']); 
+    this.router.navigate(['/profile']);
   }
-
-
-
 }

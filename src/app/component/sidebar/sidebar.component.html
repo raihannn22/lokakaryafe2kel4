@@ -1,145 +1,174 @@
 <div class="card flex justify-content-center">
-    <p-sidebar #sidebarRef [(visible)]="sidebarVisible"  (onHide)="onSidebarHide()">
-        <ng-template pTemplate="headless">
-            <div class="flex flex-column h-full">
-                <div class="flex align-items-center justify-content-between px-4 pt-3 flex-shrink-0">
-                    <span class="inline-flex align-items-center gap-2">
-                        <!-- <img src="assets/layout/images/logo.png" alt="logo" class="w-3rem h-3rem" /> -->
-                        <span class="font-semibold text-2xl text-primary">Ogya Tech</span>
-                    </span>
-                    <span>
-                        <p-button type="button" (onClick)="closeCallback($event)" icon="pi pi-times" rounded="true" outlined="true" styleClass="h-2rem w-2rem"></p-button>
-                    </span>
-                </div>
-                <div class="overflow-y-auto">
-                    <ul class="list-none p-3 m-0">
-                        <li>
-                            <a [routerLink]="['/dashboard']"  pRipple class="flex align-items-center cursor-pointer p-3 border-round text-700 hover:surface-100 transition-duration-150 transition-colors p-ripple">
-                                <i class="pi pi-home mr-2"></i>
-                                <span class="font-medium">Dashboard</span>
-                            </a>
-                        </li>
-                        @if (role?.includes('HR')) {
-                        <li>
-                            <div
-                                pRipple
-                                pStyleClass="@next"
-                                enterClass="hidden"
-                                enterActiveClass="slidedown"
-                                leaveToClass="hidden"
-                                leaveActiveClass="slideup"
-                                class="p-3 flex align-items-center justify-content-between text-600 cursor-pointer p-ripple"
-                            >
-                                <span class="font-medium">MENU HR</span>
-                                <i class="pi pi-chevron-down"></i>
-                            </div>
-                            <ul class="list-none p-0 m-0 overflow-hidden">                          
-                                <li *ngFor="let menu of getMenuByRole('hr')">
-                                    <a [routerLink]="[menu.path]" pRipple 
-                                       class="flex align-items-center cursor-pointer p-3 border-round text-700 hover:surface-100 transition-duration-150 transition-colors p-ripple">
-                                      <i [class]="menu.icon + ' mr-2'"></i>
-                                      <span class="font-medium">{{ menu.MAPPED_NAME }}</span>
-                                    </a>
-                                </li>
-                            </ul>
-                        </li>
-                    }
-                    </ul>
+  <p-sidebar
+    #sidebarRef
+    [(visible)]="sidebarVisible"
+    (onHide)="onSidebarHide()"
+  >
+    <ng-template pTemplate="headless">
+      <div class="flex flex-column h-full">
+        <div
+          class="flex align-items-center justify-content-between px-4 pt-3 flex-shrink-0"
+        >
+          <span class="inline-flex align-items-center gap-2">
+            <span class="font-semibold text-2xl text-primary">Ogya Tech</span>
+          </span>
+          <span>
+            <p-button
+              type="button"
+              (onClick)="closeCallback($event)"
+              icon="pi pi-times"
+              rounded="true"
+              outlined="true"
+              styleClass="h-2rem w-2rem"
+            ></p-button>
+          </span>
+        </div>
+        <div class="overflow-y-auto">
+          <ul class="list-none p-3 m-0">
+            <li>
+              <a
+                [routerLink]="['/dashboard']"
+                pRipple
+                class="flex align-items-center cursor-pointer p-3 border-round text-700 hover:surface-100 transition-duration-150 transition-colors p-ripple"
+              >
+                <i class="pi pi-home mr-2"></i>
+                <span class="font-medium">Dashboard</span>
+              </a>
+            </li>
+            @if (role?.includes('HR')) {
+            <li>
+              <div
+                pRipple
+                pStyleClass="@next"
+                enterClass="hidden"
+                enterActiveClass="slidedown"
+                leaveToClass="hidden"
+                leaveActiveClass="slideup"
+                class="p-3 flex align-items-center justify-content-between text-600 cursor-pointer p-ripple"
+              >
+                <span class="font-medium">MENU HR</span>
+                <i class="pi pi-chevron-down"></i>
+              </div>
+              <ul class="list-none p-0 m-0 overflow-hidden">
+                <li *ngFor="let menu of getMenuByRole('hr')">
+                  <a
+                    [routerLink]="[menu.path]"
+                    pRipple
+                    class="flex align-items-center cursor-pointer p-3 border-round text-700 hover:surface-100 transition-duration-150 transition-colors p-ripple"
+                  >
+                    <i [class]="menu.icon + ' mr-2'"></i>
+                    <span class="font-medium">{{ menu.MAPPED_NAME }}</span>
+                  </a>
+                </li>
+              </ul>
+            </li>
+            }
+          </ul>
 
+          @if (role?.includes('USER')) {
+          <ul class="list-none p-3 m-0">
+            <li>
+              <div
+                pRipple
+                pStyleClass="@next"
+                enterClass="hidden"
+                enterActiveClass="slidedown"
+                leaveToClass="hidden"
+                leaveActiveClass="slideup"
+                class="p-3 flex align-items-center justify-content-between text-600 cursor-pointer p-ripple"
+              >
+                <span class="font-medium">MENU USER</span>
+                <i class="pi pi-chevron-down"></i>
+              </div>
+              <ul class="list-none p-0 m-0 overflow-hidden">
+                <li *ngFor="let menu of getMenuByRole('user')">
+                  <a
+                    [routerLink]="[menu.path]"
+                    pRipple
+                    class="flex align-items-center cursor-pointer p-3 border-round text-700 hover:surface-100 transition-duration-150 transition-colors p-ripple"
+                  >
+                    <i [class]="menu.icon + ' mr-2'"></i>
+                    <span class="font-medium">{{ menu.MAPPED_NAME }}</span>
+                  </a>
+                </li>
+              </ul>
+            </li>
+          </ul>
+          } @if (role?.includes('SVP')) {
+          <ul class="list-none p-3 m-0">
+            <li>
+              <div
+                pRipple
+                pStyleClass="@next"
+                enterClass="hidden"
+                enterActiveClass="slidedown"
+                leaveToClass="hidden"
+                leaveActiveClass="slideup"
+                class="p-3 flex align-items-center justify-content-between text-600 cursor-pointer p-ripple"
+              >
+                <span class="font-medium">MENU SVP</span>
+                <i class="pi pi-chevron-down"></i>
+              </div>
+              <ul class="list-none p-0 m-0 overflow-hidden">
+                <li *ngFor="let menu of getMenuByRole('svp')">
+                  <a
+                    [routerLink]="[menu.path]"
+                    pRipple
+                    class="flex align-items-center cursor-pointer p-3 border-round text-700 hover:surface-100 transition-duration-150 transition-colors p-ripple"
+                  >
+                    <i [class]="menu.icon + ' mr-2'"></i>
+                    <span class="font-medium">{{ menu.MAPPED_NAME }}</span>
+                  </a>
+                </li>
+              </ul>
+            </li>
+          </ul>
+          } @if (role?.includes('MGR')) {
+          <ul class="list-none p-3 m-0">
+            <li>
+              <div
+                pRipple
+                pStyleClass="@next"
+                enterClass="hidden"
+                enterActiveClass="slidedown"
+                leaveToClass="hidden"
+                leaveActiveClass="slideup"
+                class="p-3 flex align-items-center justify-content-between text-600 cursor-pointer p-ripple"
+              >
+                <span class="font-medium">MENU MGR</span>
+                <i class="pi pi-chevron-down"></i>
+              </div>
+              <ul class="list-none p-0 m-0 overflow-hidden">
+                <li *ngFor="let menu of getMenuByRole('mgr')">
+                  <a
+                    [routerLink]="[menu.path]"
+                    pRipple
+                    class="flex align-items-center cursor-pointer p-3 border-round text-700 hover:surface-100 transition-duration-150 transition-colors p-ripple"
+                  >
+                    <i [class]="menu.icon + ' mr-2'"></i>
+                    <span class="font-medium">{{ menu.MAPPED_NAME }}</span>
+                  </a>
+                </li>
+              </ul>
+            </li>
+          </ul>
 
-                    @if (role?.includes('USER')) {
-                        <ul class="list-none p-3 m-0">
-                            <li>
-                                <div
-                                    pRipple
-                                    pStyleClass="@next"
-                                    enterClass="hidden"
-                                    enterActiveClass="slidedown"
-                                    leaveToClass="hidden"
-                                    leaveActiveClass="slideup"
-                                    class="p-3 flex align-items-center justify-content-between text-600 cursor-pointer p-ripple"
-                                >
-                                    <span class="font-medium">MENU USER</span>
-                                    <i class="pi pi-chevron-down"></i>
-                                </div>
-                                <ul class="list-none p-0 m-0 overflow-hidden">
-                                    <li *ngFor="let menu of getMenuByRole('user')">
-                                        <a [routerLink]="[menu.path]" pRipple 
-                                           class="flex align-items-center cursor-pointer p-3 border-round text-700 hover:surface-100 transition-duration-150 transition-colors p-ripple">
-                                          <i [class]="menu.icon + ' mr-2'"></i>
-                                          <span class="font-medium">{{ menu.MAPPED_NAME }}</span>
-                                        </a>
-                                    </li>
-                                </ul>
-                            </li>
-                        </ul>
-                    }
-
-                    @if (role?.includes('SVP')) {
-                    <ul class="list-none p-3 m-0">
-                        <li>
-                            <div
-                                pRipple
-                                pStyleClass="@next"
-                                enterClass="hidden"
-                                enterActiveClass="slidedown"
-                                leaveToClass="hidden"
-                                leaveActiveClass="slideup"
-                                class="p-3 flex align-items-center justify-content-between text-600 cursor-pointer p-ripple"
-                            >
-                                <span class="font-medium">MENU SVP</span>
-                                <i class="pi pi-chevron-down"></i>
-                            </div>
-                            <ul class="list-none p-0 m-0 overflow-hidden">
-                                <li *ngFor="let menu of getMenuByRole('svp')">
-                                    <a [routerLink]="[menu.path]" pRipple 
-                                       class="flex align-items-center cursor-pointer p-3 border-round text-700 hover:surface-100 transition-duration-150 transition-colors p-ripple">
-                                      <i [class]="menu.icon + ' mr-2'"></i>
-                                      <span class="font-medium">{{ menu.MAPPED_NAME }}</span>
-                                    </a>
-                                </li>
-                            </ul>
-                        </li>
-                    </ul>
-                }
-
-                @if (role?.includes('MGR')) {
-                    <ul class="list-none p-3 m-0">
-                        <li>
-                            <div
-                                pRipple
-                                pStyleClass="@next"
-                                enterClass="hidden"
-                                enterActiveClass="slidedown"
-                                leaveToClass="hidden"
-                                leaveActiveClass="slideup"
-                                class="p-3 flex align-items-center justify-content-between text-600 cursor-pointer p-ripple"
-                            >
-                                <span class="font-medium">MENU MGR</span>
-                                <i class="pi pi-chevron-down"></i>
-                            </div>
-                            <ul class="list-none p-0 m-0 overflow-hidden">
-                                <li *ngFor="let menu of getMenuByRole('mgr')">
-                                    <a [routerLink]="[menu.path]" pRipple 
-                                       class="flex align-items-center cursor-pointer p-3 border-round text-700 hover:surface-100 transition-duration-150 transition-colors p-ripple">
-                                      <i [class]="menu.icon + ' mr-2'"></i>
-                                      <span class="font-medium">{{ menu.MAPPED_NAME }}</span>
-                                    </a>
-                                </li>
-                            </ul>
-                        </li>
-                    </ul>
-
-                }
-                </div>
-                <div class="mt-auto">
-                    <hr class="mb-3 mx-3 border-top-1 border-none surface-border" />
-                    <a pRipple class="m-3 flex align-items-center cursor-pointer p-3 gap-2 border-round text-700 hover:surface-100 transition-duration-150 transition-colors p-ripple">
-                        <p-avatar image="https://www.iconbolt.com/iconsets/elastic-ui-icons/users-roles.svg" shape="circle" />
-                        <span class="font-bold">{{role}}</span>
-                    </a>
-                </div>
-            </div>
-        </ng-template>
-    </p-sidebar>
-    </div>
+          }
+        </div>
+        <div class="mt-auto">
+          <hr class="mb-3 mx-3 border-top-1 border-none surface-border" />
+          <a
+            pRipple
+            class="m-3 flex align-items-center cursor-pointer p-3 gap-2 border-round text-700 hover:surface-100 transition-duration-150 transition-colors p-ripple"
+          >
+            <p-avatar
+              image="https://www.iconbolt.com/iconsets/elastic-ui-icons/users-roles.svg"
+              shape="circle"
+            />
+            <span class="font-bold">{{ role }}</span>
+          </a>
+        </div>
+      </div>
+    </ng-template>
+  </p-sidebar>
+</div>
