@@ -32,9 +32,8 @@
             pButton
             pRipple
             type="button"
-            label="Search"
+            label=""
             icon="pi pi-search"
-            class="p-button-primary w-full"
             (click)="submit()"
           ></button>
         </div>
@@ -42,16 +41,29 @@
           <button
             pButton
             type="button"
-            label="Print"
+            label="PDF"
             icon="pi pi-print"
-            (click)="printPDF()"
+            severity="danger"
+            (click)="printToPDF()"
           ></button>
+        </div>
+        <div>
+          <div>
+            <button
+              pButton
+              type="button"
+              label="Excel"
+              icon="pi pi-file-excel"
+              severity="success"
+              (click)="printToExcel()"
+            ></button>
+          </div>
         </div>
       </div>
 
       <div class="text-center mb-1">
         <h2 class="text-2xl font-bold text-gray-800 m-0">
-          Assessment Summary : {{ yearsTitle }}
+          {{ user.full_name }}'s Assessment Summary - {{ selectedYear }}
         </h2>
       </div>
     </div>
