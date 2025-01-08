@@ -81,7 +81,8 @@ export class SummaryComponent implements OnInit {
   }
   constructor(private summaryService: SummaryService) {}
 
-  ngOnInit() {}
+  ngOnInit() {
+  }
 
   ngOnChanges() {
     this.getAllEmpAchievement();
@@ -94,53 +95,59 @@ export class SummaryComponent implements OnInit {
   }
 
   getAllEmpAchievement() {
-    forkJoin({
-      suggestion: this.summaryService.getAllSuggestionByYear(
-        this.user.id,
-        this.selectedYear
-      ),
-      empAtt: this.summaryService.getEmpAttitudeSkillByIdandYear(
-        this.user.id,
-        this.selectedYear
-      ),
-      emppAchievement: this.summaryService.getEmpAchievementByIdandYear(
-        this.user.id,
-        this.selectedYear
-      ),
-      groupAchievement: this.summaryService.getAllAchievements(),
-    }).subscribe(
-      ({ emppAchievement, groupAchievement, empAtt, suggestion }) => {
-        this.achievement = emppAchievement.content;
-        this.groupedAchievement = groupAchievement.content;
-        this.attitudeSkill = empAtt.content;
-        this.suggestion = suggestion.content;
+    const userId = this.user?.id;
+  if (userId) {
+  forkJoin({
+    suggestion: this.summaryService.getAllSuggestionByYear(
+      userId,
+      this.selectedYear
+    ),
+    empAtt: this.summaryService.getEmpAttitudeSkillByIdandYear(
+      userId,
+      this.selectedYear
+    ),
+    emppAchievement: this.summaryService.getEmpAchievementByIdandYear(
+      userId,
+      this.selectedYear
+    ),
+    groupAchievement: this.summaryService.getAllAchievements(),
+  }).subscribe(
+    ({ emppAchievement, groupAchievement, empAtt, suggestion }) => {
+      this.achievement = emppAchievement.content;
+      this.groupedAchievement = groupAchievement.content;
+      this.attitudeSkill = empAtt.content;
+      this.suggestion = suggestion.content;
 
-        this.groupedAchievement = this.groupedAchievement.map((group) => {
-          const matchingAchievements = this.achievement.filter(
-            (ach) => ach.achievement_id === group.id
-          );
-          const score =
-            matchingAchievements.length > 0
-              ? matchingAchievements.reduce((sum, ach) => sum + ach.score, 0)
-              : 0;
+      this.groupedAchievement = this.groupedAchievement.map((group) => {
+        const matchingAchievements = this.achievement.filter(
+          (ach) => ach.achievement_id === group.id
+        );
+        const score =
+          matchingAchievements.length > 0
+            ? matchingAchievements.reduce((sum, ach) => sum + ach.score, 0)
+            : 0;
 
-          return {
-            ...group,
-            score,
-          };
-        });
-        this.mapData();
-        this.groupedData = this.groupAndSumData(this.combinedData);
-        this.totalPercentage = this.groupedData.reduce(
-          (total, item) => total + item.percentage,
-          0
-        );
-        this.totalFinalScore = this.groupedData.reduce(
-          (total, item) => total + (item.score * item.percentage) / 100,
-          0
-        );
-      }
-    );
+        return {
+          ...group,
+          score,
+        };
+      });
+      this.mapData();
+      this.groupedData = this.groupAndSumData(this.combinedData);
+      this.totalPercentage = this.groupedData.reduce(
+        (total, item) => total + item.percentage,
+        0
+      );
+      this.totalFinalScore = this.groupedData.reduce(
+        (total, item) => total + (item.score * item.percentage) / 100,
+        0
+      );
+    }
+  );
+} else {
+  console.warn('ID tidak tersedia');
+}
+   
   }
 
   mapData() {

@@ -109,12 +109,13 @@ export class ConfirmedComponent implements OnInit {
   }
 
   onYearChange(): void {
-    const userId = localStorage.getItem('id');
+    const userId = this.user?.user_id;
+    
 
     if (userId) {
       this.empAttitudeSkillService
         .getEmpAttitudeSkillsByUserIdAndAssesmentYear(
-          this.user.user_id,
+          userId,
           this.year
         )
         .subscribe({
@@ -165,7 +166,7 @@ export class ConfirmedComponent implements OnInit {
         });
 
       this.summaryService
-        .getAssessmentStatus(this.user.user_id, this.year)
+        .getAssessmentStatus(userId, this.year)
         .subscribe({
           next: (response) => {
             this.statusAssessment = response.content.status;
@@ -178,7 +179,7 @@ export class ConfirmedComponent implements OnInit {
         });
 
       this.empAchievementSkillService
-        .getAllEmpAchievementSkillsByYearAndUserId(this.year, this.user.user_id)
+        .getAllEmpAchievementSkillsByYearAndUserId(this.year, userId)
         .subscribe({
           next: (response) => {
             this.empAchiements = response.content;

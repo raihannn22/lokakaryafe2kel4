@@ -19,7 +19,7 @@
           <tr>
             <th class="column1-th">Achievement</th>
             <th class="column2-th">Score</th>
-            @if (user.status == 0) {
+            @if (user?.status == 0) {
             <th class="column3-th">Action</th>
             }
           </tr>
@@ -40,7 +40,7 @@
               >
               </p-inputNumber>
             </td>
-            @if (user.status == 0) {
+            @if (user?.status == 0) {
             <td class="column3-td">
               <p-toggleButton
                 [(ngModel)]="achievement.enabled"
@@ -70,7 +70,7 @@
                 {{ group.group_name }} ({{ group.percentage }}%)
               </th>
               <th class="column2-th">Score</th>
-              @if (user.status == 0) {
+              @if (user?.status == 0) {
               <th>Action</th>
               }
             </tr>
@@ -89,7 +89,7 @@
                   [disabled]="skill.isDisabled"
                 ></p-dropdown>
               </td>
-              @if (user.status == 0) {
+              @if (user?.status == 0) {
               <td class="column3-td">
                 <p-toggleButton
                   [(ngModel)]="skill.isDisabled"
